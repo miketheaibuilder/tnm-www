@@ -341,8 +341,7 @@
       const btn = f.querySelector("[data-wistia-play]");
       if (btn && !btn.getAttribute("aria-label")) btn.setAttribute("aria-label", T_VIDEO_ARIA);
       (btn || f).addEventListener("click", () => {
-        if (CONSENT_ENABLED) set({ functional: true });    
-        mountAllWistia(f);
+        mountWistia(f, true);
       }, { once: true });
     });
     onChange(s => { if (s.functional && document.querySelector("[data-wistia-facade]")) mountAllWistia(null); });

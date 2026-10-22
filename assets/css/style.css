@@ -1698,3 +1698,12 @@ body.tnm-wait-lock{overflow:hidden}
 
 @media(max-width:900px){.p404-pas{height:167px}.subhero--404 .subhero__bg{background-position:15% center}}
 @media(max-width:600px){.p404-pas{display:none}.subhero--404 .subhero__bg{background-position:25% center}.subhero--404 .subhero__cta{align-self:stretch;justify-content:center}}
+
+.about__video:has(>.video-facade),.meet-video:has(>.video-facade){overflow:visible;background:transparent;margin-bottom:32px}
+.video-facade{overflow:visible;background:transparent}
+.video-facade__btn{width:72px;height:72px;min-width:0;min-height:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;font-size:0;color:transparent;filter:drop-shadow(0 1px 6px rgba(0,0,0,.35));transition:transform .15s}
+.video-facade__btn::before{content:"";display:block;transform:translateX(5px);border-left:30px solid #fff;border-top:18px solid transparent;border-bottom:18px solid transparent}
+.video-facade__btn:hover{background:transparent;transform:translate(-50%,-50%) scale(1.08)}
+.video-facade__note{top:100%;bottom:auto;padding:8px 0 0;background:none;color:var(--muted);font-size:11px;line-height:1.4}
+.video-facade__note button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.video-facade__note button:focus-visible{outline:2px solid var(--red);outline-offset:2px}
