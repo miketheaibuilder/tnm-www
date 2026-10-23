@@ -692,7 +692,7 @@ const FOOTER = `
 <footer class="footer" id="formularz">
   <div class="footer__mono"><img class="footer__sygnet" src="assets/img/figma/logo-tnm-sygnet.png?v=20260616" alt="The Noise Makers" width="118" height="118"></div>
   <div class="footer__top">
-    <div class="footer__claim">feel the he<span class="art">art</span></div>
+    <div class="footer__claim">Feel the he<span class="art">art</span>.</div>
     <div class="footer__social">
       <a href="https://www.instagram.com/thenoisemakers.pl" target="_blank" rel="noopener" aria-label="Instagram">${IG}</a>
       
