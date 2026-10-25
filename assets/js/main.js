@@ -598,7 +598,7 @@ const LANG_HREF_EN = EN_MIRROR.indexOf(LANG_STRONA)>-1 ? "/en/"+LANG_STRONA : "/
 const NAV = `
 <nav class="nav"><div class="nav__inner">
   <a class="nav__logo" href="index.html"><img class="nav__logo-white" src="assets/img/figma/logo-tnm-white.png?v=20260615" alt="The Noise Makers - Academy of Music"><img class="nav__logo-red" src="assets/img/logo/logotyp_TNM_czerwony.png?v=20260706" alt="" aria-hidden="true"></a>
-  <button class="nav__burger" aria-label="menu">☰</button>
+  <button class="nav__burger" aria-label="menu" aria-expanded="false"><span></span><span></span><span></span></button>
   <div class="nav__menu">
     <div class="nav__overlay-head">
       <img class="nav__overlay-logo" src="assets/img/figma/logo-tnm-white.png?v=20260615" alt="The Noise Makers">
@@ -624,6 +624,7 @@ const NAV = `
     <div class="nav__item nav__item--lang">${LANG_LABEL} ${CHEV}<div class="nav__drop">
       <a href="${LANG_HREF_PL}" hreflang="pl">PL</a>
       <a href="${LANG_HREF_EN}" hreflang="en">EN</a></div></div>
+    <a class="nav__cta" href="${FORM_URL}" data-entry="pinned-pelny">Wypełnij formularz <span aria-hidden="true">&gt;</span></a>
   </div>
 </div></nav>`;
 
@@ -879,11 +880,10 @@ function mount(){
    
    
   const navMenu=document.querySelector(".nav__menu");
-  const setMenu=open=>{if(!navMenu)return;navMenu.classList.toggle("open",open);document.body.classList.toggle("nav-lock",open);
+  const setMenu=open=>{if(!navMenu)return;navMenu.classList.toggle("open",open);document.body.classList.toggle("nav-lock",open);document.querySelector(".nav__burger")?.setAttribute("aria-expanded",String(open));
     if(!open) document.querySelectorAll(".nav__item.open").forEach(x=>x.classList.remove("open"));};
   document.querySelector(".nav__burger")?.addEventListener("click",()=>{
      
-    if(matchMedia("(min-width:992px)").matches){ scrollTo({top:0,behavior:"smooth"}); return; }
     setMenu(!navMenu.classList.contains("open"));  
   });
   document.querySelector(".nav__close")?.addEventListener("click",()=>setMenu(false));
@@ -894,12 +894,56 @@ function mount(){
   if(navEl && !isKonf){
     const remPx2=()=>parseFloat(getComputedStyle(document.documentElement).fontSize)||16;
     const COLLAPSE_REM=5;
-    const onNavScroll=()=>{ if(!navMenu?.classList.contains("open")) navEl.classList.toggle("nav--collapsed", scrollY > COLLAPSE_REM*remPx2()); };
+    const navBox=navEl.parentElement;
+    const navLum=new WeakMap();
+    const lumOf=c=>{const m=c.match(/[\d.]+/g);if(!m)return null;const a=m.length>3?+m[3]:1;if(a<.5)return null;
+      const f=v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4);};return .2126*f(+m[0])+.7152*f(+m[1])+.0722*f(+m[2]);};
+    const imgLum=(im,x,y)=>{
+      if(!im.complete||!im.naturalWidth) return 1;
+      let g=navLum.get(im);
+      if(!g){try{const c=document.createElement("canvas");c.width=c.height=16;const k=c.getContext("2d");k.drawImage(im,0,0,16,16);
+        const d=k.getImageData(0,0,16,16).data;g=[];for(let i=0;i<d.length;i+=4)g.push((.2126*d[i]+.7152*d[i+1]+.0722*d[i+2])/255);}catch(e){g=[];}
+        navLum.set(im,g);}
+      if(!g.length) return 1;
+      const r=im.getBoundingClientRect();const cx=Math.min(15,Math.max(0,Math.floor((x-r.left)/r.width*16)));const cy=Math.min(15,Math.max(0,Math.floor((y-r.top)/r.height*16)));
+      return g[cy*16+cx];};
+    const darkAt=(x,y)=>{
+      for(const n of document.elementsFromPoint(x,y)){
+        if(navEl.contains(n)||n.closest(".sticky-cta")) continue;
+        if(n.tagName==="IMG") return imgLum(n,x,y)<.45;
+        if(n.tagName==="VIDEO") return true;
+        if(n.tagName==="IFRAME") return false;
+        const cs=getComputedStyle(n);
+        if(cs.backgroundImage&&cs.backgroundImage.includes("url(")) return true;
+        const l=lumOf(cs.backgroundColor); if(l!==null) return l<.4;
+      }
+      return false;};
+    const navTone=()=>{
+      if(!navEl.classList.contains("nav--collapsed")||matchMedia("(max-width:1199px)").matches){navEl.classList.remove("nav--logo-light","nav--burger-light");return;}
+      [[".nav__logo","nav--logo-light"],[".nav__burger","nav--burger-light"]].forEach(([sel,cls])=>{
+        const el=navEl.querySelector(sel); if(!el) return; const r=el.getBoundingClientRect(); if(!r.width) return;
+        navEl.classList.toggle(cls,darkAt(r.left+r.width/2,r.top+r.height/2));});};
+    const onNavScroll=()=>{
+      if(navMenu?.classList.contains("open")) return;
+      const on=scrollY > COLLAPSE_REM*remPx2();
+      if(!navEl.classList.contains("nav--collapsed")&&navBox) navBox.style.minHeight=navEl.offsetHeight+"px";
+      navEl.classList.toggle("nav--collapsed",on);
+      const y=scrollY,dy=y-(navEl._y||0);
+      if(!on||!matchMedia("(max-width:1199px)").matches) navEl.classList.remove("nav--hidden");
+      else if(dy>6&&y>240) navEl.classList.add("nav--hidden");
+      else if(dy<-6) navEl.classList.remove("nav--hidden");
+      if(Math.abs(dy)>6) navEl._y=y;
+      navTone();};
+    let navRaf=0;
+    const onNavFrame=()=>{ if(navRaf) return; navRaf=requestAnimationFrame(()=>{navRaf=0;onNavScroll();}); };
     onNavScroll();
-    addEventListener("scroll",onNavScroll,{passive:true});
+    addEventListener("scroll",onNavFrame,{passive:true});
+    addEventListener("resize",()=>{ if(navBox&&!navEl.classList.contains("nav--collapsed")) navBox.style.minHeight=""; onNavFrame(); });
+    addEventListener("load",onNavFrame);
   }
    
   navMenu?.querySelectorAll("a[href]").forEach(a=>a.addEventListener("click",()=>setMenu(false)));
+  document.addEventListener("click",e=>{ if(navMenu?.classList.contains("open")&&!e.target.closest(".nav__menu")&&!e.target.closest(".nav__burger")) setMenu(false); });
    
   document.querySelectorAll(".nav__item").forEach(it=>{
     if(!it.querySelector(".nav__drop")) return;
