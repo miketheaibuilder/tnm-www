@@ -1707,3 +1707,7 @@ body.tnm-wait-lock{overflow:hidden}
 .video-facade__note{top:100%;bottom:auto;padding:8px 0 0;background:none;color:var(--muted);font-size:11px;line-height:1.4}
 .video-facade__note button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
 .video-facade__note button:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+
+ .map--live{overflow:hidden}
+   .map--live iframe{height:620px;margin-top:-60px}
+   @media(max-width:860px){.map--live iframe{height:380px}}
