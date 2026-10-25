@@ -1716,3 +1716,5 @@ body.tnm-wait-lock{overflow:hidden}
 .footer__place::after{content:attr(data-label);font-weight:700;height:0;overflow:hidden;visibility:hidden}
 .footer__place:hover,.footer__place[aria-pressed="true"]{font-weight:700}
 .footer__place:focus-visible{outline:2px solid #fff;outline-offset:3px}
+@media(max-width:680px){.footer__grid{gap:var(--5xl)}.footer__grid>div:nth-child(2){order:-1}}
+.footer__grid .footer__note{margin-top:-16px}
