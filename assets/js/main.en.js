@@ -664,7 +664,8 @@ const MAP_EMBED_SRC = "https://www.google.com/maps/d/u/0/embed?mid=1W2FQK9YwZCHY
 const MAP_PLACES = {"Wola":[52.2372168,20.9821862,14],"Wilanów":[52.1694,21.0778,14],"Ursus":[52.1822362,20.8664674,14]};
 const MAP_DISTRICTS = Object.keys(MAP_PLACES);
 let mapPick=null;
-function mapSrc(){ const p=mapPick&&MAP_PLACES[mapPick]; return p ? MAP_EMBED_SRC+"&ll="+p[0]+","+p[1]+"&z="+p[2] : MAP_EMBED_SRC; }
+const MAP_ALL = [52.2005,20.975,12];
+function mapSrc(){ const p=mapPick==="all" ? [MAP_ALL[0],MAP_ALL[1],window.innerWidth<=860?11:MAP_ALL[2]] : mapPick&&MAP_PLACES[mapPick]; return p ? MAP_EMBED_SRC+"&ll="+p[0]+","+p[1]+"&z="+p[2] : MAP_EMBED_SRC; }
 function mapShow(d){
   mapPick=d;
   document.querySelectorAll("[data-map-district]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.mapDistrict===d)));
@@ -724,7 +725,7 @@ const FOOTER = `
       <div class="footer__contact" style="display:flex;flex-direction:column;gap:var(--md)">
         <div class="footer__row">${WA}<a href="tel:+48570111117">+48 570 111 117</a></div>
         <div class="footer__row">${MAIL}<a href="mailto:jestem@thenoisemakers.pl">jestem@thenoisemakers.pl</a></div>
-        <div class="footer__row">${PIN}<span class="footer__places">Warsaw - ${MAP_DISTRICTS.map((d,i)=>`<span class="footer__placeitem"><button type="button" class="footer__place" data-map-district="${d}" aria-pressed="false">${d}</button>${i<MAP_DISTRICTS.length-1?",":""}</span>`).join(" ")}</span></div>
+        <div class="footer__row">${PIN}<span class="footer__places"><button type="button" class="footer__place" data-map-district="all" data-label="Warsaw" aria-pressed="false">Warsaw</button> - ${MAP_DISTRICTS.map((d,i)=>`<span class="footer__placeitem"><button type="button" class="footer__place" data-map-district="${d}" data-label="${d}" aria-pressed="false">${d}</button>${i<MAP_DISTRICTS.length-1?",":""}</span>`).join(" ")}</span></div>
       </div>
     </div>
     <div>
