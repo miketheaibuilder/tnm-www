@@ -1711,3 +1711,8 @@ body.tnm-wait-lock{overflow:hidden}
  .map--live{overflow:hidden}
    .map--live iframe{height:620px;margin-top:-60px}
    @media(max-width:860px){.map--live iframe{height:380px}}
+.footer__placeitem{white-space:nowrap}
+.footer__place{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-decoration-color:rgba(255,255,255,.5);text-underline-offset:3px}
+.footer__place:hover,.footer__place[aria-pressed="true"]{text-decoration-color:#fff}
+.footer__place[aria-pressed="true"]{font-weight:700;text-decoration-thickness:2px}
+.footer__place:focus-visible{outline:2px solid #fff;outline-offset:3px}

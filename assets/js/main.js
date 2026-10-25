@@ -661,6 +661,21 @@ const MAIL='<svg viewBox="0 0 32 32"><path d="M30.6666 5.32666V26.66H1.33331V5.3
 
 
 const MAP_EMBED_SRC = "https://www.google.com/maps/d/u/0/embed?mid=1W2FQK9YwZCHYPrj76B6_cto5HtorG-4&ehbc=E20900";
+const MAP_PLACES = {"Wola":[52.2372168,20.9821862,14],"Wilanów":[52.1694,21.0778,14],"Ursus":[52.1822362,20.8664674,14]};
+const MAP_DISTRICTS = Object.keys(MAP_PLACES);
+let mapPick=null;
+function mapSrc(){ const p=mapPick&&MAP_PLACES[mapPick]; return p ? MAP_EMBED_SRC+"&ll="+p[0]+","+p[1]+"&z="+p[2] : MAP_EMBED_SRC; }
+function mapShow(d){
+  mapPick=d;
+  document.querySelectorAll("[data-map-district]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.mapDistrict===d)));
+  const f=document.querySelector(".map--live iframe"); if(f) f.src=mapSrc();
+}
+function initMapPlaces(){
+  document.querySelectorAll("[data-map-district]").forEach(b=>b.addEventListener("click",()=>{
+    const sec=document.querySelector(".map"); if(sec) sec.scrollIntoView({behavior:"smooth",block:"center"});
+    mapShow(b.dataset.mapDistrict);
+  }));
+}
 const MAP_ALT   = "Mapa Warszawy z zaznaczonymi lokalizacjami The Noise Makers: Wola, Wilanów, Ursus, Ursynów";
 const MAP_TITLE = "Mapa Google z lokalizacjami The Noise Makers";
 const MAP_BTN   = "Włączam mapę";
@@ -672,11 +687,12 @@ const MAP_STATIC = `<section class="map map--static" data-map-facade>
 function mountMap(){
   const sec=document.querySelector("[data-map-facade]"); if(!sec) return;    
   const f=document.createElement("iframe");
-  f.src=MAP_EMBED_SRC; f.title=MAP_TITLE; f.loading="lazy"; f.referrerPolicy="no-referrer-when-downgrade";
+  f.src=mapSrc(); f.title=MAP_TITLE; f.loading="lazy"; f.referrerPolicy="no-referrer-when-downgrade";
   sec.removeAttribute("data-map-facade"); sec.classList.remove("map--static"); sec.classList.add("map--live");
   sec.replaceChildren(f);
 }
 function initMap(){
+  initMapPlaces();
   const sec=document.querySelector("[data-map-facade]"); if(!sec) return;
   const C=window.TNMConsent;
   if(C && C.enabled && C.get().functional){ mountMap(); return; }
@@ -708,7 +724,7 @@ const FOOTER = `
       <div class="footer__contact" style="display:flex;flex-direction:column;gap:var(--md)">
         <div class="footer__row">${WA}<a href="tel:+48570111117">+48 570 111 117</a></div>
         <div class="footer__row">${MAIL}<a href="mailto:jestem@thenoisemakers.pl">jestem@thenoisemakers.pl</a></div>
-        <div class="footer__row">${PIN}<span>Warszawa - Wola, Wilanów, Ursus, Ursynów</span></div>
+        <div class="footer__row">${PIN}<span class="footer__places">Warszawa - ${MAP_DISTRICTS.map((d,i)=>`<span class="footer__placeitem"><button type="button" class="footer__place" data-map-district="${d}" aria-pressed="false">${d}</button>${i<MAP_DISTRICTS.length-1?",":""}</span>`).join(" ")}</span></div>
       </div>
     </div>
     <div>
