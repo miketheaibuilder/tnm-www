@@ -1756,3 +1756,4 @@ body.tnm-wait-lock{overflow:hidden}
 .nav__menu.open .nav__cta{display:flex;align-self:center;justify-content:center;gap:10px;margin:var(--2xl) var(--xl);padding:14px 24px;border:1px solid #fff;color:#fff;font-size:16px;font-weight:500;transition:background .15s,color .15s}
 .nav__menu.open .nav__cta:hover{background:#fff;color:var(--red)}
 @media(min-width:1025px) and (max-width:1599px){.hero{min-height:clamp(420px,34vw,520px)}.offer-card{height:400px}.values .media-576,.talenty .media-576{aspect-ratio:3/4;max-height:68vh}.meet-video{height:min(68vh,560px);width:auto;aspect-ratio:376/668;flex:0 0 auto}}
+@media(min-width:1200px){.catalog .cat-side{--shift:calc((100vw - min(1536px,86vw))/2 + clamp(1.5rem,2.5vw,4rem) - 40px);margin-left:calc(-1*var(--shift));top:144px;max-height:calc(100vh - 168px)}}
