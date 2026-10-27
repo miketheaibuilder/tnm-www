@@ -204,7 +204,7 @@ body.nav-lock{overflow:hidden}
 .split--reverse{flex-direction:row-reverse}
 .col-text{flex:1;max-width:476px;display:flex;flex-direction:column;gap:var(--3xl);align-items:flex-start}
 .col-text p+p{margin-top:0}
-.prose p{margin-bottom:var(--xl)}
+.prose p{font-size:16px;line-height:20px;font-weight:500;margin-bottom:20px}
 .prose p:last-child{margin-bottom:0}
 @media(max-width:900px){
   .split,.split--reverse{flex-direction:column;align-items:flex-start;gap:var(--3xl)}
@@ -219,7 +219,7 @@ body.nav-lock{overflow:hidden}
 
 
 .about__text h2{font-size:clamp(1.6rem,2.7vw,48px)} 
-.about__text .prose p{margin-bottom:var(--xl)}
+.about__text .prose p{margin-bottom:20px}
 .about__text .prose p:last-child{margin-bottom:0}
 .feel{font-family:var(--font);font-weight:700;font-size:clamp(1.3rem,1.82vw,35px)}
 .feel .art{color:var(--red)}
@@ -249,7 +249,7 @@ wistia-player[media-id='ueqjm0xsh5']:not(:defined){display:block;width:100%;heig
 .meet-video,.meet-video>*{border-radius:0 !important}
 .meet-text{flex:0 1 482px;display:flex;flex-direction:column;gap:var(--3xl);text-align:center;align-items:center;padding:0 var(--md)}
 .meet-text .prose{max-width:434px}
-.meet-text .prose p{margin-bottom:var(--xl)}
+.meet-text .prose p{margin-bottom:20px}
 .meet-text .prose p:last-child{margin-bottom:0}
 @media(max-width:900px){.meet-row{flex-direction:column}.meet-video{flex:none;width:100%;max-width:376px}}
 
@@ -298,7 +298,8 @@ wistia-player[media-id='ueqjm0xsh5']:not(:defined){display:block;width:100%;heig
 
 
 @media(min-width:901px){.values .media-576{flex-basis:calc(50% - 12px);max-width:576px}}
-.values__rows{display:flex;flex-direction:column;gap:var(--2xl);width:100%}
+.values__rows{display:flex;flex-direction:column;gap:64px;width:100%}
+@media(min-width:768px){.values__rows{gap:96px}}
 @media(max-width:900px){.media-576{width:100%;flex:none;height:auto;aspect-ratio:576/700}}
 
 
@@ -1754,3 +1755,4 @@ body.tnm-wait-lock{overflow:hidden}
 .nav__cta{display:none}
 .nav__menu.open .nav__cta{display:flex;align-self:center;justify-content:center;gap:10px;margin:var(--2xl) var(--xl);padding:14px 24px;border:1px solid #fff;color:#fff;font-size:16px;font-weight:500;transition:background .15s,color .15s}
 .nav__menu.open .nav__cta:hover{background:#fff;color:var(--red)}
+@media(min-width:1025px) and (max-width:1599px){.hero{min-height:clamp(420px,34vw,520px)}.offer-card{height:400px}.values .media-576,.talenty .media-576{aspect-ratio:3/4;max-height:68vh}.meet-video{height:min(68vh,560px);width:auto;aspect-ratio:376/668;flex:0 0 auto}}
