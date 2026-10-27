@@ -1757,3 +1757,8 @@ body.tnm-wait-lock{overflow:hidden}
 .nav__menu.open .nav__cta:hover{background:#fff;color:var(--red)}
 @media(min-width:1025px) and (max-width:1599px){.hero{min-height:clamp(420px,34vw,520px)}.offer-card{height:400px}.values .media-576,.talenty .media-576{aspect-ratio:3/4;max-height:68vh}.meet-video{height:min(68vh,560px);width:auto;aspect-ratio:376/668;flex:0 0 auto}}
 @media(min-width:1200px){.catalog .cat-side{--shift:calc((100vw - min(1536px,86vw))/2 + clamp(1.5rem,2.5vw,4rem) - 40px);margin-left:calc(-1*var(--shift));top:144px;max-height:calc(100vh - 168px)}}
+.cat-tab{font-family:var(--font);font-weight:700;font-size:1.375rem;line-height:1.2;letter-spacing:.06em;text-transform:uppercase;color:#5f5f5f}
+.cat-tab.active{color:var(--red);box-shadow:inset 0 -2px 0 var(--red)}
+@media(max-width:760px){.cat-tab{font-size:1rem}}
+@media(min-width:1200px){.catalog .cat-tabs{position:sticky;top:144px;z-index:5;height:40px;padding-bottom:0;align-items:center;background:var(--paper)}.catalog .cat-tab{min-height:32px;padding:3px 0}.catalog .cat-side__badge{flex-shrink:0}}
+@media(min-width:601px){.zcard__desc,.tpopup__bio,.zpopup__desc{font-size:16px;line-height:22px}.zmeta,.tchar span,.zsel__label{font-size:16px;line-height:20px}}
