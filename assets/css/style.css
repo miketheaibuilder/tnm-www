@@ -1762,3 +1762,4 @@ body.tnm-wait-lock{overflow:hidden}
 @media(max-width:760px){.cat-tab{font-size:1rem}}
 @media(min-width:1200px){.catalog .cat-tabs{height:40px;padding-bottom:0;align-items:center}.catalog .cat-tab{min-height:32px;padding:3px 0}.catalog .cat-side__badge{flex-shrink:0}}
 @media(min-width:601px){.zcard__desc,.tpopup__bio,.zpopup__desc{font-size:16px;line-height:22px}.zmeta,.tchar span,.zsel__label{font-size:16px;line-height:20px}}
+.footer__mono .footer__sygnet{width:120px;height:120px;margin-bottom:-60px;clip-path:circle(59px at 50% 50%)}.footer__top{padding-top:91px}.footer__claim{font-family:var(--font);font-size:clamp(1.25rem,1.82vw,35px);line-height:1.41}.footer__social{gap:8px}.footer__social svg{width:28px;height:28px}
