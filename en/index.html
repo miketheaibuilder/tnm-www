@@ -318,5 +318,23 @@
   drawOffer("Dziecko");
 })();
 </script>
+<style>.tnm-has-player::after{content:"";position:absolute;left:50%;top:50%;width:0;height:0;transform:translate(-50%,-50%) translateX(5px);border-left:30px solid #fff;border-top:18px solid transparent;border-bottom:18px solid transparent;filter:drop-shadow(0 1px 6px rgba(0,0,0,.35));pointer-events:none;z-index:2;transition:opacity .2s}.tnm-has-player.is-playing::after{opacity:0}</style>
+<script>
+(function(){
+  function bind(w){
+    var p=w.querySelector("wistia-player");
+    if(!p||p.dataset.tnmPlay)return;
+    p.dataset.tnmPlay="1";
+    w.classList.add("tnm-has-player");
+    p.addEventListener("play",function(){w.classList.add("is-playing")});
+    p.addEventListener("pause",function(){w.classList.remove("is-playing")});
+    p.addEventListener("end",function(){w.classList.remove("is-playing")});
+  }
+  document.querySelectorAll(".about__video,.meet-video").forEach(function(w){
+    bind(w);
+    new MutationObserver(function(){bind(w)}).observe(w,{childList:true});
+  });
+})();
+</script>
 </body>
 </html>
