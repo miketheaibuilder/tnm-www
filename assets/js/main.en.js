@@ -2712,7 +2712,7 @@ function tnmSwitcher(kind,aud){
   hero.insertAdjacentHTML("afterend",`<nav class="tsw" aria-label="Classes or group work"><div class="tsw__grid">
     ${half(!z,"FOCUS","Classes","At your own pace","1:1 or small group|45 min|time arranged together","zajecia-indywidualne-"+suf+".html")}
     ${half(z,"JOY","Group work","In a shared rhythm","a fixed day once a week|2–3 hour block|peer group","zajecia-zespolowe-"+suf+".html")}
-  </div></nav>`);
+  </div><div class="tsw__strip">${z?`<b>In a shared rhythm</b>${sep}${"a fixed day once a week|2–3 hour block|peer group".split("|").join(sep)}`:`<b>At your own pace</b>${sep}${"1:1 or small group|45 min|time arranged together".split("|").join(sep)}`}</div></nav>`);
   hero.classList.add("subhero--link");
   const cta=hero.querySelector(".subhero__cta");
   if(cta){ cta.classList.remove("btn"); const a=cta.querySelector('[aria-hidden="true"]'); if(a) a.textContent="→"; }
@@ -2795,6 +2795,17 @@ function tnmChips(kind){
   sync();
 }
 
+function tnmNieWiesz(kind,aud){
+  if(kind==="zespol"||document.querySelector(".tnw")) return;
+  const main=document.querySelector(".catalog .cat-main"); if(!main) return;
+  const dz=aud==="Dziecko";
+  main.insertAdjacentHTML("beforeend",`<div class="tnw">
+    <p class="tnw__t">Not sure what to choose?</p>
+    <p class="tnw__d">${dz?"Let’s talk – we’ll help you choose classes that suit your child, their pace and temperament.":"Let’s talk – we’ll help you choose classes that suit you, your pace and your goals."}</p>
+    <a class="tnw__l" href="${dz?"konsultacje-dzieci.html":"konsultacje-dorosli.html"}">Book a consultation <span aria-hidden="true">→</span></a>
+  </div>`);
+}
+
 function mountCatalog(data, aud, opts={}){
   tnmSwitcher(opts.entryKind||"lekcja",aud);
   const items=opts.items||(data.zajecia||[]);
@@ -2859,6 +2870,7 @@ function mountCatalog(data, aud, opts={}){
   draw();
   setupFilterDrawer();
   tnmChips(opts.entryKind||"lekcja");
+  tnmNieWiesz(opts.entryKind||"lekcja",aud);
   tnmDeepLinkItem(all, opts.entryKind||"lekcja", i=>i.nazwa_id||i.nazwa);    
 }
 

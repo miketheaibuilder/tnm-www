@@ -2712,7 +2712,7 @@ function tnmSwitcher(kind,aud){
   hero.insertAdjacentHTML("afterend",`<nav class="tsw" aria-label="Zajęcia czy zespoły"><div class="tsw__grid">
     ${half(!z,"FOCUS","Zajęcia","W Twoim tempie","1:1 lub mała grupa|45 min|termin ustalamy razem","zajecia-indywidualne-"+suf+".html")}
     ${half(z,"JOY","Zespoły","We wspólnym rytmie","stały dzień raz w tygodniu|blok 2–3 godz.|grupa rówieśnicza","zajecia-zespolowe-"+suf+".html")}
-  </div></nav>`);
+  </div><div class="tsw__strip">${z?`<b>We wspólnym rytmie</b>${sep}${"stały dzień raz w tygodniu|blok 2–3 godz.|grupa rówieśnicza".split("|").join(sep)}`:`<b>W Twoim tempie</b>${sep}${"1:1 lub mała grupa|45 min|termin ustalamy razem".split("|").join(sep)}`}</div></nav>`);
   hero.classList.add("subhero--link");
   const cta=hero.querySelector(".subhero__cta");
   if(cta){ cta.classList.remove("btn"); const a=cta.querySelector('[aria-hidden="true"]'); if(a) a.textContent="→"; }
@@ -2795,6 +2795,17 @@ function tnmChips(kind){
   sync();
 }
 
+function tnmNieWiesz(kind,aud){
+  if(kind==="zespol"||document.querySelector(".tnw")) return;
+  const main=document.querySelector(".catalog .cat-main"); if(!main) return;
+  const dz=aud==="Dziecko";
+  main.insertAdjacentHTML("beforeend",`<div class="tnw">
+    <p class="tnw__t">Nie wiesz, co wybrać?</p>
+    <p class="tnw__d">${dz?"Porozmawiajmy – pomożemy dobrać zajęcia do dziecka, jego tempa i temperamentu.":"Porozmawiajmy – pomożemy dobrać zajęcia do Ciebie, Twojego tempa i celów."}</p>
+    <a class="tnw__l" href="${dz?"konsultacje-dzieci.html":"konsultacje-dorosli.html"}">Umów konsultację <span aria-hidden="true">→</span></a>
+  </div>`);
+}
+
 function mountCatalog(data, aud, opts={}){
   tnmSwitcher(opts.entryKind||"lekcja",aud);
   const items=opts.items||(data.zajecia||[]);
@@ -2859,6 +2870,7 @@ function mountCatalog(data, aud, opts={}){
   draw();
   setupFilterDrawer();
   tnmChips(opts.entryKind||"lekcja");
+  tnmNieWiesz(opts.entryKind||"lekcja",aud);
   tnmDeepLinkItem(all, opts.entryKind||"lekcja", i=>i.nazwa_id||i.nazwa);    
 }
 
