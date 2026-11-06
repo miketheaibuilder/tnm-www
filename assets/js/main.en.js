@@ -1501,6 +1501,7 @@ function tnmPanelHTML(ctx){
         ${d.akapity.length?`<div class="tp__opis">${d.akapity.map(t=>`<p>${t}</p>`).join("")}</div>`:""}
         ${d.skladniki?`<p class="tp__skl">${d.skladniki.split("|").map(s=>s.trim()).join(`<span class="tp__sep">|</span>`)}</p>`:""}
       </div>
+      ${d.alts?`<div class="tp__sec"><span class="tp__lab">CHOOSE A FORMAT</span><div class="tp__formy" role="radiogroup">${d.alts.map(a=>`<button type="button" role="radio" class="tp__forma" aria-checked="${a.on?"true":"false"}" data-tnm-alt="${a.j}">${a.label}</button>`).join("")}</div></div>`:""}
       ${plan}${rows}
       <div class="tp__sec"><span class="tp__lab">WHAT WE’LL ASK WHEN YOU SIGN UP</span><p class="tp__facts">${facts}</p></div>
       <div class="tp__sec"><span class="tp__lab">${d.krokiLab}</span><ol class="tp__kroki">${kroki}</ol></div>
@@ -2725,6 +2726,38 @@ function tnmSwitcher(kind,aud){
   place(); window.addEventListener("resize",place);
 }
 
+let TNM_ALT={items:[],idxs:[]};
+function tnmJestMg(z){return /grup|najm|small group/i.test(z.format||"");}
+function tnmTytul(i){return String(i.nazwa||"").replace(RE_FMT_MG," ").replace(/\s*\(1:1\)/g," ").replace(/\s+1:1(?=\s|$)/g," ").replace(/\s{2,}/g," ").trim().replace(/ - /g," – ");}
+function catCardGroup(g,ix){
+  const ceny=g.map(z=>parseInt(String(z.cena||"").replace(/\D/g,""),10)).filter(n=>n>0);
+  let h=catCard(g[0],ix[0]);
+  h=h.replace(/<span class="zk__tag">[^<]*<\/span>/,`<span class="zk__tags"><span class="zk__tag">1:1</span><span class="zk__tag">small group</span></span>`);
+  if(ceny.length) h=h.replace(/<span class="zk__cena">[^<]*<\/span>/,`<span class="zk__cena">from ${Math.min(...ceny)} zł</span>`);
+  return h.replace(`data-popup="${ix[0]}"`,`data-popup-g="${ix.join(",")}"`);
+}
+function tnmGrupuj(list,items){
+  const key=z=>(z.audience||"")+"|"+tnmTytul(z).toLowerCase();
+  const used=new Set(), out=[];
+  list.forEach(z=>{
+    if(used.has(z)) return;
+    used.add(z);
+    const para=list.find(o=>!used.has(o)&&key(o)===key(z)&&tnmJestMg(o)!==tnmJestMg(z));
+    if(para){ used.add(para); const g=tnmJestMg(z)?[para,z]:[z,para]; out.push(catCardGroup(g,g.map(x=>items.indexOf(x)))); }
+    else out.push(catCard(z,items.indexOf(z)));
+  });
+  return out;
+}
+function tnmOpenGroup(items,idxs,k){
+  TNM_ALT={items,idxs};
+  const ctx=lessonEntryCtx(items[idxs[k]],"lekcja");
+  if(ctx.tnm) ctx.tnm.alts=idxs.map((ix,j)=>{const z=items[ix];const m=/(\d+)\s*os/.exec(z.miejsca||"");
+    return {j,on:j===k,label:tnmJestMg(z)?("Small group"+(m?" · up to "+m[1]+"":"")):"1:1 · 45 min"};});
+  openEntry(ctx);
+}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-tnm-alt]");if(!b)return;e.preventDefault();
+  if(b.getAttribute("aria-checked")==="true")return;tnmOpenGroup(TNM_ALT.items,TNM_ALT.idxs,+b.dataset.tnmAlt);});
+
 function mountCatalog(data, aud, opts={}){
   tnmSwitcher(opts.entryKind||"lekcja",aud);
   const items=opts.items||(data.zajecia||[]);
@@ -2771,11 +2804,12 @@ function mountCatalog(data, aud, opts={}){
       for(const v of perG.values()) if(v===false) return false;
       return true;
     });
-    listEl.innerHTML=list.map((z,k)=>cardFn(z,items.indexOf(z))).join("");
+    listEl.innerHTML=(cardFn===catCard?tnmGrupuj(list,items):list.map((z,k)=>cardFn(z,items.indexOf(z)))).join("");
     emptyEl.hidden=list.length>0;
     tabsEl.querySelectorAll(".cat-tab").forEach(b=>b.classList.toggle("active",b.dataset.c===cat));
      
     listEl.querySelectorAll("[data-popup]").forEach(b=>b.onclick=()=>openEntry(lessonEntryCtx(items[+b.dataset.popup],opts.entryKind||"lekcja")));
+    listEl.querySelectorAll("[data-popup-g]").forEach(b=>b.onclick=()=>tnmOpenGroup(items,b.dataset.popupG.split(",").map(Number),0));
     if(opts.onDraw) opts.onDraw(listEl,items);
   }
    

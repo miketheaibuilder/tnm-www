@@ -1612,6 +1612,13 @@ select.tnm-cc{font-family:inherit;font-size:16px;color:var(--ink);border:1px sol
 .lcpopup__panelcta{margin-top:var(--md)}
 .lcpopup__panelcta .btn{min-height:48px}
 @media(max-width:860px){ .lcpopup__panelcta{display:none} }
+.zk__tags{display:flex;gap:6px;flex-wrap:wrap}
+.tp__formy{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--ink)}
+.tp__forma{cursor:pointer;border:0;background:#fff;color:var(--ink);font:inherit;font-size:15px;font-weight:500;padding:10px 12px;min-height:44px}
+.tp__forma+.tp__forma{border-left:1px solid var(--ink)}
+.tp__forma[aria-checked="true"]{background:var(--ink);color:#fff;font-weight:600;cursor:default}
+.tp__forma:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+
 .cat-side__badge{display:none!important}
 .subhero__metkawrap{position:relative;height:0}
 .subhero__metka{position:absolute;left:var(--ml,0);top:9px;width:160px;height:40px;padding:0;font-size:23px;font-weight:700}
