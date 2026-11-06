@@ -2212,27 +2212,63 @@ function catCard(i,idx){
 
 
 
+const TNM_HASLA_Z={"Dziecko|Musical":"Scena. Głos. Ruch. Wspólna historia.","Dziecko|Chór":"Głosy. Wspólne brzmienie. Radość.","Dziecko|Rythm & Feel - Groove":"Rytm. Ciało. Groove.","Dziecko|Stwórz swoją piosenkę - Wokal + Tekst + Produkcja":"Słowo. Melodia. Wspólne tworzenie.","Dziecko|Spektakl - Aktorstwo":"Scena. Postacie. Wspólna historia.","Dziecko|Spektakl - Taniec / Ruch":"Ruch. Ciało. Wspólna energia.","Dziecko|Yoga z relaksacją dźwiękami":"Oddech. Spokój. Ciało.","Dziecko|Koncert relaksacyjny":"Dźwięk. Cisza. Obecność.","Dziecko|Ciekawe spotkania o sztuce - kierunki, artyści, twórczość":"Rozmowa. Sztuka. Wspólne odkrywanie.","Dziecko|Ciekawe spotkania o muzyce - kierunki, artyści, twórczość":"Rozmowa. Muzyka. Wspólne słuchanie.","Dorosły|Musical":"Scena. Głos. Ruch. Wspólna historia.","Dorosły|Chór":"Głosy. Wspólne brzmienie. Radość.","Dorosły|Spektakl - Aktorstwo":"Scena. Postacie. Wspólna historia.","Dorosły|Spektakl - Taniec / Ruch":"Ruch. Ciało. Wspólna energia.","Dorosły|Yoga z relaksacją dźwiękami":"Oddech. Spokój. Ciało.","Dorosły|Koncert relaksacyjny":"Dźwięk. Cisza. Obecność.","Dorosły|TRE - praca z ciałem uwalniająca napięcia i stres":"Ciało. Napięcie. Wspólne uwolnienie.","Dorosły|Psychologia somatyczna (Dance Movement Therapy)":"Ruch. Ciało. Emocje.","Dorosły|Malarstwo intuicyjne":"Kolor. Intuicja. Wspólne tworzenie.","Dorosły|Porozmawiajmy o sztuce - kierunki, artyści, twórczość":"Rozmowa. Sztuka. Wspólne odkrywanie.","Dorosły|Porozmawiajmy o muzyce - kierunki, artyści, twórczość":"Rozmowa. Muzyka. Wspólne słuchanie.","Dorosły|Taniec intuicyjny":"Ruch. Ciało. Swoboda.","Dorosły|Karykatura":"Linia. Charakter. Humor."};
+function tnmPlan(g){
+  const L=String(g||"").split("\n").map(s=>s.trim()).filter(Boolean);
+  const t=s=>{const m=/^(\d{1,2}):(\d{2})/.exec(s);return m?(+m[1])*60+(+m[2]):null;};
+  const hh=m=>Math.floor(m/60)+":"+String(m%60).padStart(2,"0");
+  const up=s=>s.charAt(0).toUpperCase()+s.slice(1);
+  const rng=L.length===1?/^(\d{1,2}:\d{2})\s*[-–]\s*(\d{1,2}:\d{2})\s*(?:[-–]\s*(.+))?$/.exec(L[0]):null;
+  if(rng){const a=t(rng[1]),b=t(rng[2]);if(!(b>a))return null;return {od:rng[1],do:rng[2],min:b-a,segs:rng[3]?[{n:up(rng[3]),min:b-a}]:[]};}
+  const P=L.map(s=>{const m=/^(\d{1,2}:\d{2})\s*[-–]\s*(.+)$/.exec(s);return m?{t:t(m[1]),od:m[1],n:up(m[2])}:null;});
+  if(!P.length||P.some(x=>!x))return null;
+  const segs=P.map((x,k)=>({n:x.n,min:k<P.length-1?P[k+1].t-x.t:60}));
+  if(segs.some(x=>!(x.min>0)))return null;
+  const min=segs.reduce((a,x)=>a+x.min,0);
+  return {od:P[0].od,do:hh(P[0].t+min),min,segs};
+}
+function tnmGodz(min){const h=min/60;const n=Number.isInteger(h)?String(h):String(h).replace(".",",");return {n,h};}
 function zespCard(i,idx){
-  const czas=isData(i.godz)?i.godz.replace(/\n/g,"<br>"):"Harmonogram [BRAK DANYCH]";
-  const miejsca=isData(i.miejsca)?i.miejsca:"Miejsca [BRAK DANYCH]";
-  const termin=isData(i.dni_daty)?i.dni_daty:"Termin [BRAK DANYCH]";
-  const lok=isData(i.lokalizacja)?i.lokalizacja:"Lokalizacja [BRAK DANYCH]";
+  const haslo=TNM_HASLA_Z[(i.audience||"")+"|"+(i.nazwa_id||i.nazwa)]||"";
   const photo=isData(i.foto_link)?i.foto_link:"assets/img/zajecia/"+ZAJ_FALLBACK+".png";
-  return `<article class="zcard zcard--zesp" data-idx="${idx}">
-    <div class="zcard__text">
-      <h3 class="zcard__title">${i.nazwa}</h3>
-      <div class="zcard__meta">
-        <span class="zmeta">${META_ICON.clock}<span>${czas}</span></span>
-        <span class="zmeta">${META_ICON.person}<span>${miejsca}</span></span>
-        <span class="zmeta">${META_ICON.calendar}<span>${termin}</span></span>
-        <span class="zmeta">${META_ICON.pin}<span>${lok}</span></span>
-      </div>
-      
-
+  const tytul=String(i.nazwa||"").replace(/ - /g," – ");
+  const p=isData(i.godz)?tnmPlan(i.godz):null;
+  const kol=["zk__c1","zk__c2","zk__c3"];
+  let plan="";
+  if(p){
+    const g=tnmGodz(p.min);
+    const w=g.h===1?"GODZINA":(g.h>=2&&g.h<=4&&Number.isInteger(g.h)?"GODZINY":"GODZIN");
+    plan=`<div class="zk__plan">
+      <span class="zk__planlab">PRACUJEMY RAZEM · ${g.n} ${w}</span>
+      ${p.segs.length?`<span class="zk__bar">${p.segs.map((s,k)=>`<span class="${kol[k%3]}" style="flex:${s.min} 1 0"></span>`).join("")}</span>
+      <span class="zk__segs">${p.segs.map((s,k)=>`<span class="zk__seg"><span class="zk__sq ${kol[k%3]}"></span><span class="zk__segn">${s.n}</span><span class="zk__segt">${tnmGodz(s.min).n} godz.</span></span>`).join("")}</span>`:""}
+    </div>`;
+  }
+  const dni=isData(i.dni_daty)?String(i.dni_daty).replace(/\s*-\s*/g,"–"):"";
+  const kiedy=[dni,p?p.od+"–"+p.do:(isData(i.godz)?i.godz:"")].filter(Boolean).join(" · ");
+  const lok=isData(i.lokalizacja)?i.lokalizacja:"";
+  const spot=(+i.cena_lekcji>0&&+i.liczba_lekcji>0)?(+i.cena_lekcji)*(+i.liczba_lekcji):0;
+  const mies=+i.cena_karnet>0?+i.cena_karnet:0;
+  return `<article class="zk zk--zesp">
+    <div class="zk__img bw" style="background-image:url('${photo}')"></div>
+    <div class="zk__body">
+      ${haslo?`<p class="zk__haslo">${haslo}</p>`:""}
+      <h3 class="zk__title">${tytul}</h3>
+      ${plan}
+      <p class="zk__meta zk__meta--z">${kiedy}${lok?`<br>${lok}`:""}</p>
+      ${spot&&mies?`<div class="zk__foot"><span class="zk__spot">${spot} zł / spotkanie</span><span class="zk__cena">${mies} zł / mies.</span></div>`:""}
     </div>
-    <div class="zcard__media">
-      <span class="zcard__media-bg bw" style="background-image:url('${photo}')"></span>
-      <button class="btn zcard__btn" type="button" data-popup="${idx}">Dowiedz się więcej <span aria-hidden="true">&gt;</span></button>
+    <button class="zk__hit" type="button" data-popup="${idx}" aria-label="Dowiedz się więcej – ${tytul}"></button>
+  </article>`;
+}
+function zespHelp(aud,foto){
+  const dz=aud==="Dziecko";
+  return `<article class="zk zk--help">
+    ${foto?`<div class="zk__img bw" style="background-image:url('${foto}')"></div>`:""}
+    <div class="zk__body">
+      <p class="zk__helpt">Nie wiesz, który?</p>
+      <p class="zk__helpd">${dz?"Porozmawiajmy – pomożemy dobrać zespół do dziecka i jego temperamentu.":"Porozmawiajmy – pomożemy dobrać zespół do Ciebie i Twojego rytmu."}</p>
+      <a class="zk__helpl" href="${dz?"konsultacje-dzieci.html":"konsultacje-dorosli.html"}">Umów konsultację →</a>
     </div>
   </article>`;
 }
@@ -2664,7 +2700,9 @@ function mountCatalog(data, aud, opts={}){
 
  
 function mountZespoly(data, aud){
-  mountCatalog(data, aud, {items:data.zespoly||[], cardFn:zespCard, entryKind:"zespol"});
+  const tut=(data.zajecia||[]).find(z=>z.audience===aud&&/psycholog/i.test(z.nazwa||"")&&isData(z.foto_link));
+  mountCatalog(data, aud, {items:data.zespoly||[], cardFn:zespCard, entryKind:"zespol",
+    onDraw:el=>{ if(el.children.length) el.insertAdjacentHTML("beforeend", zespHelp(aud, tut?tut.foto_link:"")); }});
 }
 
 
