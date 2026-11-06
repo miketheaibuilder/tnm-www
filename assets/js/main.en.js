@@ -2721,10 +2721,18 @@ function tnmSwitcher(kind,aud){
   h1.insertAdjacentHTML("beforebegin",`<div class="subhero__metkawrap"><span class="badge-tag subhero__metka">${z?"JOY":"FOCUS"}</span></div>`);
   const wrap=hero.querySelector(".subhero__metkawrap");
   const inner=hero.querySelector(".subhero__inner");
+  document.body.classList.add("tnm-siatka");
   const place=()=>{
-    const x=h1.getBoundingClientRect().left-hero.getBoundingClientRect().left;
+    const hr=hero.getBoundingClientRect(), r=h1.getBoundingClientRect();
+    const x=r.left-hr.left, w=Math.min(160,x-16);
     wrap.style.setProperty("--ml",(-x)+"px");
-    wrap.classList.toggle("is-flow",x<200);
+    wrap.style.setProperty("--mx",x+"px");
+    const flow=window.innerWidth<992||w<84;
+    wrap.classList.toggle("is-flow",flow);
+    if(!flow){
+      wrap.style.setProperty("--mw",w+"px");
+      wrap.style.setProperty("--mt",Math.round(r.top+r.height/2-wrap.getBoundingClientRect().top-20)+"px");
+    }
   };
   place(); window.addEventListener("resize",place);
 }

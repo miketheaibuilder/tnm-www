@@ -1612,6 +1612,20 @@ select.tnm-cc{font-family:inherit;font-size:16px;color:var(--ink);border:1px sol
 .lcpopup__panelcta{margin-top:var(--md)}
 .lcpopup__panelcta .btn{min-height:48px}
 @media(max-width:860px){ .lcpopup__panelcta{display:none} }
+@media(max-width:991px){.tnm-siatka .subhero__sub{display:none}}
+.tnm-siatka .subhero__metkawrap.is-flow .subhero__metka{justify-content:flex-start;padding:0 16px 0 var(--mx,12px);margin-left:var(--ml,0)}
+@media(min-width:992px){
+  .tnm-siatka .subhero .container,.tnm-siatka .cat-wide>.container{max-width:min(1072px,calc(100vw - 80px));margin:0 auto;padding-left:0;padding-right:0}
+  .tnm-siatka .tsw__grid{max-width:min(1072px,calc(100vw - 80px));margin:0 auto}
+  .tnm-siatka .tsw__half{padding-left:0}
+  .tnm-siatka .tsw__half+.tsw__half{padding-left:24px;padding-right:0}
+  .tnm-siatka .tsw{background:linear-gradient(90deg,#fff 50%,#f6f2ec 50%)}
+  .tnm-siatka .tsw:has(.tsw__half+.tsw__half.is-on){background:linear-gradient(90deg,#f6f2ec 50%,#fff 50%)}
+}
+.tnm-siatka .cat-list:has(>.zk){grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:899px){.tnm-siatka .cat-list:has(>.zk){grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.tnm-siatka .cat-list:has(>.zk){grid-template-columns:1fr}}
+
 .footer__grid>div{min-width:0}
 .tnw{display:flex;flex-direction:column;gap:12px;padding-top:8px}
 .tnw__t{margin:0;display:flex;align-items:center;gap:12px;font-size:24px;font-weight:700;color:var(--red)}
@@ -1650,7 +1664,7 @@ select.tnm-cc{font-family:inherit;font-size:16px;color:var(--ink);border:1px sol
 
 .cat-side__badge{display:none!important}
 .subhero__metkawrap{position:relative;height:0}
-.subhero__metka{position:absolute;left:var(--ml,0);top:9px;width:160px;height:40px;padding:0;font-size:23px;font-weight:700}
+.subhero__metka{position:absolute;left:var(--ml,0);top:var(--mt,9px);width:var(--mw,160px);height:40px;padding:0;font-size:23px;font-weight:700}
 .subhero__metkawrap.is-flow{height:auto}
 .subhero__metkawrap.is-flow .subhero__metka{position:static;width:auto;height:28px;padding:0 12px;font-size:16px;margin-left:var(--ml,0)}
 .tsw{background:#fff;border-bottom:1px solid var(--beige-200)}
