@@ -1179,6 +1179,7 @@ function openEntry(ctx){
    
    
   const mediaB=media.replace(/<button class="btn lcpopup__cta"[\s\S]*?<\/button>/,"");
+  if(A&&ctx.tnm) body=tnmPanelHTML(ctx);
   const inner=A?(body+media):(mediaB+body);
   
 
@@ -1444,6 +1445,69 @@ const ENTRY={
 };
 const GIFT_MINI='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="8" width="18" height="13" rx="1"/><path d="M3 12h18M12 8v13M12 8s-2.5-5-5-5-2 4 5 5zM12 8s2.5-5 5-5 2 4-5 5z"/></svg>';
  
+const TNM_POPUP={};
+function tnmPopupData(i,kind){
+  if(kind!=="lekcja"&&kind!=="zespol") return null;
+  const key=(i.audience||"")+"|"+(i.nazwa_id||i.nazwa);
+  const dz=i.audience==="Dziecko";
+  const zl=v=>(+v>0)?(+v)+" zł":"";
+  const P=TNM_POPUP[key]||{s:"",a:[]};
+  const akapity=P.a.length?P.a:(isData(i.opis_popup)?[i.opis_popup]:(isData(i.opis)?[i.opis]:[]));
+  if(kind==="zespol"){
+    const p=isData(i.godz)?tnmPlan(i.godz):null;
+    const h=+i.liczba_lekcji||0;
+    const zgodne=p&&h>0&&p.min===h*60;
+    const dni=isData(i.dni_daty)?String(i.dni_daty).replace(/\s*-\s*/g,"–"):"";
+    let t=p?(()=>{const [a,b]=p.od.split(":").map(Number);return a*60+b;})():0;
+    const hh=m=>Math.floor(m/60)+":"+String(m%60).padStart(2,"0");
+    const segs=p?p.segs.map(s=>{const o={n:s.n,od:hh(t),do:hh(t+s.min)};t+=s.min;return o;}):[];
+    return {kind,haslo:TNM_HASLA_Z[key]||"",akapity,skladniki:"",
+      plan:p?{min:p.min,segs}:null,
+      rows:[["WHEN",[dni,p?p.od+"–"+p.do:(isData(i.godz)?i.godz:"")].filter(Boolean).join(", ")],["WHERE",isData(i.lokalizacja)?i.lokalizacja:""],["LEVEL","from first steps"]].filter(r=>r[1]),
+      facts:dz?[["your contact details"," (phone, email)"],["child’s details"," (name and age)"]]:[["your contact details"," (phone, email)"]],
+      krokiLab:"WHAT HAPPENS NEXT",kroki:["Once the group is complete, we confirm the start by phone or email.","You confirm your place – only then do you pay."],
+      mies:zl(i.cena_karnet),wzor:zgodne?`4 sessions × ${h} h = ${4*h} hours a month`:"4 sessions a month",
+      jedn:zgodne?zl(i.cena_lekcji):zl((+i.cena_lekcji||0)*(h||1)),jednTxt:zgodne?"PER HOUR":"PER SESSION"};
+  }
+  const mg=/grup|najm/i.test(i.format||"");
+  const czas=isData(i.godz)?String(i.godz).replace(/\.\s*$/,""):"45 min";
+  const f=mg?[["age"," (3–18)"],["level",""],["goal",""],["preferred day",""]]:[["age"," (3–18)"],["level",""],["goal",""],["district",""],["days and times",""]];
+  return {kind,haslo:TNM_HASLA[key]||"",akapity,skladniki:P.s,plan:null,rows:[],
+    facts:dz?f:f.slice(1),
+    krokiLab:"HOW SIGN-UP WORKS",kroki:mg?["You join the waiting list – no payment, no commitment.","Once the group is complete, we send you the start day and time.","You confirm your place and come to the first class."]:["You fill in a short sign-up form.","We get in touch, match you with a teacher and agree on a time.","First lesson – on a day and at a place that suit you."],
+    mies:zl(i.cena_karnet),wzor:`4 lessons of ${czas} a month`,jedn:zl(i.cena_lekcji),jednTxt:"PER LESSON"};
+}
+function tnmPanelHTML(ctx){
+  const d=ctx.tnm;
+  const g=d.plan?tnmGodz(d.plan.min):null;
+  const w=g?(g.h===1?"HOUR":(g.h>=2&&g.h<=4&&Number.isInteger(g.h)?"HOURS":"HOURS")):"";
+  const kol=["zk__c1","zk__c2","zk__c3"];
+  const plan=(d.plan&&d.plan.segs.length)?`<div class="tp__sec">
+      <span class="tp__lab">WE WORK TOGETHER · ${g.n} ${w}</span>
+      <span class="zk__bar">${d.plan.segs.map((s,k)=>`<span class="${kol[k%3]}" style="flex:1 1 0"></span>`).join("")}</span>
+      <div class="tp__plan">${d.plan.segs.map((s,k)=>`<div class="tp__planrow"><span class="zk__sq ${kol[k%3]}"></span><span class="tp__planod">${s.od}–${s.do}</span><span class="tp__plann">${s.n}</span></div>`).join("")}</div>
+    </div>`:"";
+  const rows=d.rows.length?`<div class="tp__rows">${d.rows.map(r=>`<div class="tp__row"><span class="tp__lab">${r[0]}</span><span>${r[1]}</span></div>`).join("")}</div>`:"";
+  const facts=d.facts.map(f=>`<span><b>${f[0]}</b>${f[1]}</span>`).join(`<span class="tp__sep">|</span>`);
+  const kroki=d.kroki.map((t,k)=>`<li><span class="tp__num">${k+1}</span><span>${t}</span></li>`).join("");
+  const cena=(d.mies||d.jedn)?`<div class="tp__cena">
+      <span class="tp__miesw">${d.mies?`<span class="tp__mies">${d.mies} <small>/ month</small></span><span class="tp__wzor">${d.wzor}</span>`:""}</span>
+      ${d.jedn?`<span class="tp__jedn"><b>${d.jedn}</b><span>${d.jednTxt}</span></span>`:""}
+    </div>`:"";
+  return `<div class="lcpopup__panel tp">
+      <div class="tp__head">
+        ${d.haslo?`<p class="tp__haslo">${d.haslo}</p>`:""}
+        <h2 class="lcpopup__title tp__title">${ctx.title||""}</h2>
+        ${d.akapity.length?`<div class="tp__opis">${d.akapity.map(t=>`<p>${t}</p>`).join("")}</div>`:""}
+        ${d.skladniki?`<p class="tp__skl">${d.skladniki.split("|").map(s=>s.trim()).join(`<span class="tp__sep">|</span>`)}</p>`:""}
+      </div>
+      ${plan}${rows}
+      <div class="tp__sec"><span class="tp__lab">WHAT WE’LL ASK WHEN YOU SIGN UP</span><p class="tp__facts">${facts}</p></div>
+      <div class="tp__sec"><span class="tp__lab">${d.krokiLab}</span><ol class="tp__kroki">${kroki}</ol></div>
+      ${cena}
+    </div>`;
+}
+
 function lessonEntryCtx(i,kind){
   const chars=[];
   if(isData(i.godz)) chars.push({icon:META_ICON.clock,text:i.godz.replace(/\n/g," · ")});
@@ -1534,7 +1598,7 @@ function lessonEntryCtx(i,kind){
 
 
 
-  return {variant:"A",mastheadTitle:fmtNazwa(i),title:fmtNazwa(i),desc,descHTML,prices,chars:chars.slice(0,4),
+  return {variant:"A",mastheadTitle:fmtNazwa(i),tnm:tnmPopupData(i,kind),title:fmtNazwa(i),desc,descHTML,prices,chars:chars.slice(0,4),
     track:{content_name:i.nazwa_id||i.nazwa, content_category:kind, audience:audienceNow()},    
     price:(isWaitlist||turnusTrwa||(POL2027&&kind==="polkolonie"))?null:(isData(i.cena)?i.cena:null),photo,    
     ctaLabel:turnusTrwa?"Write to us":cta,
