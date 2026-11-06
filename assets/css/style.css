@@ -1612,6 +1612,11 @@ select.tnm-cc{font-family:inherit;font-size:16px;color:var(--ink);border:1px sol
 .lcpopup__panelcta{margin-top:var(--md)}
 .lcpopup__panelcta .btn{min-height:48px}
 @media(max-width:860px){ .lcpopup__panelcta{display:none} }
+.subhero--link .subhero__cta{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;background:none;color:#fff;text-decoration:none;font-size:18px;font-weight:700;padding:0 0 6px;min-height:0;border-bottom:2px solid #fff;transition:opacity .15s}
+.subhero--link .subhero__cta:hover{opacity:.8;background:none}
+.subhero--link .subhero__cta [aria-hidden="true"]{font-size:22px;line-height:1}
+@media(max-width:760px){.subhero--link .subhero__cta{font-size:16px}}
+
 .tnm-bezfiltrow .catalog .cat-side,.tnm-bezfiltrow .cat-bottombar{display:none!important}
 .tnm-bezfiltrow .cat-main{padding-bottom:0}
 .zk__imgbg{position:absolute;inset:0;background:center/cover no-repeat}
