@@ -2518,9 +2518,6 @@ function tnmDeepLinkItem(list, kind, keyFn){
   const w=tnmSlug(want); const it=list.find(i=>tnmSlug(keyFn(i))===w);
   if(it) openEntry(lessonEntryCtx(it, kind));
 }
-/* Oferta (lista Patrycji z 3.11.2026): tych zajęć i zespołów nie pokazujemy w katalogu.
-   Dane, nazwy rekordów, SKU, ceny i formularze zostają bez zmian – ukrywamy tylko karty.
-   Klucz: "audience|nazwa" (PL nazwa; w wersji EN porównujemy nazwa_id). */
 const TNM_UKRYTE={
   lekcja:new Set([
     "Dorosły|Dyrygentura (małe grupy)",
