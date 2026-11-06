@@ -2518,10 +2518,95 @@ function tnmDeepLinkItem(list, kind, keyFn){
   const w=tnmSlug(want); const it=list.find(i=>tnmSlug(keyFn(i))===w);
   if(it) openEntry(lessonEntryCtx(it, kind));
 }
+/* Oferta (lista Patrycji z 3.11.2026): tych zajęć i zespołów nie pokazujemy w katalogu.
+   Dane, nazwy rekordów, SKU, ceny i formularze zostają bez zmian – ukrywamy tylko karty.
+   Klucz: "audience|nazwa" (PL nazwa; w wersji EN porównujemy nazwa_id). */
+const TNM_UKRYTE={
+  lekcja:new Set([
+    "Dorosły|Dyrygentura (małe grupy)",
+    "Dorosły|Filozofia (małe grupy)",
+    "Dorosły|Flet (1:1)",
+    "Dorosły|Fotografia (1:1)",
+    "Dorosły|Koncert relaksacyjny (małe grupy)",
+    "Dorosły|Malarstwo (1:1)",
+    "Dorosły|Medytacja",
+    "Dorosły|Medytacja (1:1)",
+    "Dorosły|Neurografika (1:1)",
+    "Dorosły|Neurografika (małe grupy)",
+    "Dorosły|Piosenka Aktorska (małe grupy)",
+    "Dorosły|Podstawy - Muzyka (kształcenie słuchu + teoria) 1:1 (1:1)",
+    "Dorosły|Podstawy - Muzyka (kształcenie słuchu + teoria) mała grupa (małe grupy)",
+    "Dorosły|Poezja - interpretacja i rozmowa (małe grupy)",
+    "Dorosły|Praktyka mindfulness (1:1)",
+    "Dorosły|Praktyka mindfulness (małe grupy)",
+    "Dorosły|Produkcja Muzyczna (małe grupy)",
+    "Dorosły|Regulacja emocji + Techniki oddechu",
+    "Dorosły|Rysunek (1:1)",
+    "Dorosły|Stwórz swoją piosenkę - Wokal + Tekst + Produkcja (małe grupy)",
+    "Dorosły|TRE - praca z ciałem uwalniająca napięcia i stres (1:1)",
+    "Dorosły|Taniec - praktyka baletowa (1:1)",
+    "Dorosły|Taniec - praktyka baletowa (małe grupy)",
+    "Dorosły|Taniec indywidualnie (standardy, klasyczny) (1:1)",
+    "Dorosły|Taniec standardy - klasyczny (małe grupy)",
+    "Dorosły|Taniec współczesny (1:1)",
+    "Dorosły|Taniec współczesny (małe grupy)",
+    "Dorosły|Tworzenie scenariuszy (małe grupy)",
+    "Dorosły|Ukulele (1:1)",
+    "Dorosły|Uwalnianie emocji + oddech + ćwiczenia wspierające układ nerwowy + Medytacja (małe grupy)",
+    "Dorosły|Wystąpienia publiczne - Praca z głosem | Emisja głosu, dykcja (małe grupy)",
+    "Dorosły|Zespoły instrumentalne (mala grupa) (małe grupy)",
+    "Dziecko|Arteterapia (małe grupy)",
+    "Dziecko|Filozofia (małe grupy)",
+    "Dziecko|Flet (1:1)",
+    "Dziecko|Handpan (1:1)",
+    "Dziecko|Handpan (małe grupy)",
+    "Dziecko|Jazz",
+    "Dziecko|Malarstwo (+ wiedza o kierunkach i malarzach) (1:1)",
+    "Dziecko|Malarstwo intuicyjne (małe grupy)",
+    "Dziecko|Medytacja (małe grupy)",
+    "Dziecko|Muzykoterapia",
+    "Dziecko|Muzykoterapia (1:1)",
+    "Dziecko|Pisanie dzienników + książek + scenariuszy | Praca z wierszem (1:1)",
+    "Dziecko|Podstawy - Muzyka (kształcenie słuchu + teoria) 1:1 (1:1)",
+    "Dziecko|Podstawy - Muzyka (kształcenie słuchu + teoria) mała grupa (małe grupy)",
+    "Dziecko|Praca z kamerą - produkcja filmowa (małe grupy)",
+    "Dziecko|Praktyka baletowa (1:1)",
+    "Dziecko|Praktyka baletowa (małe grupy)",
+    "Dziecko|Praktyka mindfulness (małe grupy)",
+    "Dziecko|Regulacja emocji + Techniki oddechu (małe grupy)",
+    "Dziecko|Rysunek (+karykatura) (1:1)",
+    "Dziecko|Taniec klasyczny/standardowy (małe grupy)",
+    "Dziecko|Taniec współczesny (małe grupy)",
+    "Dziecko|Uwalnianie emocji + oddech + ćwiczenia wspierające + Medytacja (małe grupy)",
+    "Dziecko|WARSZTAT MALARSTWA - Wstęp do malarstwa (małe grupy)",
+    "Dziecko|WARSZTAT RYSUNKU - Wstęp do rysunku (małe grupy)",
+    "Dziecko|WARSZTAT Z EMOCJI - Wstęp do koncentracji i regulacji (małe grupy)",
+    "Dziecko|Yoga (1:1)",
+    "Dziecko|Yoga (małe grupy)",
+    "Dziecko|Zajęcia TUS + sensoryka (małe grupy)",
+    "Dziecko|Zespoły instrumentalne (mala grupa) (małe grupy)"
+  ]),
+  zespol:new Set([
+    "Dorosły|Medytacja",
+    "Dorosły|Muzykoterapia",
+    "Dorosły|Orkiestra",
+    "Dorosły|Stwórz swoją piosenkę - Wokal + Tekst + Produkcja",
+    "Dorosły|Yoga",
+    "Dorosły|Zajęcia z zakresu MUZYKI (kształcenie słuchu + teoria muzyki + ciekawostki historyczne)",
+    "Dziecko|Medytacja",
+    "Dziecko|Muzykoterapia",
+    "Dziecko|Orkiestra",
+    "Dziecko|Zajęcia z zakresu MUZYKI (kształcenie słuchu + teoria muzyki + ciekawostki historyczne)"
+  ])
+};
+function tnmWidoczne(z,kind){
+  const s=TNM_UKRYTE[kind==="zespol"?"zespol":"lekcja"];
+  return !s.has((z.audience||"")+"|"+(z.nazwa_id||z.nazwa));
+}
 function mountCatalog(data, aud, opts={}){
   const items=opts.items||(data.zajecia||[]);
   const cardFn=opts.cardFn||catCard;
-  const all=items.filter(z=>z.audience===aud);
+  const all=items.filter(z=>z.audience===aud && tnmWidoczne(z, opts.entryKind||"lekcja"));
   const listEl=document.getElementById("catalog");
   const emptyEl=document.getElementById("cat-empty");
   const tabsEl=document.getElementById("cat-tabs");
