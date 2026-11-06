@@ -2713,6 +2713,9 @@ function tnmSwitcher(kind,aud){
     ${half(!z,"FOCUS","Zajęcia","W Twoim tempie","1:1 lub mała grupa|45 min|termin ustalamy razem","zajecia-indywidualne-"+suf+".html")}
     ${half(z,"JOY","Zespoły","We wspólnym rytmie","stały dzień raz w tygodniu|blok 2–3 godz.|grupa rówieśnicza","zajecia-zespolowe-"+suf+".html")}
   </div></nav>`);
+  hero.classList.add("subhero--link");
+  const cta=hero.querySelector(".subhero__cta");
+  if(cta){ cta.classList.remove("btn"); const a=cta.querySelector('[aria-hidden="true"]'); if(a) a.textContent="→"; }
   const h1=hero.querySelector(".subhero__inner h1");
   if(!h1) return;
   h1.insertAdjacentHTML("beforebegin",`<div class="subhero__metkawrap"><span class="badge-tag subhero__metka">${z?"JOY":"FOCUS"}</span></div>`);
