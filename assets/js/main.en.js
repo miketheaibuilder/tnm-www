@@ -2188,27 +2188,25 @@ function fmtNazwa(i){
 
 
 
+const TNM_HASLA={"Dziecko|Fortepian (1:1)":"Sound. Precision. Calm in your fingers.","Dziecko|Gitara klasyczna (1:1)":"Strings. Melody. The joy of playing.","Dziecko|Gitara elektryczna (1:1)":"Energy. Tone. Freedom.","Dziecko|Bas (1:1)":"Pulse. Foundation. Confidence.","Dziecko|Ukulele (1:1)":"Lightness. Rhythm. First sounds.","Dziecko|Ukulele (małe grupy)":"Lightness. Rhythm. First sounds.","Dziecko|Saksofon (1:1)":"Breath. Tone. Freedom.","Dziecko|Perkusja (1:1)":"Rhythm. Body. Shared energy.","Dziecko|Perkusja (małe grupy)":"Rhythm. Body. Shared energy.","Dziecko|Band (małe grupy)":"Shared sound. Energy. Connection.","Dziecko|Skrzypce (1:1)":"Melody. Precision. Tenderness.","Dziecko|Dyrygentura (małe grupy)":"Gesture. Listening. Leading.","Dziecko|Dyrygentura (1:1)":"Gesture. Listening. Leading.","Dziecko|Produkcja Muzyczna (1:1)":"Sound. Idea. Creation.","Dziecko|Produkcja Muzyczna (małe grupy)":"Sound. Idea. Creation.","Dziecko|Wokal (1:1)":"Breath. Voice. The courage to be heard.","Dziecko|Wokal (małe grupy)":"Breath. Voice. The courage to be heard.","Dziecko|Pisanie piosenek - praca z tekstem (mala grupa) (małe grupy)":"Words. Emotions. Story.","Dziecko|Stwórz swoją piosenkę - Wokal + Tekst + Produkcja (małe grupy)":"Words. Melody. Your voice.","Dziecko|Piosenka Aktorska (powyżej 14 lat) 1:1 (1:1)":"Voice. Emotion. Presence.","Dziecko|Dubbing (małe grupy)":"Voice. Emotion. Character.","Dziecko|Pisanie książek / dzienników (małe grupy)":"Words. Stories. Emotions.","Dziecko|Tworzenie komiksów (małe grupy)":"Picture. Story. Dialogue.","Dziecko|Tworzenie scenariuszy (małe grupy)":"Story. Characters. Dialogue.","Dziecko|Stwórz swoją piosenkę (małe grupy)":"Words. Melody. Your voice.","Dziecko|Aktorstwo (1:1)":"Word. Body. Presence.","Dziecko|Aktorstwo (małe grupy)":"Word. Body. Presence.","Dziecko|Spotkanie z Tutorem / psychologiem (emocje + rozwój)":"Mindfulness. Connection. Calm.","Dziecko|Praca na celach - trener mentalny":"Goals. Confidence. Small steps.","Dziecko|Medytacja":"Silence. Breath. Presence.","Dziecko|Regulacja emocji + Techniki oddechu":"Breath. Emotions. Calm.","Dziecko|Sensoryka (małe grupy)":"Senses. Body. Discovery.","Dziecko|Sensoryka (1:1)":"Senses. Body. Discovery.","Dziecko|Tworzenie komiksów":"Picture. Story. Dialogue.","Dziecko|Fotografia":"Image. Light. Perspective.","Dziecko|Malarstwo (+ wiedza o kierunkach i malarzach)":"Colour. Form. History.","Dziecko|Rysunek (+karykatura)":"Line. Character. Humour.","Dziecko|Taniec intuicyjny":"Movement. Body. Freedom.","Dziecko|Modern":"Movement. Form. Energy.","Dorosły|Fortepian (1:1)":"Sound. Precision. Your own pace.","Dorosły|Gitara klasyczna (1:1)":"Strings. Melody. Freedom.","Dorosły|Gitara akustyczna (1:1)":"Chords. Rhythm. Your voice.","Dorosły|Gitara elektryczna (1:1)":"Energy. Tone. Expression.","Dorosły|Bas (1:1)":"Pulse. Foundation. Confidence.","Dorosły|Saksofon (1:1)":"Breath. Tone. Freedom.","Dorosły|Perkusja (1:1)":"Rhythm. Body. Energy.","Dorosły|Handpan (1:1)":"Sound. Body. Calm.","Dorosły|Handpan (małe grupy)":"Sound. Body. Calm.","Dorosły|Band (małe grupy)":"Shared sound. Energy. Connection.","Dorosły|Skrzypce (1:1)":"Melody. Precision. Tenderness.","Dorosły|Dyrygentura (1:1)":"Gesture. Listening. Leading.","Dorosły|Produkcja Muzyczna (1:1)":"Sound. Idea. Creation.","Dorosły|Wokal (1:1)":"Breath. Voice. Courage.","Dorosły|Wokal (małe grupy)":"Breath. Voice. Courage.","Dorosły|Pisanie piosenek - praca z tekstem (mala grupa) (małe grupy)":"Words. Emotions. Story.","Dorosły|Piosenka Aktorska 1:1 (1:1)":"Voice. Emotion. Presence.","Dorosły|Dubbing (małe grupy)":"Voice. Emotion. Character.","Dorosły|Pisanie książek / dzienników (małe grupy)":"Words. Stories. Emotions.","Dorosły|Aktorstwo (małe grupy)":"Word. Body. Presence.","Dorosły|Wystąpienia publiczne - Praca z głosem":"Voice. Confidence. Presence.","Dorosły|Aktorstwo (1:1)":"Word. Body. Presence.","Dorosły|Emisja głosu (1:1)":"Voice. Breath. Confidence.","Dorosły|Emisja głosu (małe grupy)":"Voice. Breath. Confidence.","Dorosły|Piosenka Aktorska":"Voice. Emotion. Presence.","Dorosły|Spotkanie z psychologiem (emocje) 1:1 (1:1)":"Mindfulness. Connection. Calm.","Dorosły|Praca na celach - trener mentalny":"Goals. Confidence. Small steps.","Dorosły|Praca z emocjami + Gestalt (1:1)":"Emotions. Body. Presence.","Dorosły|Fotografia":"Image. Light. Perspective.","Dorosły|Malarstwo (+ wiedza o kierunkach i malarzach)":"Colour. Form. History.","Dorosły|Rysunek":"Line. Character. Observation.","Dorosły|Malarstwo intuicyjne":"Colour. Intuition. Freedom.","Dorosły|Taniec intuicyjny (małe grupy)":"Movement. Body. Freedom.","Dorosły|Psychologia somatyczna (Dance Movement Therapy) - mała grupa (małe grupy)":"Movement. Body. Emotions.","Dorosły|Yoga z relaksacją dźwiękami (małe grupy)":"Breath. Calm. Body.","Dorosły|Yoga 1:1 (1:1)":"Breath. Body. Calm.","Dorosły|TRE - praca z ciałem uwalniająca napięcia i stres":"Body. Tension. Release.","Dziecko|WARSZTAT AKTORA - Wstęp do aktorstwa (małe grupy)":"Play. Movement. First roles.","Dziecko|WARSZTAT MUZYKA - Wstęp do muzyki (małe grupy)":"Sound. Play. First discoveries.","Dziecko|WARSZTAT RUCHU - Wstęp do tańca (małe grupy)":"Rhythm. Body. Play.","Dorosły|Regulacja emocji + Techniki oddechu (1:1)":"Breath. Emotions. Calm."};
 function catCard(i,idx){
-  const czas=isData(i.godz)?i.godz:"Time [NO DATA]";
-  const grupa=isData(i.miejsca)?i.miejsca:prowadzenie(i.format);
-  const lok=isData(i.lokalizacja)?i.lokalizacja:"Location [NO DATA]";
+  const key=(i.audience||"")+"|"+(i.nazwa_id||i.nazwa);
+  const haslo=TNM_HASLA[key]||"";
   const photo=isData(i.foto_link)?i.foto_link:"../assets/img/zajecia/"+zajPhoto(i)+".png";
-  return `<article class="zcard">
-    <div class="zcard__text">
-      <h3 class="zcard__title">${fmtNazwa(i)}</h3>
-      ${isData(i.opis)?`<p class="zcard__desc">${i.opis}</p>`:`<p class="zcard__desc muted">Description [NO DATA]</p>`}
-      <div class="zcard__meta">
-        <span class="zmeta">${META_ICON.clock}<span>${czas}</span></span>
-        <span class="zmeta">${META_ICON.person}<span>${grupa}</span></span>
-        <span class="zmeta">${META_ICON.pin}<span>${lok}</span></span>
-      </div>
-      
-
+  const mg=/ma[łl][ae] grup|najm|small group/i.test(i.format||"");
+  const najm=/najm/i.test(i.format||"");
+  const tytul=String(i.nazwa||"").replace(RE_FMT_MG," ").replace(/\s*\(1:1\)/g," ").replace(/\s+1:1(?=\s|$)/g," ").replace(/\s{2,}/g," ").trim().replace(/ - /g," – ");
+  const czas=isData(i.godz)?String(i.godz).replace(/\.\s*$/,""):"45 min";
+  const kiedy=mg?(isData(i.lokalizacja)?i.lokalizacja:""):"time arranged together";
+  return `<article class="zk">
+    <div class="zk__img bw" style="background-image:url('${photo}')">${najm?`<span class="zk__najm">AGES 3–5</span>`:""}</div>
+    <div class="zk__body">
+      ${haslo?`<p class="zk__haslo">${haslo}</p>`:""}
+      <h3 class="zk__title">${tytul}</h3>
+      <p class="zk__meta">${czas}${kiedy?" · "+kiedy:""}</p>
+      <div class="zk__foot"><span class="zk__tag">${mg?"small group":"1:1"}</span><span class="zk__cena">${isData(i.cena)?i.cena:""}</span></div>
     </div>
-    <div class="zcard__media">
-      <span class="zcard__media-bg bw" style="background-image:url('${photo}')"></span>
-      <button class="btn zcard__btn" type="button" data-popup="${idx}">Sign up <span aria-hidden="true">&gt;</span></button>
-    </div>
+    <button class="zk__hit" type="button" data-popup="${idx}" aria-label="Sign up – ${tytul}"></button>
   </article>`;
 }
 
