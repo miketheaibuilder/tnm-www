@@ -2263,8 +2263,8 @@ function catCard(i,idx){
   const tytul=String(i.nazwa||"").replace(RE_FMT_MG," ").replace(/\s*\(1:1\)/g," ").replace(/\s+1:1(?=\s|$)/g," ").replace(/\s{2,}/g," ").trim().replace(/ - /g," – ");
   const czas=isData(i.godz)?String(i.godz).replace(/\.\s*$/,""):"45 min";
   const kiedy=mg?(isData(i.lokalizacja)?i.lokalizacja:""):"termin ustalamy razem";
-  return `<article class="zk">
-    <div class="zk__img bw" style="background-image:url('${photo}')">${najm?`<span class="zk__najm">3–5 LAT</span>`:""}</div>
+  return `<article class="zk${najm?" zk--najm":""}">
+    <div class="zk__img"><span class="zk__imgbg bw" style="background-image:url('${photo}')"></span>${najm?`<span class="zk__najm">3–5 LAT</span>`:""}</div>
     <div class="zk__body">
       ${haslo?`<p class="zk__haslo">${haslo}</p>`:""}
       <h3 class="zk__title">${tytul}</h3>
@@ -2713,6 +2713,9 @@ function tnmSwitcher(kind,aud){
     ${half(!z,"FOCUS","Zajęcia","W Twoim tempie","1:1 lub mała grupa|45 min|termin ustalamy razem","zajecia-indywidualne-"+suf+".html")}
     ${half(z,"JOY","Zespoły","We wspólnym rytmie","stały dzień raz w tygodniu|blok 2–3 godz.|grupa rówieśnicza","zajecia-zespolowe-"+suf+".html")}
   </div></nav>`);
+  hero.classList.add("subhero--link");
+  const cta=hero.querySelector(".subhero__cta");
+  if(cta){ cta.classList.remove("btn"); const a=cta.querySelector('[aria-hidden="true"]'); if(a) a.textContent="→"; }
   const h1=hero.querySelector(".subhero__inner h1");
   if(!h1) return;
   h1.insertAdjacentHTML("beforebegin",`<div class="subhero__metkawrap"><span class="badge-tag subhero__metka">${z?"JOY":"FOCUS"}</span></div>`);
@@ -2757,6 +2760,40 @@ function tnmOpenGroup(items,idxs,k){
 }
 document.addEventListener("click",e=>{const b=e.target.closest("[data-tnm-alt]");if(!b)return;e.preventDefault();
   if(b.getAttribute("aria-checked")==="true")return;tnmOpenGroup(TNM_ALT.items,TNM_ALT.idxs,+b.dataset.tnmAlt);});
+
+function tnmChips(kind){
+  document.body.classList.add("tnm-bezfiltrow");
+  const sideEl=document.getElementById("side-filters"), tabs=document.getElementById("cat-tabs");
+  const list=document.getElementById("catalog"), empty=document.getElementById("cat-empty");
+  if(kind==="zespol"||!sideEl||!tabs||!list||document.querySelector(".cfil")) return;
+  const forma=sideEl.querySelector('.fgroup[data-g="forma"]');
+  const box=v=>forma?[...forma.querySelectorAll("input")].find(i=>i.value===v):null;
+  const najm=!!list.querySelector(".zk--najm");
+  tabs.insertAdjacentHTML("afterend",`<div class="cfil" role="group" aria-label="Filtry">
+    ${forma?`<span class="cfil__lab">FORMA</span><button type="button" class="cfil__chip" data-f="1:1" aria-pressed="false">1:1</button><button type="button" class="cfil__chip" data-f="małe grupy" aria-pressed="false">mała grupa</button>`:""}
+    ${forma&&najm?`<span class="cfil__sep"></span>`:""}
+    ${najm?`<button type="button" class="cfil__chip" data-najm aria-pressed="false">Dla najmłodszych (3–5 lat)</button>`:""}
+  </div>`);
+  const bar=document.querySelector(".cfil");
+  const pusto=()=>{ if(list.classList.contains("only-najm")) empty.hidden=!!list.querySelector(".zk--najm"); };
+  const sync=()=>{
+    bar.querySelectorAll("[data-f]").forEach(b=>{const i=box(b.dataset.f);b.setAttribute("aria-pressed",i&&i.checked?"true":"false");});
+    const n=bar.querySelector("[data-najm]"); if(n) n.setAttribute("aria-pressed",list.classList.contains("only-najm")?"true":"false");
+  };
+  bar.addEventListener("click",e=>{
+    const b=e.target.closest(".cfil__chip"); if(!b) return;
+    if(b.hasAttribute("data-najm")){ list.classList.toggle("only-najm"); if(!list.classList.contains("only-najm")) empty.hidden=list.children.length>0; pusto(); sync(); return; }
+    const i=box(b.dataset.f); if(!i) return;
+    const on=i.checked;
+    forma.querySelectorAll("input").forEach(x=>{x.checked=false;});
+    if(!on) i.checked=true;
+    i.dispatchEvent(new Event("change"));
+    sync();
+  });
+  new MutationObserver(pusto).observe(list,{childList:true});
+  sideEl.addEventListener("change",sync);
+  sync();
+}
 
 function mountCatalog(data, aud, opts={}){
   tnmSwitcher(opts.entryKind||"lekcja",aud);
@@ -2821,6 +2858,7 @@ function mountCatalog(data, aud, opts={}){
     sideEl.querySelectorAll("input").forEach(i=>i.checked=false);cat="all";draw();};
   draw();
   setupFilterDrawer();
+  tnmChips(opts.entryKind||"lekcja");
   tnmDeepLinkItem(all, opts.entryKind||"lekcja", i=>i.nazwa_id||i.nazwa);    
 }
 

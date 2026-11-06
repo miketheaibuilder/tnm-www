@@ -1612,6 +1612,24 @@ select.tnm-cc{font-family:inherit;font-size:16px;color:var(--ink);border:1px sol
 .lcpopup__panelcta{margin-top:var(--md)}
 .lcpopup__panelcta .btn{min-height:48px}
 @media(max-width:860px){ .lcpopup__panelcta{display:none} }
+.subhero--link .subhero__cta{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;background:none;color:#fff;text-decoration:none;font-size:18px;font-weight:700;padding:0 0 6px;min-height:0;border-bottom:2px solid #fff;transition:opacity .15s}
+.subhero--link .subhero__cta:hover{opacity:.8;background:none}
+.subhero--link .subhero__cta [aria-hidden="true"]{font-size:22px;line-height:1}
+@media(max-width:760px){.subhero--link .subhero__cta{font-size:16px}}
+
+.tnm-bezfiltrow .catalog .cat-side,.tnm-bezfiltrow .cat-bottombar{display:none!important}
+.tnm-bezfiltrow .cat-main{padding-bottom:0}
+.zk__imgbg{position:absolute;inset:0;background:center/cover no-repeat}
+.zk__najm{z-index:1}
+.cfil{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--beige-200);border-bottom:1px solid var(--beige-200);padding:14px 0}
+.cfil__lab{font-size:13px;font-weight:700;letter-spacing:1px;color:#5f5f5f;margin-right:4px}
+.cfil__chip{cursor:pointer;border:1px solid var(--ink);background:#fff;color:var(--ink);font:inherit;font-size:16px;font-weight:500;padding:9px 14px;min-height:44px}
+.cfil__chip[aria-pressed="true"]{border-color:var(--red);background:var(--red);color:#fff;font-weight:600}
+.cfil__chip:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.cfil__sep{width:1px;height:28px;background:var(--beige-200);margin:0 8px}
+.cat-list.only-najm>.zk:not(.zk--najm){display:none}
+@media(max-width:560px){.cfil{gap:8px;padding:10px 0}.cfil__lab{width:100%}.cfil__chip{font-size:15px;padding:8px 12px}.cfil__sep{display:none}}
+
 .zk__tags{display:flex;gap:6px;flex-wrap:wrap}
 .tp__formy{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--ink)}
 .tp__forma{cursor:pointer;border:0;background:#fff;color:var(--ink);font:inherit;font-size:15px;font-weight:500;padding:10px 12px;min-height:44px}
