@@ -2698,7 +2698,35 @@ function tnmWidoczne(z,kind){
   const s=TNM_UKRYTE[kind==="zespol"?"zespol":"lekcja"];
   return !s.has((z.audience||"")+"|"+(z.nazwa_id||z.nazwa));
 }
+function tnmSwitcher(kind,aud){
+  const hero=document.querySelector(".subhero");
+  if(!hero||document.querySelector(".tsw")) return;
+  const z=kind==="zespol";
+  const suf=aud==="Dziecko"?"dzieci":"dorosli";
+  const sep=`<b class="tsw__sep">|</b>`;
+  const half=(on,metka,nazwa,haslo,sub,href)=>{
+    const inner=`<span class="tsw__metka">${metka}</span><span class="tsw__txt"><span class="tsw__name">${nazwa}<b class="tsw__sep">|</b><span class="tsw__haslo">${haslo}</span>${on?"":`<span class="tsw__arr" aria-hidden="true">›</span>`}</span><span class="tsw__sub">${sub.split("|").join(sep)}</span></span>`;
+    return on?`<div class="tsw__half is-on" aria-current="page">${inner}</div>`:`<a class="tsw__half" href="${href}">${inner}</a>`;
+  };
+  hero.insertAdjacentHTML("afterend",`<nav class="tsw" aria-label="Zajęcia czy zespoły"><div class="tsw__grid">
+    ${half(!z,"FOCUS","Zajęcia","W Twoim tempie","1:1 lub mała grupa|45 min|termin ustalamy razem","zajecia-indywidualne-"+suf+".html")}
+    ${half(z,"JOY","Zespoły","We wspólnym rytmie","stały dzień raz w tygodniu|blok 2–3 godz.|grupa rówieśnicza","zajecia-zespolowe-"+suf+".html")}
+  </div></nav>`);
+  const h1=hero.querySelector(".subhero__inner h1");
+  if(!h1) return;
+  h1.insertAdjacentHTML("beforebegin",`<div class="subhero__metkawrap"><span class="badge-tag subhero__metka">${z?"JOY":"FOCUS"}</span></div>`);
+  const wrap=hero.querySelector(".subhero__metkawrap");
+  const inner=hero.querySelector(".subhero__inner");
+  const place=()=>{
+    const x=h1.getBoundingClientRect().left-hero.getBoundingClientRect().left;
+    wrap.style.setProperty("--ml",(-x)+"px");
+    wrap.classList.toggle("is-flow",x<200);
+  };
+  place(); window.addEventListener("resize",place);
+}
+
 function mountCatalog(data, aud, opts={}){
+  tnmSwitcher(opts.entryKind||"lekcja",aud);
   const items=opts.items||(data.zajecia||[]);
   const cardFn=opts.cardFn||catCard;
   const all=items.filter(z=>z.audience===aud && tnmWidoczne(z, opts.entryKind||"lekcja"));
