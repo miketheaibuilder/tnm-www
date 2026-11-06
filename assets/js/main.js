@@ -1,3 +1,4 @@
+const UKRYJ_POZNAJMY_SIE=true;
  
 const FORM_URL = "#formularz";  
 const EASYCART_URL = "#easycart";  
@@ -615,7 +616,7 @@ const NAV = `
     <div class="nav__item">Dorośli ${CHEV}<div class="nav__drop">
       <a href="zajecia-indywidualne-dorosli.html">Zajęcia</a>
       <a href="zajecia-zespolowe-dorosli.html">Zespoły</a></div></div>
-    <a class="nav__item" href="dni-probne.html">Poznajmy się</a>
+    ${UKRYJ_POZNAJMY_SIE?"":`<a class="nav__item" href="dni-probne.html">Poznajmy się</a>`}
     <a class="nav__item" href="konsultacje-dzieci.html">Konsultacje</a>
     <a class="nav__item" href="partnerzy.html">Partnerzy</a>
     <a class="nav__item" href="wydarzenia.html">Wydarzenia</a>
@@ -2185,8 +2186,9 @@ function renderOffer(data, grid, introEl, aud){
   const v=(data.oferta||{})[aud];
   if(!v){grid.innerHTML="";return;}
   if(introEl) introEl.textContent=v.intro;
-  grid.classList.toggle("offer-grid--2", v.cards.length===2);
-  grid.innerHTML=v.cards.map(c=>`
+  const cards=UKRYJ_POZNAJMY_SIE?v.cards.filter(c=>!/dni-probne/.test(c.href)):v.cards;
+  grid.classList.toggle("offer-grid--2", cards.length===2);
+  grid.innerHTML=cards.map(c=>`
     <a class="offer-card" href="${c.href}">
       <span class="offer-card__bg bw" style="background-image:url('${c.img}')"></span>
       <span class="offer-card__title">${c.title}</span>
