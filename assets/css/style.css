@@ -1960,3 +1960,31 @@ body.tnm-wait-lock{overflow:hidden}
   .tnm-siatka .catalog.section{padding-top:64px}
   .tnm-siatka .catalog .cat-main{gap:40px}
 }
+
+.knarz .container{max-width:min(1072px,calc(100vw - 32px))}
+.knarz__h{font-size:clamp(26px,3vw,40px);margin:0 0 40px}
+.knarz__h>span{color:var(--red)}
+.knarz__sep{display:inline-block;margin:0 .5em;font-weight:400}
+.knarz__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.knarz__haslo{color:var(--red)}
+.knarz__card .zk__hit{z-index:2}
+.knarz__main{position:relative;grid-column:1/3;grid-row:1/3;min-height:560px;display:flex;align-items:flex-end;overflow:hidden;color:#fff;transition:box-shadow .15s ease}
+.knarz__main:hover,.knarz__main:focus-within{box-shadow:0 0 0 2px var(--red)}
+.knarz__bg{position:absolute;inset:0;background:#161616 center 30%/cover no-repeat}
+.knarz__bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05) 40%,rgba(0,0,0,.6))}
+.knarz__metka{position:absolute;left:0;top:28px;z-index:1}
+.knarz__txt{position:relative;z-index:1;display:flex;flex-direction:column;gap:10px;padding:0 28px 28px}
+.knarz__mh{margin:0;font-size:13px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase}
+.knarz__mt{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(24px,2.4vw,35px);line-height:1.2;color:#fff}
+.knarz__mm{margin:0;font-size:15px}
+.knarz__mm .knarz__sep,.knarz__mh .knarz__sep,.knarz__haslo .knarz__sep,.knarz__card .zk__meta .knarz__sep{margin:0 .5em}
+.knarz__haslo .knarz__sep{color:var(--red)}
+.knarz__cta{align-self:flex-start;margin-top:18px;font-weight:700;font-size:17px;border-bottom:2px solid #fff;padding-bottom:4px}
+.knarz__hit{position:absolute;inset:0;width:100%;height:100%;background:none;border:0;padding:0;cursor:pointer;z-index:2}
+.knarz__hit:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.lcpopup__metka{position:absolute;left:0;top:28px;z-index:2}
+@media(max-width:899px){.knarz__grid{grid-template-columns:1fr 1fr}.knarz__main{grid-column:1/3;grid-row:auto;min-height:440px}}
+@media(max-width:600px){.knarz__metka,.lcpopup__metka{width:110px;height:28px;font-size:16px;top:20px}.knarz__txt{padding:0 20px 24px}}
+@media(max-width:560px){.knarz__grid{grid-template-columns:1fr}.knarz__main{grid-column:auto}.knarz__h>span{display:block}.knarz__h>.knarz__sep{display:none}}
+.knarz__nw{white-space:nowrap}
+.knarz .is-tight .knarz__sep{margin:0 .25em}

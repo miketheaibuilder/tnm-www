@@ -1131,7 +1131,7 @@ function openEntry(ctx){
 
   const media=`<div class="lcpopup__media">
       <span class="lcpopup__media-bg bw" style="${photo?`background-image:url('${photo}')`:""}"></span>
-      <span class="lcpopup__logo"><img src="${THX_LOGO}" alt="The Noise Makers"></span>
+      ${ctx.metka?`<span class="badge-tag lcpopup__metka">${ctx.metka}</span>`:`<span class="lcpopup__logo"><img src="${THX_LOGO}" alt="The Noise Makers"></span>`}
       <button class="btn lcpopup__cta" type="button" data-entry-go>${ctx.ctaLabel||"Zapisz się"} ${ARR}</button>
     </div>`;
   let body;
@@ -1415,11 +1415,11 @@ const ENTRY={
 
   "kons-poznajmy":()=>({variant:"B",mastheadTitle:"Umów spotkanie",title:"Cześć,",desc:WELCOME_ZENCAL_FREE,
     outro:WELCOME_ZENCAL_OUTRO,
-    priceNote:"bezpłatnie",price:"0 zł",photo:THX_PHOTO_NEUTRAL,ctaLabel:WELCOME_ZENCAL_CTA,
+    priceNote:"bezpłatnie",price:"0 zł",photo:"assets/img/figma/konsultacje/dzieci/kons-narz-poznajmy.webp",metka:"CLARITY",ctaLabel:WELCOME_ZENCAL_CTA,
     next:{kind:"zencal",key:"free"},thx:{surface:"konsultacja",button:true}}),
   "kons-fundamenty":()=>({variant:"B",mastheadTitle:"Umów spotkanie",title:"Cześć,",desc:WELCOME_ZENCAL_PAID,
     outro:WELCOME_ZENCAL_OUTRO,
-    priceNote:"płatne",price:"899 zł",photo:THX_PHOTO_NEUTRAL,ctaLabel:WELCOME_ZENCAL_CTA,
+    priceNote:"płatne",price:"899 zł",photo:"assets/img/figma/konsultacje/dzieci/kons-narz-fundamenty.webp",metka:"CLARITY",ctaLabel:WELCOME_ZENCAL_CTA,
     next:{kind:"zencal",key:"paid"},thx:{surface:"konsultacja",button:true}}),
    
   "kons-napisz":()=>({variant:"B",mastheadTitle:"Formularz zgłoszeniowy",title:"Napisz do nas",
@@ -2153,6 +2153,21 @@ const KONS_TILES=[
    desc:"Wypełnij krótki formularz, a my dobierzemy zajęcia i Prowadzących pod Wasze potrzeby i wrócimy z propozycją.",
    chars:[{i:"pin",t:"Wypełnij online"},{i:"clock",t:"do 5 min"},{i:"star",t:"Efekt: Rekomendacje TNM - e-mail"}]}
 ];
+function tnmFitSep(root){
+  const els=[...root.querySelectorAll(".knarz__mh,.knarz__haslo,.knarz__mm,.knarz__card .zk__meta")];
+  const fit=()=>els.forEach(e=>{
+    e.classList.remove("is-tight");
+    const cs=getComputedStyle(e), lh=parseFloat(cs.lineHeight)||parseFloat(cs.fontSize)*1.4;
+    if(e.getBoundingClientRect().height>lh*1.5) e.classList.add("is-tight");
+  });
+  fit(); window.addEventListener("resize",fit);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fit);
+}
+function renderKonsultacjeNarzedzia(el){
+  if(!el) return;
+  el.innerHTML=`<article class="knarz__main"><span class="knarz__bg bw" style="background-image:url('assets/img/figma/konsultacje/dzieci/kons-narz-fundamenty.webp')"></span><span class="badge-tag knarz__metka">CLARITY</span><div class="knarz__txt"><p class="knarz__mh">Słuchanie<b class="knarz__sep">|</b>Odkrywanie<b class="knarz__sep">|</b>Kierunek</p><h3 class="knarz__mt">„Fundamenty” – Diagnostyka</h3><p class="knarz__mm">45 min<b class="knarz__sep">|</b>spotkanie 1:1<b class="knarz__sep">|</b>Warszawa, Wiertnicza 141</p><span class="knarz__cta">Wybierz swój termin <span aria-hidden="true">→</span></span></div><button class="knarz__hit" type="button" data-entry="kons-fundamenty" aria-label="„Fundamenty” – Diagnostyka"></button></article><article class="zk knarz__card"><div class="zk__img"><span class="zk__imgbg bw" style="background-image:url('assets/img/figma/konsultacje/dzieci/kons-narz-poznajmy.webp')"></span></div><div class="zk__body"><p class="zk__haslo knarz__haslo"><span class="knarz__nw">Rozmowa</span><b class="knarz__sep">|</b><span class="knarz__nw">Zaufanie</span><b class="knarz__sep">|</b><span class="knarz__nw">Pierwszy krok</span></p><h3 class="zk__title">„Poznajmy się” – Rozmowa</h3><p class="zk__meta">15 min<b class="knarz__sep">|</b>rozmowa online</p><div class="zk__foot"><span class="zk__tag">online</span><span class="zk__cena">bezpłatnie</span></div></div><button class="zk__hit" type="button" data-entry="kons-poznajmy" aria-label="„Poznajmy się” – Rozmowa"></button></article><article class="zk knarz__card"><div class="zk__img"><span class="zk__imgbg bw" style="background-image:url('assets/img/figma/konsultacje/dzieci/kons-narz-napisz.webp')"></span></div><div class="zk__body"><p class="zk__haslo knarz__haslo"><span class="knarz__nw">Kilka zdań</span><b class="knarz__sep">|</b><span class="knarz__nw">Nasza odpowiedź</span></p><h3 class="zk__title">„Napisz do nas” – Formularz</h3><p class="zk__meta">do 5 min<b class="knarz__sep">|</b>odpowiedź e-mailem</p><div class="zk__foot"><span class="zk__tag">online</span><span class="zk__cena">bezpłatnie</span></div></div><button class="zk__hit" type="button" data-entry="kons-napisz" aria-label="„Napisz do nas” – Formularz"></button></article>`;
+  tnmFitSep(el);
+}
 function renderKonsultacjeTiles(el, aud){
   if(!el) return;
   const ph = aud==="dzieci" ? KONS_PHOTO_DZIECI : KONS_PHOTO;   
@@ -3749,4 +3764,4 @@ document.addEventListener("DOMContentLoaded",mount);
 
 
 window.TNMThx={photo:thxPhoto,audienceNow};
-window.TNM={initArtletterForm,loadData,renderTeam,renderOpinie,renderOffer,initCarousels,mountCatalog,mountZespoly,mountPolkolonie,mountDniProbne,renderFaq,renderCatalog,openModal,openTerminModal,openBooking,closeBooking,openBookingIntro,openBookingThanks,openTeamPopup,openZespPopup,openPolkPopup,openVoucherModal,renderKonsultacjeValues,renderKonsultacjeTiles,openEntry,routeStep2,openThanks,ENTRY,initPartnerForm,initWaitlistForm,qsAud,isData,setSubheroVideo};
+window.TNM={initArtletterForm,loadData,renderTeam,renderOpinie,renderOffer,initCarousels,mountCatalog,mountZespoly,mountPolkolonie,mountDniProbne,renderFaq,renderCatalog,openModal,openTerminModal,openBooking,closeBooking,openBookingIntro,openBookingThanks,openTeamPopup,openZespPopup,openPolkPopup,openVoucherModal,renderKonsultacjeValues,renderKonsultacjeTiles,renderKonsultacjeNarzedzia,openEntry,routeStep2,openThanks,ENTRY,initPartnerForm,initWaitlistForm,qsAud,isData,setSubheroVideo};
