@@ -66,16 +66,9 @@
 </section>
 
  
-<section class="section section--paper" id="kons-opcje"><div class="container">
-  <div class="kcat__layout">
-    <aside class="kcat__side">
-      <span class="badge-tag">CLARITY</span>
-    </aside>
-    <div class="kcat__main">
-      <h2 class="kcat__title">Our Tools</h2>
-      <div class="kctiles" id="konsultacje-opts"></div>
-    </div>
-  </div>
+<section class="section section--paper knarz" id="kons-opcje"><div class="container">
+  <h2 class="knarz__h">Our tools<b class="knarz__sep">|</b><span>A conscious choice of path</span></h2>
+  <div class="knarz__grid" id="konsultacje-opts"></div>
 </div></section>
 
  
@@ -103,7 +96,7 @@
   const d=await TNM.loadData();
   TNM.renderKonsultacjeValues(d,document.getElementById("kons-values"),"konsultacje_values_dzieci");
    
-  TNM.renderKonsultacjeTiles(document.getElementById("konsultacje-opts"), "dzieci");
+  TNM.renderKonsultacjeNarzedzia(document.getElementById("konsultacje-opts"));
    
   TNM.renderOpinie(d,document.getElementById("opinie"),"opinie_konsultacje");
   TNM.initCarousels();
