@@ -2707,14 +2707,15 @@ function tnmSwitcher(kind,aud){
   const z=kind==="zespol";
   const suf=aud==="Dziecko"?"dzieci":"dorosli";
   const sep=`<b class="tsw__sep">|</b>`;
+  const zsub=suf==="dzieci"?"a fixed day once a week|2–3 hour block|age groups 3–18":"a fixed day once a week|2–3 hour block";
   const half=(on,metka,nazwa,haslo,sub,href)=>{
     const inner=`<span class="tsw__metka">${metka}</span><span class="tsw__txt"><span class="tsw__name">${nazwa}<b class="tsw__sep">|</b><span class="tsw__haslo">${haslo}</span>${on?"":`<span class="tsw__arr" aria-hidden="true">›</span>`}</span><span class="tsw__sub">${sub.split("|").join(sep)}</span></span>`;
     return on?`<div class="tsw__half is-on" aria-current="page">${inner}</div>`:`<a class="tsw__half" href="${href}">${inner}</a>`;
   };
   hero.insertAdjacentHTML("afterend",`<nav class="tsw" aria-label="Classes or group work"><div class="tsw__grid">
     ${half(!z,"FOCUS","Classes","At your own pace","1:1 or small group|45 min|time arranged together","zajecia-indywidualne-"+suf+".html")}
-    ${half(z,"JOY","Group work","In a shared rhythm","a fixed day once a week|2–3 hour block|peer group","zajecia-zespolowe-"+suf+".html")}
-  </div><div class="tsw__strip">${z?`<b>In a shared rhythm</b>${sep}${"a fixed day once a week|2–3 hour block|peer group".split("|").join(sep)}`:`<b>At your own pace</b>${sep}${"1:1 or small group|45 min|time arranged together".split("|").join(sep)}`}</div></nav>`);
+    ${half(z,"JOY","Group work","In a shared rhythm",zsub,"zajecia-zespolowe-"+suf+".html")}
+  </div><div class="tsw__strip">${z?`<b>In a shared rhythm</b>${sep}${zsub.split("|").join(sep)}`:`<b>At your own pace</b>${sep}${"1:1 or small group|45 min|time arranged together".split("|").join(sep)}`}</div></nav>`);
   hero.classList.add("subhero--link");
   const cta=hero.querySelector(".subhero__cta");
   if(cta){ cta.classList.remove("btn"); const a=cta.querySelector('[aria-hidden="true"]'); if(a) a.textContent="→"; }

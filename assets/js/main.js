@@ -2707,14 +2707,15 @@ function tnmSwitcher(kind,aud){
   const z=kind==="zespol";
   const suf=aud==="Dziecko"?"dzieci":"dorosli";
   const sep=`<b class="tsw__sep">|</b>`;
+  const zsub=suf==="dzieci"?"stały dzień raz w tygodniu|blok 2–3 godz.|grupy wiekowe 3–18 lat":"stały dzień raz w tygodniu|blok 2–3 godz.";
   const half=(on,metka,nazwa,haslo,sub,href)=>{
     const inner=`<span class="tsw__metka">${metka}</span><span class="tsw__txt"><span class="tsw__name">${nazwa}<b class="tsw__sep">|</b><span class="tsw__haslo">${haslo}</span>${on?"":`<span class="tsw__arr" aria-hidden="true">›</span>`}</span><span class="tsw__sub">${sub.split("|").join(sep)}</span></span>`;
     return on?`<div class="tsw__half is-on" aria-current="page">${inner}</div>`:`<a class="tsw__half" href="${href}">${inner}</a>`;
   };
   hero.insertAdjacentHTML("afterend",`<nav class="tsw" aria-label="Zajęcia czy zespoły"><div class="tsw__grid">
     ${half(!z,"FOCUS","Zajęcia","W Twoim tempie","1:1 lub mała grupa|45 min|termin ustalamy razem","zajecia-indywidualne-"+suf+".html")}
-    ${half(z,"JOY","Zespoły","We wspólnym rytmie","stały dzień raz w tygodniu|blok 2–3 godz.|grupa rówieśnicza","zajecia-zespolowe-"+suf+".html")}
-  </div><div class="tsw__strip">${z?`<b>We wspólnym rytmie</b>${sep}${"stały dzień raz w tygodniu|blok 2–3 godz.|grupa rówieśnicza".split("|").join(sep)}`:`<b>W Twoim tempie</b>${sep}${"1:1 lub mała grupa|45 min|termin ustalamy razem".split("|").join(sep)}`}</div></nav>`);
+    ${half(z,"JOY","Zespoły","We wspólnym rytmie",zsub,"zajecia-zespolowe-"+suf+".html")}
+  </div><div class="tsw__strip">${z?`<b>We wspólnym rytmie</b>${sep}${zsub.split("|").join(sep)}`:`<b>W Twoim tempie</b>${sep}${"1:1 lub mała grupa|45 min|termin ustalamy razem".split("|").join(sep)}`}</div></nav>`);
   hero.classList.add("subhero--link");
   const cta=hero.querySelector(".subhero__cta");
   if(cta){ cta.classList.remove("btn"); const a=cta.querySelector('[aria-hidden="true"]'); if(a) a.textContent="→"; }
