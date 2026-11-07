@@ -1613,7 +1613,7 @@ select.tnm-cc{font-family:inherit;font-size:16px;color:var(--ink);border:1px sol
 .lcpopup__panelcta .btn{min-height:48px}
 @media(max-width:860px){ .lcpopup__panelcta{display:none} }
 @media(max-width:991px){.tnm-siatka .subhero__sub{display:none}}
-.tnm-siatka .subhero__metkawrap.is-flow .subhero__metka{justify-content:flex-start;padding:0 16px 0 var(--mx,12px);margin-left:var(--ml,0)}
+.tnm-siatka .subhero__metkawrap.is-flow .subhero__metka,.subhero--metka .subhero__metkawrap.is-flow .subhero__metka{justify-content:flex-start;padding:0 16px 0 var(--mx,12px);margin-left:var(--ml,0)}
 @media(min-width:992px){
   .tnm-siatka .subhero .container,.tnm-siatka .cat-wide>.container{max-width:min(1072px,calc(100vw - 80px));margin:0 auto;padding-left:0;padding-right:0}
   .tnm-siatka .tsw__grid{max-width:min(1072px,calc(100vw - 80px));margin:0 auto}
