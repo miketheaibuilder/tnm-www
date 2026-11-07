@@ -1464,7 +1464,7 @@ function tnmPopupData(i,kind){
     const segs=p?p.segs.map(s=>{const o={n:s.n,od:hh(t),do:hh(t+s.min)};t+=s.min;return o;}):[];
     return {kind,haslo:TNM_HASLA_Z[key]||"",akapity,skladniki:"",
       plan:p?{min:p.min,segs}:null,
-      rows:[["KIEDY",[dni,p?p.od+"–"+p.do:(isData(i.godz)?i.godz:"")].filter(Boolean).join(", ")],["GDZIE",isData(i.lokalizacja)?i.lokalizacja:""],["POZIOM","od pierwszych kroków"]].filter(r=>r[1]),
+      rows:[["KIEDY",tnmKiedyZesp(p,i)],["GDZIE",isData(i.lokalizacja)?i.lokalizacja:""],["POZIOM","od pierwszych kroków"]].filter(r=>r[1]),
       facts:dz?[["Twój kontakt"," (telefon, e-mail)"],["dane dziecka"," (imię i wiek)"]]:[["Twój kontakt"," (telefon, e-mail)"]],
       krokiLab:"CO DALEJ",kroki:["Gdy grupa się zbierze, potwierdzamy start telefonicznie lub mailem.","Potwierdzasz miejsce – dopiero wtedy płatność."],
       mies:zl(i.cena_karnet),wzor:zgodne?`4 spotkania × ${h} godz. = ${4*h} godzin w miesiącu`:"4 spotkania w miesiącu",
@@ -1477,6 +1477,15 @@ function tnmPopupData(i,kind){
     facts:dz?f:f.slice(1),
     krokiLab:"JAK WYGLĄDA ZAPIS",kroki:mg?["Dołączasz do listy oczekujących – bez płatności i zobowiązań.","Gdy grupa się zbierze, piszemy z dniem i godziną startu.","Potwierdzasz miejsce i przychodzicie na pierwsze zajęcia."]:["Wypełniasz krótki formularz zapisu.","Odzywamy się, dobieramy prowadzącego i ustalamy termin.",dz?"Pierwsze zajęcia – w dniu i miejscu, które Wam pasują.":"Pierwsze zajęcia – w dniu i miejscu, które Ci pasują."],
     mies:zl(i.cena_karnet),wzor:`4 zajęcia po ${czas} w miesiącu`,jedn:zl(i.cena_lekcji),jednTxt:"ZA ZAJĘCIA"};
+}
+const TNM_ZESP_DZIEN="wybrany dzień", TNM_ZESP_START="luty 2027";
+function tnmHaslo(t){
+  const p=String(t||"").split(/\.\s*/).map(x=>x.trim()).filter(Boolean);
+  return p.map(x=>`<span class="tnm-hs__w">${x}</span>`).join(`<b class="tnm-hs__sep">|</b>`);
+}
+function tnmKiedyZesp(p,i){
+  const godz=p?p.od+"–"+p.do:(isData(i.godz)?i.godz:"");
+  return godz?`${TNM_ZESP_DZIEN}, ${godz} (start: ${TNM_ZESP_START})`:"";
 }
 function tnmPanelHTML(ctx){
   const d=ctx.tnm;
@@ -1497,10 +1506,10 @@ function tnmPanelHTML(ctx){
     </div>`:"";
   return `<div class="lcpopup__panel tp">
       <div class="tp__head">
-        ${d.haslo?`<p class="tp__haslo">${d.haslo}</p>`:""}
+        ${d.haslo?`<p class="tp__haslo">${tnmHaslo(d.haslo)}</p>`:""}
         <h2 class="lcpopup__title tp__title">${ctx.title||""}</h2>
         ${d.akapity.length?`<div class="tp__opis">${d.akapity.map(t=>`<p>${t}</p>`).join("")}</div>`:""}
-        ${d.skladniki?`<p class="tp__skl">${d.skladniki.split("|").map(s=>s.trim()).join(`<span class="tp__sep">|</span>`)}</p>`:""}
+        
       </div>
       ${d.alts?`<div class="tp__sec"><span class="tp__lab">WYBIERZ FORMĘ</span><div class="tp__formy" role="radiogroup">${d.alts.map(a=>`<button type="button" role="radio" class="tp__forma" aria-checked="${a.on?"true":"false"}" data-tnm-alt="${a.j}">${a.label}</button>`).join("")}</div></div>`:""}
       ${plan}${rows}
@@ -1600,7 +1609,7 @@ function lessonEntryCtx(i,kind){
 
 
 
-  return {variant:"A",mastheadTitle:fmtNazwa(i),tnm:tnmPopupData(i,kind),title:fmtNazwa(i),desc,descHTML,prices,chars:chars.slice(0,4),
+  return {variant:"A",metka:kind==="zespol"?"JOY":(kind==="lekcja"?"FOCUS":""),mastheadTitle:fmtNazwa(i),tnm:tnmPopupData(i,kind),title:fmtNazwa(i),desc,descHTML,prices,chars:chars.slice(0,4),
     track:{content_name:i.nazwa_id||i.nazwa, content_category:kind, audience:audienceNow()},    
     price:(isWaitlist||turnusTrwa||(POL2027&&kind==="polkolonie"))?null:(isData(i.cena)?i.cena:null),photo,    
     ctaLabel:turnusTrwa?"Napisz do nas":cta,
@@ -2283,7 +2292,7 @@ function catCard(i,idx){
   return `<article class="zk${najm?" zk--najm":""}">
     <div class="zk__img"><span class="zk__imgbg bw" style="background-image:url('${photo}')"></span>${najm?`<span class="zk__najm">3–5 LAT</span>`:""}</div>
     <div class="zk__body">
-      ${haslo?`<p class="zk__haslo">${haslo}</p>`:""}
+      ${haslo?`<p class="zk__haslo">${tnmHaslo(haslo)}</p>`:""}
       <h3 class="zk__title">${tytul}</h3>
       <p class="zk__meta">${czas}${kiedy?" · "+kiedy:""}</p>
       <div class="zk__foot"><span class="zk__tag">${mg?"mała grupa":"1:1"}</span><span class="zk__cena">${isData(i.cena)?i.cena:""}</span></div>
@@ -2327,14 +2336,14 @@ function zespCard(i,idx){
     </div>`;
   }
   const dni=isData(i.dni_daty)?String(i.dni_daty).replace(/\s*-\s*/g,"–"):"";
-  const kiedy=[dni,p?p.od+"–"+p.do:(isData(i.godz)?i.godz:"")].filter(Boolean).join(" · ");
+  const kiedy=tnmKiedyZesp(p,i);
   const lok=isData(i.lokalizacja)?i.lokalizacja:"";
   const spot=(+i.cena_lekcji>0&&+i.liczba_lekcji>0)?(+i.cena_lekcji)*(+i.liczba_lekcji):0;
   const mies=+i.cena_karnet>0?+i.cena_karnet:0;
   return `<article class="zk zk--zesp">
     <div class="zk__img bw" style="background-image:url('${photo}')"></div>
     <div class="zk__body">
-      ${haslo?`<p class="zk__haslo">${haslo}</p>`:""}
+      ${haslo?`<p class="zk__haslo">${tnmHaslo(haslo)}</p>`:""}
       <h3 class="zk__title">${tytul}</h3>
       ${plan}
       <p class="zk__meta zk__meta--z">${kiedy}${lok?`<br>${lok}`:""}</p>
@@ -2722,15 +2731,15 @@ function tnmSwitcher(kind,aud){
   const z=kind==="zespol";
   const suf=aud==="Dziecko"?"dzieci":"dorosli";
   const sep=`<b class="tsw__sep">|</b>`;
-  const zsub=suf==="dzieci"?"stały dzień raz w tygodniu|blok 2–3 godz.|grupy wiekowe 3–18 lat":"stały dzień raz w tygodniu|blok 2–3 godz.";
+  const zsub=suf==="dzieci"?"grupy wiekowe 3–18 lat|stały dzień raz w tygodniu":"stały dzień raz w tygodniu";
   const half=(on,metka,nazwa,haslo,sub,href)=>{
     const inner=`<span class="tsw__metka">${metka}</span><span class="tsw__txt"><span class="tsw__name">${nazwa}<b class="tsw__sep">|</b><span class="tsw__haslo">${haslo}</span>${on?"":`<span class="tsw__arr" aria-hidden="true">›</span>`}</span><span class="tsw__sub">${sub.split("|").join(sep)}</span></span>`;
     return on?`<div class="tsw__half is-on" aria-current="page">${inner}</div>`:`<a class="tsw__half" href="${href}">${inner}</a>`;
   };
   hero.insertAdjacentHTML("afterend",`<nav class="tsw" aria-label="Zajęcia czy zespoły"><div class="tsw__grid">
-    ${half(!z,"FOCUS","Zajęcia","W Twoim tempie","1:1 lub mała grupa|45 min|termin ustalamy razem","zajecia-indywidualne-"+suf+".html")}
-    ${half(z,"JOY","Zespoły","We wspólnym rytmie",zsub,"zajecia-zespolowe-"+suf+".html")}
-  </div><div class="tsw__strip">${z?`<b>We wspólnym rytmie</b>${sep}${zsub.split("|").join(sep)}`:`<b>W Twoim tempie</b>${sep}${"1:1 lub mała grupa|45 min|termin ustalamy razem".split("|").join(sep)}`}</div></nav>`);
+    ${half(!z,"FOCUS","Zajęcia","45 min","1:1 lub mała grupa|termin ustalamy razem","zajecia-indywidualne-"+suf+".html")}
+    ${half(z,"JOY","Zespoły","blok 2–3 godz.",zsub,"zajecia-zespolowe-"+suf+".html")}
+  </div><div class="tsw__strip">${z?`<b>blok 2–3 godz.</b>${sep}${zsub.split("|").join(sep)}`:`<b>45 min</b>${sep}${"1:1 lub mała grupa|termin ustalamy razem".split("|").join(sep)}`}</div></nav>`);
   hero.classList.add("subhero--link");
   const cta=hero.querySelector(".subhero__cta");
   if(cta){ cta.classList.remove("btn"); const a=cta.querySelector('[aria-hidden="true"]'); if(a) a.textContent="→"; }

@@ -1988,3 +1988,21 @@ body.tnm-wait-lock{overflow:hidden}
 @media(max-width:560px){.knarz__grid{grid-template-columns:1fr}.knarz__main{grid-column:auto}.knarz__h>span{display:block}.knarz__h>.knarz__sep{display:none}}
 .knarz__nw{white-space:nowrap}
 .knarz .is-tight .knarz__sep{margin:0 .25em}
+
+.zk__haslo,.tp__haslo{color:var(--red)}
+.tnm-hs__w{white-space:nowrap}
+.tnm-hs__sep{display:inline-block;margin:0 .5em;font-weight:400}
+.tp__haslo .tnm-hs__sep,.zk__haslo .tnm-hs__sep{color:var(--red)}
+.cfil__chip{background:transparent;font-size:14px;line-height:1.2;padding:5px 10px;min-height:32px}
+.cfil__chip:hover{background:var(--beige-200)}
+.cfil__chip[aria-pressed="true"]:hover{background:var(--red)}
+.sec-intro .split{align-items:flex-start}
+.sec-intro .col-text>h2{font-size:35px;line-height:42px;margin-top:-6px}
+.tnm-home .offer-body{padding-top:var(--5xl)}
+@media(max-width:760px){
+  .sec-intro .col-text>h2{font-size:28px;line-height:34px}
+  .tnm-home .offer-body{padding-top:var(--4xl)}
+  .catalog.section{padding-top:32px}
+  .catalog .cat-main{gap:20px}
+  .catalog .cat-tabs{padding-bottom:0}
+}
