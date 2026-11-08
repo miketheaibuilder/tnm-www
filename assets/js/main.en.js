@@ -1484,8 +1484,8 @@ function tnmHaslo(t){
   return p.map(x=>`<span class="tnm-hs__w">${x}</span>`).join(`<b class="tnm-hs__sep">|</b>`);
 }
 function tnmKiedyZesp(p,i){
-  const godz=p?p.od+"–"+p.do:(isData(i.godz)?i.godz:"");
-  return godz?`${TNM_ZESP_DZIEN}, ${godz} (starting ${TNM_ZESP_START})`:"";
+  const godz=p&&p.od?p.od+"–"+p.do:(p?p.min+" min, once a week":(isData(i.godz)?i.godz:""));
+  return godz?`${TNM_ZESP_DZIEN}, ${godz} (starting\u00a0${TNM_ZESP_START})`:"";
 }
 function tnmPanelHTML(ctx){
   const d=ctx.tnm;
@@ -2303,14 +2303,19 @@ function catCard(i,idx){
 
 
 
-const TNM_HASLA_Z={"Dziecko|Musical":"Stage. Voice. Movement.","Dziecko|Chór":"Voices. Sound. Joy.","Dziecko|Rythm & Feel - Groove":"Rhythm. Body. Groove.","Dziecko|Stwórz swoją piosenkę - Wokal + Tekst + Produkcja":"Words. Melody. Creating.","Dziecko|Spektakl - Aktorstwo":"Stage. Characters. Story.","Dziecko|Spektakl - Taniec / Ruch":"Movement. Body. Energy.","Dziecko|Yoga z relaksacją dźwiękami":"Breath. Calm. Body.","Dziecko|Koncert relaksacyjny":"Sound. Silence. Presence.","Dziecko|Ciekawe spotkania o sztuce - kierunki, artyści, twórczość":"Conversation. Art. Discovery.","Dziecko|Ciekawe spotkania o muzyce - kierunki, artyści, twórczość":"Conversation. Music. Listening.","Dorosły|Musical":"Stage. Voice. Movement.","Dorosły|Chór":"Voices. Sound. Joy.","Dorosły|Spektakl - Aktorstwo":"Stage. Characters. Story.","Dorosły|Spektakl - Taniec / Ruch":"Movement. Body. Energy.","Dorosły|Yoga z relaksacją dźwiękami":"Breath. Calm. Body.","Dorosły|Koncert relaksacyjny":"Sound. Silence. Presence.","Dorosły|TRE - praca z ciałem uwalniająca napięcia i stres":"Body. Tension. Release.","Dorosły|Psychologia somatyczna (Dance Movement Therapy)":"Movement. Body. Emotions.","Dorosły|Malarstwo intuicyjne":"Colour. Intuition. Creating.","Dorosły|Porozmawiajmy o sztuce - kierunki, artyści, twórczość":"Conversation. Art. Discovery.","Dorosły|Porozmawiajmy o muzyce - kierunki, artyści, twórczość":"Conversation. Music. Listening.","Dorosły|Taniec intuicyjny":"Movement. Body. Freedom.","Dorosły|Karykatura":"Line. Character. Humour."};
+const TNM_HASLA_Z={"Dorosły|Malarstwo":"Colour. Craft. Studio.","Dziecko|Musical":"Stage. Voice. Movement.","Dziecko|Chór":"Voices. Sound. Joy.","Dziecko|Rythm & Feel - Groove":"Rhythm. Body. Groove.","Dziecko|Stwórz swoją piosenkę - Wokal + Tekst + Produkcja":"Words. Melody. Creating.","Dziecko|Spektakl - Aktorstwo":"Stage. Characters. Story.","Dziecko|Spektakl - Taniec / Ruch":"Movement. Body. Energy.","Dziecko|Yoga z relaksacją dźwiękami":"Breath. Calm. Body.","Dziecko|Koncert relaksacyjny":"Sound. Silence. Presence.","Dziecko|Ciekawe spotkania o sztuce - kierunki, artyści, twórczość":"Conversation. Art. Discovery.","Dziecko|Ciekawe spotkania o muzyce - kierunki, artyści, twórczość":"Conversation. Music. Listening.","Dorosły|Musical":"Stage. Voice. Movement.","Dorosły|Chór":"Voices. Sound. Joy.","Dorosły|Spektakl - Aktorstwo":"Stage. Characters. Story.","Dorosły|Spektakl - Taniec / Ruch":"Movement. Body. Energy.","Dorosły|Yoga z relaksacją dźwiękami":"Breath. Calm. Body.","Dorosły|Koncert relaksacyjny":"Sound. Silence. Presence.","Dorosły|TRE - praca z ciałem uwalniająca napięcia i stres":"Body. Tension. Release.","Dorosły|Psychologia somatyczna (Dance Movement Therapy)":"Movement. Body. Emotions.","Dorosły|Malarstwo intuicyjne":"Colour. Intuition. Creating.","Dorosły|Porozmawiajmy o sztuce - kierunki, artyści, twórczość":"Conversation. Art. Discovery.","Dorosły|Porozmawiajmy o muzyce - kierunki, artyści, twórczość":"Conversation. Music. Listening.","Dorosły|Taniec intuicyjny":"Movement. Body. Freedom.","Dorosły|Karykatura":"Line. Character. Humour."};
 function tnmPlan(g){
+  const mm=/^(?:(\d+)\s*×\s*)?(\d+)\s*min/.exec(String(g||"").trim());
+  if(mm){const k=+(mm[1]||1),m=+mm[2];const nm=k===3?["Vocals","Lyrics","Production"]:["Session"];return {od:"",do:"",min:k*m,segs:Array.from({length:k},(x,j)=>({n:nm[j]||"Session",min:m}))};}
+  return tnmPlan0(g);
+}
+function tnmPlan0(g){
   const L=String(g||"").split("\n").map(s=>s.trim()).filter(Boolean);
   const t=s=>{const m=/^(\d{1,2}):(\d{2})/.exec(s);return m?(+m[1])*60+(+m[2]):null;};
   const hh=m=>Math.floor(m/60)+":"+String(m%60).padStart(2,"0");
   const up=s=>s.charAt(0).toUpperCase()+s.slice(1);
   const rng=L.length===1?/^(\d{1,2}:\d{2})\s*[-–]\s*(\d{1,2}:\d{2})\s*(?:[-–]\s*(.+))?$/.exec(L[0]):null;
-  if(rng){const a=t(rng[1]),b=t(rng[2]);if(!(b>a))return null;return {od:rng[1],do:rng[2],min:b-a,segs:rng[3]?[{n:up(rng[3]),min:b-a}]:[]};}
+  if(rng){const a=t(rng[1]),b=t(rng[2]);if(!(b>a))return null;return {od:rng[1],do:rng[2],min:b-a,segs:[{n:rng[3]?up(rng[3]):"Session",min:b-a}]};}
   const P=L.map(s=>{const m=/^(\d{1,2}:\d{2})\s*[-–]\s*(.+)$/.exec(s);return m?{t:t(m[1]),od:m[1],n:up(m[2])}:null;});
   if(!P.length||P.some(x=>!x))return null;
   const segs=P.map((x,k)=>({n:x.n,min:k<P.length-1?P[k+1].t-x.t:60}));
@@ -2327,12 +2332,12 @@ function zespCard(i,idx){
   const kol=["zk__c1","zk__c2","zk__c3"];
   let plan="";
   if(p){
-    const g=tnmGodz(p.min);
+    const g=tnmGodz(p.min);const minLab=p.min%60?p.min+" MIN":"";
     const w=g.h===1?"HOUR":(g.h>=2&&g.h<=4&&Number.isInteger(g.h)?"HOURS":"HOURS");
     plan=`<div class="zk__plan">
-      <span class="zk__planlab">WE WORK TOGETHER<b class=tnm-hs__sep>|</b>${g.n} ${w}</span>
+      <span class="zk__planlab">WE WORK IN A BLOCK: ${p.segs.length===3&&p.min===135?"3 × 45 MIN":(minLab||g.n+" "+w)}</span>
       ${p.segs.length?`<span class="zk__bar">${p.segs.map((s,k)=>`<span class="${kol[k%3]}" style="flex:${s.min} 1 0"></span>`).join("")}</span>
-      <span class="zk__segs">${p.segs.map((s,k)=>`<span class="zk__seg"><span class="zk__sq ${kol[k%3]}"></span><span class="zk__segn">${s.n}</span><span class="zk__segt">${tnmGodz(s.min).n} h</span></span>`).join("")}</span>`:""}
+      <span class="zk__segs">${p.segs.map((s,k)=>`<span class="zk__seg"><span class="zk__sq ${kol[k%3]}"></span><span class="zk__segn">${s.n}</span><span class="zk__segt">${s.min<60||s.min%60?s.min+" min":tnmGodz(s.min).n+" h"}</span></span>`).join("")}</span>`:""}
     </div>`;
   }
   const dni=isData(i.dni_daty)?String(i.dni_daty).replace(/\s*-\s*/g,"–"):"";
@@ -2345,8 +2350,8 @@ function zespCard(i,idx){
     <div class="zk__body">
       ${haslo?`<p class="zk__haslo">${tnmHaslo(haslo)}</p>`:""}
       <h3 class="zk__title">${tytul}</h3>
+      <p class="zk__meta zk__meta--z zk__kiedy">${kiedy}</p>
       ${plan}
-      <p class="zk__meta zk__meta--z">${kiedy}${lok?`<br>${lok}`:""}</p>
       ${spot&&mies?`<div class="zk__foot"><span class="zk__spot">${spot} zł / session</span><span class="zk__cena">${mies} zł / month</span></div>`:""}
     </div>
     <button class="zk__hit" type="button" data-popup="${idx}" aria-label="Learn more – ${tytul}"></button>
