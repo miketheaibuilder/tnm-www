@@ -493,7 +493,7 @@ function legalLink(key, label, nowa){
 
 function legalNoteHTML(keys, wstep){
   const ks = keys && keys.length ? keys : ["regulamin","prywatnosc"];
-  return '<p class="legal-note">'+(wstep||"Details:")+' '+ks.map(k=>legalLink(k,null,true)).join(" · ")+'</p>';
+  return '<p class="legal-note">'+(wstep||"Details:")+' '+ks.map(k=>legalLink(k,null,true)).join("<b class=tnm-hs__sep>|</b>")+'</p>';
 }
 
 
@@ -1441,7 +1441,7 @@ const ENTRY={
    
   "voucher":()=>({variant:"A",mastheadTitle:"Voucher",title:"Voucher",
     desc:"Take care of your loved ones. Invite someone special to classes or an assessment as a GIFT.",
-    chars:[{icon:GIFT_MINI,text:"A flexible gift - the recipient chooses"},{icon:META_ICON.calendar,text:"Valid for 12 months"},{icon:ICO_STAR,text:"Classes 1:1 · “Fundamentals” assessment"}],
+    chars:[{icon:GIFT_MINI,text:"A flexible gift - the recipient chooses"},{icon:META_ICON.calendar,text:"Valid for 12 months"},{icon:ICO_STAR,text:"Classes 1:1<b class=tnm-hs__sep>|</b>“Fundamentals” assessment"}],
     photo:THX_PHOTO,ctaLabel:"Order a VOUCHER",next:{kind:"easycart",product:"voucher"},thx:{surface:"voucher",button:false}})
 };
 const GIFT_MINI='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="8" width="18" height="13" rx="1"/><path d="M3 12h18M12 8v13M12 8s-2.5-5-5-5-2 4 5 5zM12 8s2.5-5 5-5 2 4-5 5z"/></svg>';
@@ -1478,14 +1478,14 @@ function tnmPopupData(i,kind){
     krokiLab:"HOW SIGN-UP WORKS",kroki:mg?["You join the waiting list – no payment, no commitment.","Once the group is complete, we send you the start day and time.","You confirm your place and come to the first class."]:["You fill in a short sign-up form.","We get in touch, match you with a teacher and agree on a time.","First lesson – on a day and at a place that suit you."],
     mies:zl(i.cena_karnet),wzor:`4 lessons of ${czas} a month`,jedn:zl(i.cena_lekcji),jednTxt:"PER LESSON"};
 }
-const TNM_ZESP_DZIEN="chosen day", TNM_ZESP_START="February 2027";
+const TNM_ZESP_DZIEN="chosen day", TNM_ZESP_START="soon";
 function tnmHaslo(t){
   const p=String(t||"").split(/\.\s*/).map(x=>x.trim()).filter(Boolean);
   return p.map(x=>`<span class="tnm-hs__w">${x}</span>`).join(`<b class="tnm-hs__sep">|</b>`);
 }
 function tnmKiedyZesp(p,i){
   const godz=p?p.od+"–"+p.do:(isData(i.godz)?i.godz:"");
-  return godz?`${TNM_ZESP_DZIEN}, ${godz} (start: ${TNM_ZESP_START})`:"";
+  return godz?`${TNM_ZESP_DZIEN}, ${godz} (starting ${TNM_ZESP_START})`:"";
 }
 function tnmPanelHTML(ctx){
   const d=ctx.tnm;
@@ -1493,7 +1493,7 @@ function tnmPanelHTML(ctx){
   const w=g?(g.h===1?"HOUR":(g.h>=2&&g.h<=4&&Number.isInteger(g.h)?"HOURS":"HOURS")):"";
   const kol=["zk__c1","zk__c2","zk__c3"];
   const plan=(d.plan&&d.plan.segs.length)?`<div class="tp__sec">
-      <span class="tp__lab">WE WORK TOGETHER · ${g.n} ${w}</span>
+      <span class="tp__lab">WE WORK TOGETHER<b class=tnm-hs__sep>|</b>${g.n} ${w}</span>
       <span class="zk__bar">${d.plan.segs.map((s,k)=>`<span class="${kol[k%3]}" style="flex:1 1 0"></span>`).join("")}</span>
       <div class="tp__plan">${d.plan.segs.map((s,k)=>`<div class="tp__planrow"><span class="zk__sq ${kol[k%3]}"></span><span class="tp__planod">${s.od}–${s.do}</span><span class="tp__plann">${s.n}</span></div>`).join("")}</div>
     </div>`:"";
@@ -1521,7 +1521,7 @@ function tnmPanelHTML(ctx){
 
 function lessonEntryCtx(i,kind){
   const chars=[];
-  if(isData(i.godz)) chars.push({icon:META_ICON.clock,text:i.godz.replace(/\n/g," · ")});
+  if(isData(i.godz)) chars.push({icon:META_ICON.clock,text:i.godz.replace(/\n/g,"<b class=tnm-hs__sep>|</b>")});
   if(kind==="polkolonie"){
     if(isData(i.turnus)) chars.push({icon:META_ICON.calendar,text:i.turnus});
     if(isData(i.wiek)) chars.push({icon:META_ICON.person,text:i.wiek+(isData(i.miejsca)?` (${i.miejsca})`:"")});
@@ -1725,11 +1725,11 @@ const BOOKING=`<div class="booking" id="booking" role="dialog" aria-modal="true"
     <div class="booking__tabs" role="tablist" aria-label="Rodzaj spotkania">
       <button class="booking-tab" role="tab" id="booktab-free" aria-controls="bookpanel-free" aria-selected="true" data-event="free">
         <span class="booking-tab__ico">${BOOK_ICO_SCREEN}</span>
-        <span class="booking-tab__txt"><span class="booking-tab__name">Let's meet</span><span class="booking-tab__meta">15 min · online <span class="badge-soft">Free</span></span></span>
+        <span class="booking-tab__txt"><span class="booking-tab__name">Let's meet</span><span class="booking-tab__meta">15 min<b class=tnm-hs__sep>|</b>online <span class="badge-soft">Free</span></span></span>
       </button>
       <button class="booking-tab" role="tab" id="booktab-paid" aria-controls="bookpanel-paid" aria-selected="false" data-event="paid">
         <span class="booking-tab__ico">${BOOK_ICO_PEOPLE}</span>
-        <span class="booking-tab__txt"><span class="booking-tab__name">„Fundamentals" assessment</span><span class="booking-tab__meta">45 min · at our place <span class="booking-tab__price">899 zł</span></span></span>
+        <span class="booking-tab__txt"><span class="booking-tab__name">„Fundamentals" assessment</span><span class="booking-tab__meta">45 min<b class=tnm-hs__sep>|</b>at our place <span class="booking-tab__price">899 zł</span></span></span>
       </button>
     </div>
     <div class="booking__body">
@@ -2279,7 +2279,7 @@ function fmtNazwa(i){
 
 
 
-const TNM_HASLA={"Dziecko|Fortepian (1:1)":"Sound. Precision. Calm in your fingers.","Dziecko|Gitara klasyczna (1:1)":"Strings. Melody. The joy of playing.","Dziecko|Gitara elektryczna (1:1)":"Energy. Tone. Freedom.","Dziecko|Bas (1:1)":"Pulse. Foundation. Confidence.","Dziecko|Ukulele (1:1)":"Lightness. Rhythm. First sounds.","Dziecko|Ukulele (małe grupy)":"Lightness. Rhythm. First sounds.","Dziecko|Saksofon (1:1)":"Breath. Tone. Freedom.","Dziecko|Perkusja (1:1)":"Rhythm. Body. Shared energy.","Dziecko|Perkusja (małe grupy)":"Rhythm. Body. Shared energy.","Dziecko|Band (małe grupy)":"Shared sound. Energy. Connection.","Dziecko|Skrzypce (1:1)":"Melody. Precision. Tenderness.","Dziecko|Dyrygentura (małe grupy)":"Gesture. Listening. Leading.","Dziecko|Dyrygentura (1:1)":"Gesture. Listening. Leading.","Dziecko|Produkcja Muzyczna (1:1)":"Sound. Idea. Creation.","Dziecko|Produkcja Muzyczna (małe grupy)":"Sound. Idea. Creation.","Dziecko|Wokal (1:1)":"Breath. Voice. The courage to be heard.","Dziecko|Wokal (małe grupy)":"Breath. Voice. The courage to be heard.","Dziecko|Pisanie piosenek - praca z tekstem (mala grupa) (małe grupy)":"Words. Emotions. Story.","Dziecko|Stwórz swoją piosenkę - Wokal + Tekst + Produkcja (małe grupy)":"Words. Melody. Your voice.","Dziecko|Piosenka Aktorska (powyżej 14 lat) 1:1 (1:1)":"Voice. Emotion. Presence.","Dziecko|Dubbing (małe grupy)":"Voice. Emotion. Character.","Dziecko|Pisanie książek / dzienników (małe grupy)":"Words. Stories. Emotions.","Dziecko|Tworzenie komiksów (małe grupy)":"Picture. Story. Dialogue.","Dziecko|Tworzenie scenariuszy (małe grupy)":"Story. Characters. Dialogue.","Dziecko|Stwórz swoją piosenkę (małe grupy)":"Words. Melody. Your voice.","Dziecko|Aktorstwo (1:1)":"Word. Body. Presence.","Dziecko|Aktorstwo (małe grupy)":"Word. Body. Presence.","Dziecko|Spotkanie z Tutorem / psychologiem (emocje + rozwój)":"Mindfulness. Connection. Calm.","Dziecko|Praca na celach - trener mentalny":"Goals. Confidence. Small steps.","Dziecko|Medytacja":"Silence. Breath. Presence.","Dziecko|Regulacja emocji + Techniki oddechu":"Breath. Emotions. Calm.","Dziecko|Sensoryka (małe grupy)":"Senses. Body. Discovery.","Dziecko|Sensoryka (1:1)":"Senses. Body. Discovery.","Dziecko|Tworzenie komiksów":"Picture. Story. Dialogue.","Dziecko|Fotografia":"Image. Light. Perspective.","Dziecko|Malarstwo (+ wiedza o kierunkach i malarzach)":"Colour. Form. History.","Dziecko|Rysunek (+karykatura)":"Line. Character. Humour.","Dziecko|Taniec intuicyjny":"Movement. Body. Freedom.","Dziecko|Modern":"Movement. Form. Energy.","Dorosły|Fortepian (1:1)":"Sound. Precision. Your own pace.","Dorosły|Gitara klasyczna (1:1)":"Strings. Melody. Freedom.","Dorosły|Gitara akustyczna (1:1)":"Chords. Rhythm. Your voice.","Dorosły|Gitara elektryczna (1:1)":"Energy. Tone. Expression.","Dorosły|Bas (1:1)":"Pulse. Foundation. Confidence.","Dorosły|Saksofon (1:1)":"Breath. Tone. Freedom.","Dorosły|Perkusja (1:1)":"Rhythm. Body. Energy.","Dorosły|Handpan (1:1)":"Sound. Body. Calm.","Dorosły|Handpan (małe grupy)":"Sound. Body. Calm.","Dorosły|Band (małe grupy)":"Shared sound. Energy. Connection.","Dorosły|Skrzypce (1:1)":"Melody. Precision. Tenderness.","Dorosły|Dyrygentura (1:1)":"Gesture. Listening. Leading.","Dorosły|Produkcja Muzyczna (1:1)":"Sound. Idea. Creation.","Dorosły|Wokal (1:1)":"Breath. Voice. Courage.","Dorosły|Wokal (małe grupy)":"Breath. Voice. Courage.","Dorosły|Pisanie piosenek - praca z tekstem (mala grupa) (małe grupy)":"Words. Emotions. Story.","Dorosły|Piosenka Aktorska 1:1 (1:1)":"Voice. Emotion. Presence.","Dorosły|Dubbing (małe grupy)":"Voice. Emotion. Character.","Dorosły|Pisanie książek / dzienników (małe grupy)":"Words. Stories. Emotions.","Dorosły|Aktorstwo (małe grupy)":"Word. Body. Presence.","Dorosły|Wystąpienia publiczne - Praca z głosem":"Voice. Confidence. Presence.","Dorosły|Aktorstwo (1:1)":"Word. Body. Presence.","Dorosły|Emisja głosu (1:1)":"Voice. Breath. Confidence.","Dorosły|Emisja głosu (małe grupy)":"Voice. Breath. Confidence.","Dorosły|Piosenka Aktorska":"Voice. Emotion. Presence.","Dorosły|Spotkanie z psychologiem (emocje) 1:1 (1:1)":"Mindfulness. Connection. Calm.","Dorosły|Praca na celach - trener mentalny":"Goals. Confidence. Small steps.","Dorosły|Praca z emocjami + Gestalt (1:1)":"Emotions. Body. Presence.","Dorosły|Fotografia":"Image. Light. Perspective.","Dorosły|Malarstwo (+ wiedza o kierunkach i malarzach)":"Colour. Form. History.","Dorosły|Rysunek":"Line. Character. Observation.","Dorosły|Malarstwo intuicyjne":"Colour. Intuition. Freedom.","Dorosły|Taniec intuicyjny (małe grupy)":"Movement. Body. Freedom.","Dorosły|Psychologia somatyczna (Dance Movement Therapy) - mała grupa (małe grupy)":"Movement. Body. Emotions.","Dorosły|Yoga z relaksacją dźwiękami (małe grupy)":"Breath. Calm. Body.","Dorosły|Yoga 1:1 (1:1)":"Breath. Body. Calm.","Dorosły|TRE - praca z ciałem uwalniająca napięcia i stres":"Body. Tension. Release.","Dziecko|WARSZTAT AKTORA - Wstęp do aktorstwa (małe grupy)":"Play. Movement. First roles.","Dziecko|WARSZTAT MUZYKA - Wstęp do muzyki (małe grupy)":"Sound. Play. First discoveries.","Dziecko|WARSZTAT RUCHU - Wstęp do tańca (małe grupy)":"Rhythm. Body. Play.","Dorosły|Regulacja emocji + Techniki oddechu (1:1)":"Breath. Emotions. Calm."};
+const TNM_HASLA={"Dziecko|Fortepian (1:1)":"Sound. Precision. Calm.","Dziecko|Gitara klasyczna (1:1)":"Strings. Melody. Joy.","Dziecko|Gitara elektryczna (1:1)":"Energy. Tone. Freedom.","Dziecko|Bas (1:1)":"Pulse. Foundation. Confidence.","Dziecko|Ukulele (1:1)":"Lightness. Rhythm. Start.","Dziecko|Ukulele (małe grupy)":"Lightness. Rhythm. Start.","Dziecko|Saksofon (1:1)":"Breath. Tone. Freedom.","Dziecko|Perkusja (1:1)":"Rhythm. Body. Energy.","Dziecko|Perkusja (małe grupy)":"Rhythm. Body. Energy.","Dziecko|Band (małe grupy)":"Sound. Energy. Connection.","Dziecko|Skrzypce (1:1)":"Melody. Precision. Tenderness.","Dziecko|Dyrygentura (małe grupy)":"Gesture. Listening. Leading.","Dziecko|Dyrygentura (1:1)":"Gesture. Listening. Leading.","Dziecko|Produkcja Muzyczna (1:1)":"Sound. Idea. Creation.","Dziecko|Produkcja Muzyczna (małe grupy)":"Sound. Idea. Creation.","Dziecko|Wokal (1:1)":"Breath. Voice. Courage.","Dziecko|Wokal (małe grupy)":"Breath. Voice. Courage.","Dziecko|Pisanie piosenek - praca z tekstem (mala grupa) (małe grupy)":"Words. Emotions. Story.","Dziecko|Stwórz swoją piosenkę - Wokal + Tekst + Produkcja (małe grupy)":"Words. Melody. Voice.","Dziecko|Piosenka Aktorska (powyżej 14 lat) 1:1 (1:1)":"Voice. Emotion. Presence.","Dziecko|Dubbing (małe grupy)":"Voice. Emotion. Character.","Dziecko|Pisanie książek / dzienników (małe grupy)":"Words. Stories. Emotions.","Dziecko|Tworzenie komiksów (małe grupy)":"Picture. Story. Dialogue.","Dziecko|Tworzenie scenariuszy (małe grupy)":"Story. Characters. Dialogue.","Dziecko|Stwórz swoją piosenkę (małe grupy)":"Words. Melody. Voice.","Dziecko|Aktorstwo (1:1)":"Word. Body. Presence.","Dziecko|Aktorstwo (małe grupy)":"Word. Body. Presence.","Dziecko|Spotkanie z Tutorem / psychologiem (emocje + rozwój)":"Mindfulness. Connection. Calm.","Dziecko|Praca na celach - trener mentalny":"Goals. Confidence. Steps.","Dziecko|Medytacja":"Silence. Breath. Presence.","Dziecko|Regulacja emocji + Techniki oddechu":"Breath. Emotions. Calm.","Dziecko|Sensoryka (małe grupy)":"Senses. Body. Discovery.","Dziecko|Sensoryka (1:1)":"Senses. Body. Discovery.","Dziecko|Tworzenie komiksów":"Picture. Story. Dialogue.","Dziecko|Fotografia":"Image. Light. Perspective.","Dziecko|Malarstwo (+ wiedza o kierunkach i malarzach)":"Colour. Form. History.","Dziecko|Rysunek (+karykatura)":"Line. Character. Humour.","Dziecko|Taniec intuicyjny":"Movement. Body. Freedom.","Dziecko|Modern":"Movement. Form. Energy.","Dorosły|Fortepian (1:1)":"Sound. Precision. Rhythm.","Dorosły|Gitara klasyczna (1:1)":"Strings. Melody. Freedom.","Dorosły|Gitara akustyczna (1:1)":"Chords. Rhythm. Voice.","Dorosły|Gitara elektryczna (1:1)":"Energy. Tone. Expression.","Dorosły|Bas (1:1)":"Pulse. Foundation. Confidence.","Dorosły|Saksofon (1:1)":"Breath. Tone. Freedom.","Dorosły|Perkusja (1:1)":"Rhythm. Body. Energy.","Dorosły|Handpan (1:1)":"Sound. Body. Calm.","Dorosły|Handpan (małe grupy)":"Sound. Body. Calm.","Dorosły|Band (małe grupy)":"Sound. Energy. Connection.","Dorosły|Skrzypce (1:1)":"Melody. Precision. Tenderness.","Dorosły|Dyrygentura (1:1)":"Gesture. Listening. Leading.","Dorosły|Produkcja Muzyczna (1:1)":"Sound. Idea. Creation.","Dorosły|Wokal (1:1)":"Breath. Voice. Courage.","Dorosły|Wokal (małe grupy)":"Breath. Voice. Courage.","Dorosły|Pisanie piosenek - praca z tekstem (mala grupa) (małe grupy)":"Words. Emotions. Story.","Dorosły|Piosenka Aktorska 1:1 (1:1)":"Voice. Emotion. Presence.","Dorosły|Dubbing (małe grupy)":"Voice. Emotion. Character.","Dorosły|Pisanie książek / dzienników (małe grupy)":"Words. Stories. Emotions.","Dorosły|Aktorstwo (małe grupy)":"Word. Body. Presence.","Dorosły|Wystąpienia publiczne - Praca z głosem":"Voice. Confidence. Presence.","Dorosły|Aktorstwo (1:1)":"Word. Body. Presence.","Dorosły|Emisja głosu (1:1)":"Voice. Breath. Confidence.","Dorosły|Emisja głosu (małe grupy)":"Voice. Breath. Confidence.","Dorosły|Piosenka Aktorska":"Voice. Emotion. Presence.","Dorosły|Spotkanie z psychologiem (emocje) 1:1 (1:1)":"Mindfulness. Connection. Calm.","Dorosły|Praca na celach - trener mentalny":"Goals. Confidence. Steps.","Dorosły|Praca z emocjami + Gestalt (1:1)":"Emotions. Body. Presence.","Dorosły|Fotografia":"Image. Light. Perspective.","Dorosły|Malarstwo (+ wiedza o kierunkach i malarzach)":"Colour. Form. History.","Dorosły|Rysunek":"Line. Character. Observation.","Dorosły|Malarstwo intuicyjne":"Colour. Intuition. Freedom.","Dorosły|Taniec intuicyjny (małe grupy)":"Movement. Body. Freedom.","Dorosły|Psychologia somatyczna (Dance Movement Therapy) - mała grupa (małe grupy)":"Movement. Body. Emotions.","Dorosły|Yoga z relaksacją dźwiękami (małe grupy)":"Breath. Calm. Body.","Dorosły|Yoga 1:1 (1:1)":"Breath. Body. Calm.","Dorosły|TRE - praca z ciałem uwalniająca napięcia i stres":"Body. Tension. Release.","Dziecko|WARSZTAT AKTORA - Wstęp do aktorstwa (małe grupy)":"Play. Movement. Role.","Dziecko|WARSZTAT MUZYKA - Wstęp do muzyki (małe grupy)":"Sound. Play. Discovery.","Dziecko|WARSZTAT RUCHU - Wstęp do tańca (małe grupy)":"Rhythm. Body. Play.","Dorosły|Regulacja emocji + Techniki oddechu (1:1)":"Breath. Emotions. Calm."};
 function catCard(i,idx){
   const key=(i.audience||"")+"|"+(i.nazwa_id||i.nazwa);
   const haslo=TNM_HASLA[key]||"";
@@ -2290,12 +2290,12 @@ function catCard(i,idx){
   const czas=isData(i.godz)?String(i.godz).replace(/\.\s*$/,""):"45 min";
   const kiedy=mg?(isData(i.lokalizacja)?i.lokalizacja:""):"time arranged together";
   return `<article class="zk${najm?" zk--najm":""}">
-    <div class="zk__img"><span class="zk__imgbg bw" style="background-image:url('${photo}')"></span>${najm?`<span class="zk__najm">AGES 3–5</span>`:""}</div>
+    <div class="zk__img"><span class="zk__imgbg bw" style="background-image:url('${photo}')"></span></div>
     <div class="zk__body">
       ${haslo?`<p class="zk__haslo">${tnmHaslo(haslo)}</p>`:""}
       <h3 class="zk__title">${tytul}</h3>
-      <p class="zk__meta">${czas}${kiedy?" · "+kiedy:""}</p>
-      <div class="zk__foot"><span class="zk__tag">${mg?"small group":"1:1"}</span><span class="zk__cena">${isData(i.cena)?i.cena:""}</span></div>
+      <p class="zk__meta">${czas}${kiedy?"<b class=tnm-hs__sep>|</b>"+kiedy:""}</p>
+      <div class="zk__foot"><span class="zk__tags"><span class="zk__tag">${mg?"small group":"1:1"}</span>${najm?`<span class="zk__tag">ages 3–5</span>`:""}</span><span class="zk__cena">${isData(i.cena)?i.cena:""}</span></div>
     </div>
     <button class="zk__hit" type="button" data-popup="${idx}" aria-label="Sign up – ${tytul}"></button>
   </article>`;
@@ -2303,7 +2303,7 @@ function catCard(i,idx){
 
 
 
-const TNM_HASLA_Z={"Dziecko|Musical":"Stage. Voice. Movement. A shared story.","Dziecko|Chór":"Voices. A shared sound. Joy.","Dziecko|Rythm & Feel - Groove":"Rhythm. Body. Groove.","Dziecko|Stwórz swoją piosenkę - Wokal + Tekst + Produkcja":"Words. Melody. Creating together.","Dziecko|Spektakl - Aktorstwo":"Stage. Characters. A shared story.","Dziecko|Spektakl - Taniec / Ruch":"Movement. Body. Shared energy.","Dziecko|Yoga z relaksacją dźwiękami":"Breath. Calm. Body.","Dziecko|Koncert relaksacyjny":"Sound. Silence. Presence.","Dziecko|Ciekawe spotkania o sztuce - kierunki, artyści, twórczość":"Conversation. Art. Discovering together.","Dziecko|Ciekawe spotkania o muzyce - kierunki, artyści, twórczość":"Conversation. Music. Listening together.","Dorosły|Musical":"Stage. Voice. Movement. A shared story.","Dorosły|Chór":"Voices. A shared sound. Joy.","Dorosły|Spektakl - Aktorstwo":"Stage. Characters. A shared story.","Dorosły|Spektakl - Taniec / Ruch":"Movement. Body. Shared energy.","Dorosły|Yoga z relaksacją dźwiękami":"Breath. Calm. Body.","Dorosły|Koncert relaksacyjny":"Sound. Silence. Presence.","Dorosły|TRE - praca z ciałem uwalniająca napięcia i stres":"Body. Tension. Releasing together.","Dorosły|Psychologia somatyczna (Dance Movement Therapy)":"Movement. Body. Emotions.","Dorosły|Malarstwo intuicyjne":"Colour. Intuition. Creating together.","Dorosły|Porozmawiajmy o sztuce - kierunki, artyści, twórczość":"Conversation. Art. Discovering together.","Dorosły|Porozmawiajmy o muzyce - kierunki, artyści, twórczość":"Conversation. Music. Listening together.","Dorosły|Taniec intuicyjny":"Movement. Body. Freedom.","Dorosły|Karykatura":"Line. Character. Humour."};
+const TNM_HASLA_Z={"Dziecko|Musical":"Stage. Voice. Movement.","Dziecko|Chór":"Voices. Sound. Joy.","Dziecko|Rythm & Feel - Groove":"Rhythm. Body. Groove.","Dziecko|Stwórz swoją piosenkę - Wokal + Tekst + Produkcja":"Words. Melody. Creating.","Dziecko|Spektakl - Aktorstwo":"Stage. Characters. Story.","Dziecko|Spektakl - Taniec / Ruch":"Movement. Body. Energy.","Dziecko|Yoga z relaksacją dźwiękami":"Breath. Calm. Body.","Dziecko|Koncert relaksacyjny":"Sound. Silence. Presence.","Dziecko|Ciekawe spotkania o sztuce - kierunki, artyści, twórczość":"Conversation. Art. Discovery.","Dziecko|Ciekawe spotkania o muzyce - kierunki, artyści, twórczość":"Conversation. Music. Listening.","Dorosły|Musical":"Stage. Voice. Movement.","Dorosły|Chór":"Voices. Sound. Joy.","Dorosły|Spektakl - Aktorstwo":"Stage. Characters. Story.","Dorosły|Spektakl - Taniec / Ruch":"Movement. Body. Energy.","Dorosły|Yoga z relaksacją dźwiękami":"Breath. Calm. Body.","Dorosły|Koncert relaksacyjny":"Sound. Silence. Presence.","Dorosły|TRE - praca z ciałem uwalniająca napięcia i stres":"Body. Tension. Release.","Dorosły|Psychologia somatyczna (Dance Movement Therapy)":"Movement. Body. Emotions.","Dorosły|Malarstwo intuicyjne":"Colour. Intuition. Creating.","Dorosły|Porozmawiajmy o sztuce - kierunki, artyści, twórczość":"Conversation. Art. Discovery.","Dorosły|Porozmawiajmy o muzyce - kierunki, artyści, twórczość":"Conversation. Music. Listening.","Dorosły|Taniec intuicyjny":"Movement. Body. Freedom.","Dorosły|Karykatura":"Line. Character. Humour."};
 function tnmPlan(g){
   const L=String(g||"").split("\n").map(s=>s.trim()).filter(Boolean);
   const t=s=>{const m=/^(\d{1,2}):(\d{2})/.exec(s);return m?(+m[1])*60+(+m[2]):null;};
@@ -2330,7 +2330,7 @@ function zespCard(i,idx){
     const g=tnmGodz(p.min);
     const w=g.h===1?"HOUR":(g.h>=2&&g.h<=4&&Number.isInteger(g.h)?"HOURS":"HOURS");
     plan=`<div class="zk__plan">
-      <span class="zk__planlab">WE WORK TOGETHER · ${g.n} ${w}</span>
+      <span class="zk__planlab">WE WORK TOGETHER<b class=tnm-hs__sep>|</b>${g.n} ${w}</span>
       ${p.segs.length?`<span class="zk__bar">${p.segs.map((s,k)=>`<span class="${kol[k%3]}" style="flex:${s.min} 1 0"></span>`).join("")}</span>
       <span class="zk__segs">${p.segs.map((s,k)=>`<span class="zk__seg"><span class="zk__sq ${kol[k%3]}"></span><span class="zk__segn">${s.n}</span><span class="zk__segt">${tnmGodz(s.min).n} h</span></span>`).join("")}</span>`:""}
     </div>`;
@@ -2816,7 +2816,7 @@ function tnmOpenGroup(items,idxs,k){
   TNM_ALT={items,idxs};
   const ctx=lessonEntryCtx(items[idxs[k]],"lekcja");
   if(ctx.tnm) ctx.tnm.alts=idxs.map((ix,j)=>{const z=items[ix];const m=/(\d+)\s*os/.exec(z.miejsca||"");
-    return {j,on:j===k,label:tnmJestMg(z)?("Small group"+(m?" · up to "+m[1]+"":"")):"1:1 · 45 min"};});
+    return {j,on:j===k,label:tnmJestMg(z)?("Small group"+(m?"<b class=tnm-hs__sep>|</b>up to "+m[1]+"":"")):"1:1<b class=tnm-hs__sep>|</b>45 min"};});
   openEntry(ctx);
 }
 document.addEventListener("click",e=>{const b=e.target.closest("[data-tnm-alt]");if(!b)return;e.preventDefault();

@@ -493,7 +493,7 @@ function legalLink(key, label, nowa){
 
 function legalNoteHTML(keys, wstep){
   const ks = keys && keys.length ? keys : ["regulamin","prywatnosc"];
-  return '<p class="legal-note">'+(wstep||"Szczegóły:")+' '+ks.map(k=>legalLink(k,null,true)).join(" · ")+'</p>';
+  return '<p class="legal-note">'+(wstep||"Szczegóły:")+' '+ks.map(k=>legalLink(k,null,true)).join("<b class=tnm-hs__sep>|</b>")+'</p>';
 }
 
 
@@ -1441,7 +1441,7 @@ const ENTRY={
    
   "voucher":()=>({variant:"A",mastheadTitle:"Voucher",title:"Voucher",
     desc:"Zadbaj o bliskich. Zaproś wybraną osobę na zajęcia lub diagnostykę w PREZENCIE.",
-    chars:[{icon:GIFT_MINI,text:"Elastyczny prezent - obdarowany sam wybiera"},{icon:META_ICON.calendar,text:"Ważny przez 12 miesięcy"},{icon:ICO_STAR,text:"Zajęcia 1:1 · diagnostyka „Fundamenty”"}],
+    chars:[{icon:GIFT_MINI,text:"Elastyczny prezent - obdarowany sam wybiera"},{icon:META_ICON.calendar,text:"Ważny przez 12 miesięcy"},{icon:ICO_STAR,text:"Zajęcia 1:1<b class=tnm-hs__sep>|</b>diagnostyka „Fundamenty”"}],
     photo:THX_PHOTO,ctaLabel:"Zamawiam VOUCHER",next:{kind:"easycart",product:"voucher"},thx:{surface:"voucher",button:false}})
 };
 const GIFT_MINI='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="8" width="18" height="13" rx="1"/><path d="M3 12h18M12 8v13M12 8s-2.5-5-5-5-2 4 5 5zM12 8s2.5-5 5-5 2 4-5 5z"/></svg>';
@@ -1478,14 +1478,14 @@ function tnmPopupData(i,kind){
     krokiLab:"JAK WYGLĄDA ZAPIS",kroki:mg?["Dołączasz do listy oczekujących – bez płatności i zobowiązań.","Gdy grupa się zbierze, piszemy z dniem i godziną startu.","Potwierdzasz miejsce i przychodzicie na pierwsze zajęcia."]:["Wypełniasz krótki formularz zapisu.","Odzywamy się, dobieramy prowadzącego i ustalamy termin.",dz?"Pierwsze zajęcia – w dniu i miejscu, które Wam pasują.":"Pierwsze zajęcia – w dniu i miejscu, które Ci pasują."],
     mies:zl(i.cena_karnet),wzor:`4 zajęcia po ${czas} w miesiącu`,jedn:zl(i.cena_lekcji),jednTxt:"ZA ZAJĘCIA"};
 }
-const TNM_ZESP_DZIEN="wybrany dzień", TNM_ZESP_START="luty 2027";
+const TNM_ZESP_DZIEN="wybrany dzień", TNM_ZESP_START="wkrótce";
 function tnmHaslo(t){
   const p=String(t||"").split(/\.\s*/).map(x=>x.trim()).filter(Boolean);
   return p.map(x=>`<span class="tnm-hs__w">${x}</span>`).join(`<b class="tnm-hs__sep">|</b>`);
 }
 function tnmKiedyZesp(p,i){
   const godz=p?p.od+"–"+p.do:(isData(i.godz)?i.godz:"");
-  return godz?`${TNM_ZESP_DZIEN}, ${godz} (start: ${TNM_ZESP_START})`:"";
+  return godz?`${TNM_ZESP_DZIEN}, ${godz} (start ${TNM_ZESP_START})`:"";
 }
 function tnmPanelHTML(ctx){
   const d=ctx.tnm;
@@ -1493,7 +1493,7 @@ function tnmPanelHTML(ctx){
   const w=g?(g.h===1?"GODZINA":(g.h>=2&&g.h<=4&&Number.isInteger(g.h)?"GODZINY":"GODZIN")):"";
   const kol=["zk__c1","zk__c2","zk__c3"];
   const plan=(d.plan&&d.plan.segs.length)?`<div class="tp__sec">
-      <span class="tp__lab">PRACUJEMY RAZEM · ${g.n} ${w}</span>
+      <span class="tp__lab">PRACUJEMY RAZEM<b class=tnm-hs__sep>|</b>${g.n} ${w}</span>
       <span class="zk__bar">${d.plan.segs.map((s,k)=>`<span class="${kol[k%3]}" style="flex:1 1 0"></span>`).join("")}</span>
       <div class="tp__plan">${d.plan.segs.map((s,k)=>`<div class="tp__planrow"><span class="zk__sq ${kol[k%3]}"></span><span class="tp__planod">${s.od}–${s.do}</span><span class="tp__plann">${s.n}</span></div>`).join("")}</div>
     </div>`:"";
@@ -1521,7 +1521,7 @@ function tnmPanelHTML(ctx){
 
 function lessonEntryCtx(i,kind){
   const chars=[];
-  if(isData(i.godz)) chars.push({icon:META_ICON.clock,text:i.godz.replace(/\n/g," · ")});
+  if(isData(i.godz)) chars.push({icon:META_ICON.clock,text:i.godz.replace(/\n/g,"<b class=tnm-hs__sep>|</b>")});
   if(kind==="polkolonie"){
     if(isData(i.turnus)) chars.push({icon:META_ICON.calendar,text:i.turnus});
     if(isData(i.wiek)) chars.push({icon:META_ICON.person,text:i.wiek+(isData(i.miejsca)?` (${i.miejsca})`:"")});
@@ -1725,11 +1725,11 @@ const BOOKING=`<div class="booking" id="booking" role="dialog" aria-modal="true"
     <div class="booking__tabs" role="tablist" aria-label="Rodzaj spotkania">
       <button class="booking-tab" role="tab" id="booktab-free" aria-controls="bookpanel-free" aria-selected="true" data-event="free">
         <span class="booking-tab__ico">${BOOK_ICO_SCREEN}</span>
-        <span class="booking-tab__txt"><span class="booking-tab__name">Poznajmy się</span><span class="booking-tab__meta">15 min · online <span class="badge-soft">Bezpłatna</span></span></span>
+        <span class="booking-tab__txt"><span class="booking-tab__name">Poznajmy się</span><span class="booking-tab__meta">15 min<b class=tnm-hs__sep>|</b>online <span class="badge-soft">Bezpłatna</span></span></span>
       </button>
       <button class="booking-tab" role="tab" id="booktab-paid" aria-controls="bookpanel-paid" aria-selected="false" data-event="paid">
         <span class="booking-tab__ico">${BOOK_ICO_PEOPLE}</span>
-        <span class="booking-tab__txt"><span class="booking-tab__name">Diagnostyka „Fundamenty"</span><span class="booking-tab__meta">45 min · w siedzibie <span class="booking-tab__price">899 zł</span></span></span>
+        <span class="booking-tab__txt"><span class="booking-tab__name">Diagnostyka „Fundamenty"</span><span class="booking-tab__meta">45 min<b class=tnm-hs__sep>|</b>w siedzibie <span class="booking-tab__price">899 zł</span></span></span>
       </button>
     </div>
     <div class="booking__body">
@@ -2279,7 +2279,7 @@ function fmtNazwa(i){
 
 
 
-const TNM_HASLA={"Dziecko|Fortepian (1:1)":"Dźwięk. Precyzja. Spokój w palcach.","Dziecko|Gitara klasyczna (1:1)":"Struny. Melodia. Radość z grania.","Dziecko|Gitara elektryczna (1:1)":"Energia. Brzmienie. Swoboda.","Dziecko|Bas (1:1)":"Puls. Fundament. Pewność.","Dziecko|Ukulele (1:1)":"Lekkość. Rytm. Pierwsze dźwięki.","Dziecko|Ukulele (małe grupy)":"Lekkość. Rytm. Pierwsze dźwięki.","Dziecko|Saksofon (1:1)":"Oddech. Brzmienie. Swoboda.","Dziecko|Perkusja (1:1)":"Rytm. Ciało. Wspólna energia.","Dziecko|Perkusja (małe grupy)":"Rytm. Ciało. Wspólna energia.","Dziecko|Band (małe grupy)":"Wspólny dźwięk. Energia. Relacja.","Dziecko|Skrzypce (1:1)":"Melodia. Precyzja. Czułość.","Dziecko|Dyrygentura (małe grupy)":"Gest. Słuch. Prowadzenie.","Dziecko|Dyrygentura (1:1)":"Gest. Słuch. Prowadzenie.","Dziecko|Produkcja Muzyczna (1:1)":"Dźwięk. Pomysł. Tworzenie.","Dziecko|Produkcja Muzyczna (małe grupy)":"Dźwięk. Pomysł. Tworzenie.","Dziecko|Wokal (1:1)":"Oddech. Głos. Odwaga, by być słyszanym.","Dziecko|Wokal (małe grupy)":"Oddech. Głos. Odwaga, by być słyszanym.","Dziecko|Pisanie piosenek - praca z tekstem (mala grupa) (małe grupy)":"Słowa. Emocje. Historia.","Dziecko|Stwórz swoją piosenkę - Wokal + Tekst + Produkcja (małe grupy)":"Słowo. Melodia. Twój głos.","Dziecko|Piosenka Aktorska (powyżej 14 lat) 1:1 (1:1)":"Głos. Emocja. Obecność.","Dziecko|Dubbing (małe grupy)":"Głos. Emocja. Postać.","Dziecko|Pisanie książek / dzienników (małe grupy)":"Słowa. Historie. Emocje.","Dziecko|Tworzenie komiksów (małe grupy)":"Obraz. Historia. Dialog.","Dziecko|Tworzenie scenariuszy (małe grupy)":"Historia. Postacie. Dialog.","Dziecko|Stwórz swoją piosenkę (małe grupy)":"Słowo. Melodia. Twój głos.","Dziecko|Aktorstwo (1:1)":"Słowo. Ciało. Obecność.","Dziecko|Aktorstwo (małe grupy)":"Słowo. Ciało. Obecność.","Dziecko|Spotkanie z Tutorem / psychologiem (emocje + rozwój)":"Uważność. Relacja. Spokój.","Dziecko|Praca na celach - trener mentalny":"Cel. Pewność. Małe kroki.","Dziecko|Medytacja":"Cisza. Oddech. Obecność.","Dziecko|Regulacja emocji + Techniki oddechu":"Oddech. Emocje. Spokój.","Dziecko|Sensoryka (małe grupy)":"Zmysły. Ciało. Odkrywanie.","Dziecko|Sensoryka (1:1)":"Zmysły. Ciało. Odkrywanie.","Dziecko|Tworzenie komiksów":"Obraz. Historia. Dialog.","Dziecko|Fotografia":"Obraz. Światło. Spojrzenie.","Dziecko|Malarstwo (+ wiedza o kierunkach i malarzach)":"Kolor. Forma. Historia.","Dziecko|Rysunek (+karykatura)":"Linia. Charakter. Humor.","Dziecko|Taniec intuicyjny":"Ruch. Ciało. Swoboda.","Dziecko|Modern":"Ruch. Forma. Energia.","Dorosły|Fortepian (1:1)":"Dźwięk. Precyzja. Twój rytm.","Dorosły|Gitara klasyczna (1:1)":"Struny. Melodia. Swoboda.","Dorosły|Gitara akustyczna (1:1)":"Akordy. Rytm. Twój głos.","Dorosły|Gitara elektryczna (1:1)":"Energia. Brzmienie. Ekspresja.","Dorosły|Bas (1:1)":"Puls. Fundament. Pewność.","Dorosły|Saksofon (1:1)":"Oddech. Brzmienie. Swoboda.","Dorosły|Perkusja (1:1)":"Rytm. Ciało. Energia.","Dorosły|Handpan (1:1)":"Dźwięk. Ciało. Spokój.","Dorosły|Handpan (małe grupy)":"Dźwięk. Ciało. Spokój.","Dorosły|Band (małe grupy)":"Wspólny dźwięk. Energia. Relacja.","Dorosły|Skrzypce (1:1)":"Melodia. Precyzja. Czułość.","Dorosły|Dyrygentura (1:1)":"Gest. Słuch. Prowadzenie.","Dorosły|Produkcja Muzyczna (1:1)":"Dźwięk. Pomysł. Tworzenie.","Dorosły|Wokal (1:1)":"Oddech. Głos. Odwaga.","Dorosły|Wokal (małe grupy)":"Oddech. Głos. Odwaga.","Dorosły|Pisanie piosenek - praca z tekstem (mala grupa) (małe grupy)":"Słowa. Emocje. Historia.","Dorosły|Piosenka Aktorska 1:1 (1:1)":"Głos. Emocja. Obecność.","Dorosły|Dubbing (małe grupy)":"Głos. Emocja. Postać.","Dorosły|Pisanie książek / dzienników (małe grupy)":"Słowa. Historie. Emocje.","Dorosły|Aktorstwo (małe grupy)":"Słowo. Ciało. Obecność.","Dorosły|Wystąpienia publiczne - Praca z głosem":"Głos. Pewność. Obecność.","Dorosły|Aktorstwo (1:1)":"Słowo. Ciało. Obecność.","Dorosły|Emisja głosu (1:1)":"Głos. Oddech. Pewność.","Dorosły|Emisja głosu (małe grupy)":"Głos. Oddech. Pewność.","Dorosły|Piosenka Aktorska":"Głos. Emocja. Obecność.","Dorosły|Spotkanie z psychologiem (emocje) 1:1 (1:1)":"Uważność. Relacja. Spokój.","Dorosły|Praca na celach - trener mentalny":"Cel. Pewność. Małe kroki.","Dorosły|Praca z emocjami + Gestalt (1:1)":"Emocje. Ciało. Obecność.","Dorosły|Fotografia":"Obraz. Światło. Spojrzenie.","Dorosły|Malarstwo (+ wiedza o kierunkach i malarzach)":"Kolor. Forma. Historia.","Dorosły|Rysunek":"Linia. Charakter. Obserwacja.","Dorosły|Malarstwo intuicyjne":"Kolor. Intuicja. Swoboda.","Dorosły|Taniec intuicyjny (małe grupy)":"Ruch. Ciało. Swoboda.","Dorosły|Psychologia somatyczna (Dance Movement Therapy) - mała grupa (małe grupy)":"Ruch. Ciało. Emocje.","Dorosły|Yoga z relaksacją dźwiękami (małe grupy)":"Oddech. Spokój. Ciało.","Dorosły|Yoga 1:1 (1:1)":"Oddech. Ciało. Spokój.","Dorosły|TRE - praca z ciałem uwalniająca napięcia i stres":"Ciało. Napięcie. Uwolnienie.","Dziecko|WARSZTAT AKTORA - Wstęp do aktorstwa (małe grupy)":"Zabawa. Ruch. Pierwsze role.","Dziecko|WARSZTAT MUZYKA - Wstęp do muzyki (małe grupy)":"Dźwięk. Zabawa. Pierwsze odkrycia.","Dziecko|WARSZTAT RUCHU - Wstęp do tańca (małe grupy)":"Rytm. Ciało. Zabawa.","Dorosły|Regulacja emocji + Techniki oddechu (1:1)":"Oddech. Emocje. Spokój."};
+const TNM_HASLA={"Dziecko|Fortepian (1:1)":"Dźwięk. Precyzja. Spokój.","Dziecko|Gitara klasyczna (1:1)":"Struny. Melodia. Radość.","Dziecko|Gitara elektryczna (1:1)":"Energia. Brzmienie. Swoboda.","Dziecko|Bas (1:1)":"Puls. Fundament. Pewność.","Dziecko|Ukulele (1:1)":"Lekkość. Rytm. Start.","Dziecko|Ukulele (małe grupy)":"Lekkość. Rytm. Start.","Dziecko|Saksofon (1:1)":"Oddech. Brzmienie. Swoboda.","Dziecko|Perkusja (1:1)":"Rytm. Ciało. Energia.","Dziecko|Perkusja (małe grupy)":"Rytm. Ciało. Energia.","Dziecko|Band (małe grupy)":"Brzmienie. Energia. Relacja.","Dziecko|Skrzypce (1:1)":"Melodia. Precyzja. Czułość.","Dziecko|Dyrygentura (małe grupy)":"Gest. Słuch. Prowadzenie.","Dziecko|Dyrygentura (1:1)":"Gest. Słuch. Prowadzenie.","Dziecko|Produkcja Muzyczna (1:1)":"Dźwięk. Pomysł. Tworzenie.","Dziecko|Produkcja Muzyczna (małe grupy)":"Dźwięk. Pomysł. Tworzenie.","Dziecko|Wokal (1:1)":"Oddech. Głos. Odwaga.","Dziecko|Wokal (małe grupy)":"Oddech. Głos. Odwaga.","Dziecko|Pisanie piosenek - praca z tekstem (mala grupa) (małe grupy)":"Słowa. Emocje. Historia.","Dziecko|Stwórz swoją piosenkę - Wokal + Tekst + Produkcja (małe grupy)":"Słowo. Melodia. Głos.","Dziecko|Piosenka Aktorska (powyżej 14 lat) 1:1 (1:1)":"Głos. Emocja. Obecność.","Dziecko|Dubbing (małe grupy)":"Głos. Emocja. Postać.","Dziecko|Pisanie książek / dzienników (małe grupy)":"Słowa. Historie. Emocje.","Dziecko|Tworzenie komiksów (małe grupy)":"Obraz. Historia. Dialog.","Dziecko|Tworzenie scenariuszy (małe grupy)":"Historia. Postacie. Dialog.","Dziecko|Stwórz swoją piosenkę (małe grupy)":"Słowo. Melodia. Głos.","Dziecko|Aktorstwo (1:1)":"Słowo. Ciało. Obecność.","Dziecko|Aktorstwo (małe grupy)":"Słowo. Ciało. Obecność.","Dziecko|Spotkanie z Tutorem / psychologiem (emocje + rozwój)":"Uważność. Relacja. Spokój.","Dziecko|Praca na celach - trener mentalny":"Cel. Pewność. Kroki.","Dziecko|Medytacja":"Cisza. Oddech. Obecność.","Dziecko|Regulacja emocji + Techniki oddechu":"Oddech. Emocje. Spokój.","Dziecko|Sensoryka (małe grupy)":"Zmysły. Ciało. Odkrywanie.","Dziecko|Sensoryka (1:1)":"Zmysły. Ciało. Odkrywanie.","Dziecko|Tworzenie komiksów":"Obraz. Historia. Dialog.","Dziecko|Fotografia":"Obraz. Światło. Spojrzenie.","Dziecko|Malarstwo (+ wiedza o kierunkach i malarzach)":"Kolor. Forma. Historia.","Dziecko|Rysunek (+karykatura)":"Linia. Charakter. Humor.","Dziecko|Taniec intuicyjny":"Ruch. Ciało. Swoboda.","Dziecko|Modern":"Ruch. Forma. Energia.","Dorosły|Fortepian (1:1)":"Dźwięk. Precyzja. Rytm.","Dorosły|Gitara klasyczna (1:1)":"Struny. Melodia. Swoboda.","Dorosły|Gitara akustyczna (1:1)":"Akordy. Rytm. Głos.","Dorosły|Gitara elektryczna (1:1)":"Energia. Brzmienie. Ekspresja.","Dorosły|Bas (1:1)":"Puls. Fundament. Pewność.","Dorosły|Saksofon (1:1)":"Oddech. Brzmienie. Swoboda.","Dorosły|Perkusja (1:1)":"Rytm. Ciało. Energia.","Dorosły|Handpan (1:1)":"Dźwięk. Ciało. Spokój.","Dorosły|Handpan (małe grupy)":"Dźwięk. Ciało. Spokój.","Dorosły|Band (małe grupy)":"Brzmienie. Energia. Relacja.","Dorosły|Skrzypce (1:1)":"Melodia. Precyzja. Czułość.","Dorosły|Dyrygentura (1:1)":"Gest. Słuch. Prowadzenie.","Dorosły|Produkcja Muzyczna (1:1)":"Dźwięk. Pomysł. Tworzenie.","Dorosły|Wokal (1:1)":"Oddech. Głos. Odwaga.","Dorosły|Wokal (małe grupy)":"Oddech. Głos. Odwaga.","Dorosły|Pisanie piosenek - praca z tekstem (mala grupa) (małe grupy)":"Słowa. Emocje. Historia.","Dorosły|Piosenka Aktorska 1:1 (1:1)":"Głos. Emocja. Obecność.","Dorosły|Dubbing (małe grupy)":"Głos. Emocja. Postać.","Dorosły|Pisanie książek / dzienników (małe grupy)":"Słowa. Historie. Emocje.","Dorosły|Aktorstwo (małe grupy)":"Słowo. Ciało. Obecność.","Dorosły|Wystąpienia publiczne - Praca z głosem":"Głos. Pewność. Obecność.","Dorosły|Aktorstwo (1:1)":"Słowo. Ciało. Obecność.","Dorosły|Emisja głosu (1:1)":"Głos. Oddech. Pewność.","Dorosły|Emisja głosu (małe grupy)":"Głos. Oddech. Pewność.","Dorosły|Piosenka Aktorska":"Głos. Emocja. Obecność.","Dorosły|Spotkanie z psychologiem (emocje) 1:1 (1:1)":"Uważność. Relacja. Spokój.","Dorosły|Praca na celach - trener mentalny":"Cel. Pewność. Kroki.","Dorosły|Praca z emocjami + Gestalt (1:1)":"Emocje. Ciało. Obecność.","Dorosły|Fotografia":"Obraz. Światło. Spojrzenie.","Dorosły|Malarstwo (+ wiedza o kierunkach i malarzach)":"Kolor. Forma. Historia.","Dorosły|Rysunek":"Linia. Charakter. Obserwacja.","Dorosły|Malarstwo intuicyjne":"Kolor. Intuicja. Swoboda.","Dorosły|Taniec intuicyjny (małe grupy)":"Ruch. Ciało. Swoboda.","Dorosły|Psychologia somatyczna (Dance Movement Therapy) - mała grupa (małe grupy)":"Ruch. Ciało. Emocje.","Dorosły|Yoga z relaksacją dźwiękami (małe grupy)":"Oddech. Spokój. Ciało.","Dorosły|Yoga 1:1 (1:1)":"Oddech. Ciało. Spokój.","Dorosły|TRE - praca z ciałem uwalniająca napięcia i stres":"Ciało. Napięcie. Uwolnienie.","Dziecko|WARSZTAT AKTORA - Wstęp do aktorstwa (małe grupy)":"Zabawa. Ruch. Rola.","Dziecko|WARSZTAT MUZYKA - Wstęp do muzyki (małe grupy)":"Dźwięk. Zabawa. Odkrycia.","Dziecko|WARSZTAT RUCHU - Wstęp do tańca (małe grupy)":"Rytm. Ciało. Zabawa.","Dorosły|Regulacja emocji + Techniki oddechu (1:1)":"Oddech. Emocje. Spokój."};
 function catCard(i,idx){
   const key=(i.audience||"")+"|"+(i.nazwa_id||i.nazwa);
   const haslo=TNM_HASLA[key]||"";
@@ -2290,12 +2290,12 @@ function catCard(i,idx){
   const czas=isData(i.godz)?String(i.godz).replace(/\.\s*$/,""):"45 min";
   const kiedy=mg?(isData(i.lokalizacja)?i.lokalizacja:""):"termin ustalamy razem";
   return `<article class="zk${najm?" zk--najm":""}">
-    <div class="zk__img"><span class="zk__imgbg bw" style="background-image:url('${photo}')"></span>${najm?`<span class="zk__najm">3–5 LAT</span>`:""}</div>
+    <div class="zk__img"><span class="zk__imgbg bw" style="background-image:url('${photo}')"></span></div>
     <div class="zk__body">
       ${haslo?`<p class="zk__haslo">${tnmHaslo(haslo)}</p>`:""}
       <h3 class="zk__title">${tytul}</h3>
-      <p class="zk__meta">${czas}${kiedy?" · "+kiedy:""}</p>
-      <div class="zk__foot"><span class="zk__tag">${mg?"mała grupa":"1:1"}</span><span class="zk__cena">${isData(i.cena)?i.cena:""}</span></div>
+      <p class="zk__meta">${czas}${kiedy?"<b class=tnm-hs__sep>|</b>"+kiedy:""}</p>
+      <div class="zk__foot"><span class="zk__tags"><span class="zk__tag">${mg?"mała grupa":"1:1"}</span>${najm?`<span class="zk__tag">3–5 lat</span>`:""}</span><span class="zk__cena">${isData(i.cena)?i.cena:""}</span></div>
     </div>
     <button class="zk__hit" type="button" data-popup="${idx}" aria-label="Zapisz się – ${tytul}"></button>
   </article>`;
@@ -2303,7 +2303,7 @@ function catCard(i,idx){
 
 
 
-const TNM_HASLA_Z={"Dziecko|Musical":"Scena. Głos. Ruch. Wspólna historia.","Dziecko|Chór":"Głosy. Wspólne brzmienie. Radość.","Dziecko|Rythm & Feel - Groove":"Rytm. Ciało. Groove.","Dziecko|Stwórz swoją piosenkę - Wokal + Tekst + Produkcja":"Słowo. Melodia. Wspólne tworzenie.","Dziecko|Spektakl - Aktorstwo":"Scena. Postacie. Wspólna historia.","Dziecko|Spektakl - Taniec / Ruch":"Ruch. Ciało. Wspólna energia.","Dziecko|Yoga z relaksacją dźwiękami":"Oddech. Spokój. Ciało.","Dziecko|Koncert relaksacyjny":"Dźwięk. Cisza. Obecność.","Dziecko|Ciekawe spotkania o sztuce - kierunki, artyści, twórczość":"Rozmowa. Sztuka. Wspólne odkrywanie.","Dziecko|Ciekawe spotkania o muzyce - kierunki, artyści, twórczość":"Rozmowa. Muzyka. Wspólne słuchanie.","Dorosły|Musical":"Scena. Głos. Ruch. Wspólna historia.","Dorosły|Chór":"Głosy. Wspólne brzmienie. Radość.","Dorosły|Spektakl - Aktorstwo":"Scena. Postacie. Wspólna historia.","Dorosły|Spektakl - Taniec / Ruch":"Ruch. Ciało. Wspólna energia.","Dorosły|Yoga z relaksacją dźwiękami":"Oddech. Spokój. Ciało.","Dorosły|Koncert relaksacyjny":"Dźwięk. Cisza. Obecność.","Dorosły|TRE - praca z ciałem uwalniająca napięcia i stres":"Ciało. Napięcie. Wspólne uwolnienie.","Dorosły|Psychologia somatyczna (Dance Movement Therapy)":"Ruch. Ciało. Emocje.","Dorosły|Malarstwo intuicyjne":"Kolor. Intuicja. Wspólne tworzenie.","Dorosły|Porozmawiajmy o sztuce - kierunki, artyści, twórczość":"Rozmowa. Sztuka. Wspólne odkrywanie.","Dorosły|Porozmawiajmy o muzyce - kierunki, artyści, twórczość":"Rozmowa. Muzyka. Wspólne słuchanie.","Dorosły|Taniec intuicyjny":"Ruch. Ciało. Swoboda.","Dorosły|Karykatura":"Linia. Charakter. Humor."};
+const TNM_HASLA_Z={"Dziecko|Musical":"Scena. Głos. Ruch.","Dziecko|Chór":"Głosy. Brzmienie. Radość.","Dziecko|Rythm & Feel - Groove":"Rytm. Ciało. Groove.","Dziecko|Stwórz swoją piosenkę - Wokal + Tekst + Produkcja":"Słowo. Melodia. Tworzenie.","Dziecko|Spektakl - Aktorstwo":"Scena. Postacie. Historia.","Dziecko|Spektakl - Taniec / Ruch":"Ruch. Ciało. Energia.","Dziecko|Yoga z relaksacją dźwiękami":"Oddech. Spokój. Ciało.","Dziecko|Koncert relaksacyjny":"Dźwięk. Cisza. Obecność.","Dziecko|Ciekawe spotkania o sztuce - kierunki, artyści, twórczość":"Rozmowa. Sztuka. Odkrywanie.","Dziecko|Ciekawe spotkania o muzyce - kierunki, artyści, twórczość":"Rozmowa. Muzyka. Słuchanie.","Dorosły|Musical":"Scena. Głos. Ruch.","Dorosły|Chór":"Głosy. Brzmienie. Radość.","Dorosły|Spektakl - Aktorstwo":"Scena. Postacie. Historia.","Dorosły|Spektakl - Taniec / Ruch":"Ruch. Ciało. Energia.","Dorosły|Yoga z relaksacją dźwiękami":"Oddech. Spokój. Ciało.","Dorosły|Koncert relaksacyjny":"Dźwięk. Cisza. Obecność.","Dorosły|TRE - praca z ciałem uwalniająca napięcia i stres":"Ciało. Napięcie. Uwolnienie.","Dorosły|Psychologia somatyczna (Dance Movement Therapy)":"Ruch. Ciało. Emocje.","Dorosły|Malarstwo intuicyjne":"Kolor. Intuicja. Tworzenie.","Dorosły|Porozmawiajmy o sztuce - kierunki, artyści, twórczość":"Rozmowa. Sztuka. Odkrywanie.","Dorosły|Porozmawiajmy o muzyce - kierunki, artyści, twórczość":"Rozmowa. Muzyka. Słuchanie.","Dorosły|Taniec intuicyjny":"Ruch. Ciało. Swoboda.","Dorosły|Karykatura":"Linia. Charakter. Humor."};
 function tnmPlan(g){
   const L=String(g||"").split("\n").map(s=>s.trim()).filter(Boolean);
   const t=s=>{const m=/^(\d{1,2}):(\d{2})/.exec(s);return m?(+m[1])*60+(+m[2]):null;};
@@ -2330,7 +2330,7 @@ function zespCard(i,idx){
     const g=tnmGodz(p.min);
     const w=g.h===1?"GODZINA":(g.h>=2&&g.h<=4&&Number.isInteger(g.h)?"GODZINY":"GODZIN");
     plan=`<div class="zk__plan">
-      <span class="zk__planlab">PRACUJEMY RAZEM · ${g.n} ${w}</span>
+      <span class="zk__planlab">PRACUJEMY RAZEM<b class=tnm-hs__sep>|</b>${g.n} ${w}</span>
       ${p.segs.length?`<span class="zk__bar">${p.segs.map((s,k)=>`<span class="${kol[k%3]}" style="flex:${s.min} 1 0"></span>`).join("")}</span>
       <span class="zk__segs">${p.segs.map((s,k)=>`<span class="zk__seg"><span class="zk__sq ${kol[k%3]}"></span><span class="zk__segn">${s.n}</span><span class="zk__segt">${tnmGodz(s.min).n} godz.</span></span>`).join("")}</span>`:""}
     </div>`;
@@ -2816,7 +2816,7 @@ function tnmOpenGroup(items,idxs,k){
   TNM_ALT={items,idxs};
   const ctx=lessonEntryCtx(items[idxs[k]],"lekcja");
   if(ctx.tnm) ctx.tnm.alts=idxs.map((ix,j)=>{const z=items[ix];const m=/(\d+)\s*os/.exec(z.miejsca||"");
-    return {j,on:j===k,label:tnmJestMg(z)?("Mała grupa"+(m?" · do "+m[1]+" os.":"")):"1:1 · 45 min"};});
+    return {j,on:j===k,label:tnmJestMg(z)?("Mała grupa"+(m?"<b class=tnm-hs__sep>|</b>do "+m[1]+" os.":"")):"1:1<b class=tnm-hs__sep>|</b>45 min"};});
   openEntry(ctx);
 }
 document.addEventListener("click",e=>{const b=e.target.closest("[data-tnm-alt]");if(!b)return;e.preventDefault();
