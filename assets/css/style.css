@@ -2052,3 +2052,13 @@ body>section>.container,body>section .container.subhero__inner,.subhero>.contain
 }
 @media(min-width:761px){.tnm-siatka .catalog .cat-main:not(:has(.cfil)) .cat-tabs{margin-bottom:48px}}
 @media(max-width:760px){.catalog .cat-main:not(:has(.cfil)) .cat-tabs{margin-bottom:28px}}
+
+.tnm-home .offer-head{background:linear-gradient(90deg,#ebe6dd 50%,#f6f2ec 50%)!important;border-bottom:1px solid #dfd6c9}
+.tnm-home .offer-head:has(.aud-tabs button+button.active){background:linear-gradient(90deg,#f6f2ec 50%,#ebe6dd 50%)!important}
+.tnm-home .aud-tabs button{border-bottom:0!important;box-shadow:none!important}
+.tnm-home .aud-tabs button.active{background:#ebe6dd!important}
+.tnm-home .aud-tabs button:not(.active){background:#f6f2ec!important}
+.tsw{border-bottom:1px solid #dfd6c9!important}
+.tsw__half{box-shadow:none!important;align-items:flex-start!important}
+.tsw__name,.tsw__name .tsw__haslo,.tsw__name .tsw__sep{font-size:18px!important}
+.tsw__metka{margin-top:1.7px!important}
