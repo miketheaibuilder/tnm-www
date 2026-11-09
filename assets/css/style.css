@@ -2062,3 +2062,6 @@ body>section>.container,body>section .container.subhero__inner,.subhero>.contain
 .tsw__half{box-shadow:none!important;align-items:flex-start!important}
 .tsw__name,.tsw__name .tsw__haslo,.tsw__name .tsw__sep{font-size:18px!important}
 .tsw__metka{margin-top:1.7px!important}
+
+.tnm-home .aud-tabs button,.tnm-home .aud-tabs button+button{justify-content:center!important;text-align:center!important;padding-left:24px!important;padding-right:24px!important}
+@media(max-width:991px){.tnm-home .aud-tabs button,.tnm-home .aud-tabs button+button{align-items:center!important;padding-left:16px!important;padding-right:16px!important}}
