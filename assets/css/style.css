@@ -2085,3 +2085,18 @@ body>section>.container,body>section .container.subhero__inner,.subhero>.contain
 @media(min-width:901px){.clarity-content{margin-left:12px}}
 @media(max-width:760px){.clarity-head h2{font-size:28px;line-height:34px}}
 @media(max-width:600px){.clarity-media{padding-top:20px}.clarity-media .badge-tag{width:110px;height:28px;font-size:16px}}
+
+.knarz__grid{align-items:stretch}
+.knarz .knarz__card .zk__body{padding:20px 20px 24px;gap:24px;justify-content:space-between}
+.knarz__top{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.knarz .knarz__card .zk__title{font-size:23px;line-height:28px}
+.knarz__m{margin:0;font-size:15px;line-height:20px;color:#5f5f5f}
+.knarz__m .knarz__sep{margin:0 .5em}
+.knarz .knarz__sep.knarz__sep--br{margin-left:0}
+.knarz__tags{display:flex;gap:8px;margin-top:6px}
+.knarz__tg{font-size:13px;line-height:16px;padding:4px 8px;background:var(--beige-200);color:var(--ink)}
+.knarz__more{align-self:flex-end;display:inline-flex;align-items:center;gap:12px;color:var(--ink);font-size:16px;line-height:20px;font-weight:700;padding-bottom:6px;box-shadow:inset 0 -2px 0 currentColor;transition:color .15s ease}
+.knarz__card:hover .knarz__more{color:var(--red)}
+.knarz__ar{width:24px;height:12px;fill:none;stroke:currentColor;stroke-width:1.5;flex:0 0 auto}
+@media(max-width:899px){.knarz__grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.knarz__grid{grid-template-columns:1fr}.knarz .knarz__card .zk__title{font-size:20px;line-height:24px}}
