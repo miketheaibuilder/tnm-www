@@ -1130,7 +1130,7 @@ function openEntry(ctx){
 
 
   const media=`<div class="lcpopup__media">
-      <span class="lcpopup__media-bg bw" style="${photo?`background-image:url('${photo}')`:""}"></span>
+      <span class="lcpopup__media-bg bw" style="${photo?`background-image:url('${photo}')${ctx.photoPos?`;background-position:${ctx.photoPos}`:""}`:""}"></span>
       ${ctx.metka?`<span class="badge-tag lcpopup__metka">${ctx.metka}</span>`:`<span class="lcpopup__logo"><img src="${THX_LOGO}" alt="The Noise Makers"></span>`}
       <button class="btn lcpopup__cta" type="button" data-entry-go>${ctx.ctaLabel||"Zapisz się"} ${ARR}</button>
     </div>`;
@@ -1419,7 +1419,7 @@ const ENTRY={
     next:{kind:"zencal",key:"free"},thx:{surface:"konsultacja",button:true}}),
   "kons-fundamenty":()=>({variant:"B",mastheadTitle:"Book a meeting",title:"Hi,",desc:WELCOME_ZENCAL_PAID,
     outro:WELCOME_ZENCAL_OUTRO,
-    priceNote:"paid",price:"899 zł",photo:"../assets/img/figma/konsultacje/dzieci/kons-narz-fundamenty.webp",metka:"CLARITY",ctaLabel:WELCOME_ZENCAL_CTA,
+    priceNote:"paid",price:"899 zł",photo:"../assets/img/figma/clarity.webp",photoPos:"50% 22%",metka:"CLARITY",ctaLabel:WELCOME_ZENCAL_CTA,
     next:{kind:"zencal",key:"paid"},thx:{surface:"konsultacja",button:true}}),
    
   "kons-napisz":()=>({variant:"B",mastheadTitle:"Sign-up form",title:"Write to us",
