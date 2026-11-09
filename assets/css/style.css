@@ -2066,7 +2066,6 @@ body>section>.container,body>section .container.subhero__inner,.subhero>.contain
 .tnm-home .aud-tabs button,.tnm-home .aud-tabs button+button{justify-content:center!important;text-align:center!important;padding-left:24px!important;padding-right:24px!important}
 @media(max-width:991px){.tnm-home .aud-tabs button,.tnm-home .aud-tabs button+button{align-items:center!important;padding-left:16px!important;padding-right:16px!important}}
 
-/* Konsultacje na Home (CLARITY) – typografia wg systemu, metka u góry, przycisk bez strzałki (9.11.2026) */
 .clarity-media{align-items:flex-start;padding:28px 0 0}
 .clarity-head{gap:16px}
 .clarity-head h2{font-size:35px;line-height:42px}
