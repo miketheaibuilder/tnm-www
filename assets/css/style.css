@@ -2065,3 +2065,23 @@ body>section>.container,body>section .container.subhero__inner,.subhero>.contain
 
 .tnm-home .aud-tabs button,.tnm-home .aud-tabs button+button{justify-content:center!important;text-align:center!important;padding-left:24px!important;padding-right:24px!important}
 @media(max-width:991px){.tnm-home .aud-tabs button,.tnm-home .aud-tabs button+button{align-items:center!important;padding-left:16px!important;padding-right:16px!important}}
+
+.clarity-media{align-items:flex-start;padding:28px 0 0}
+.clarity-head{gap:16px}
+.clarity-head h2{font-size:35px;line-height:42px}
+.clarity-head p{font-size:17px;line-height:24px;font-weight:500}
+.clarity-content{gap:32px}
+.clarity-content .options{gap:28px}
+.clarity-content .option{gap:20px}
+.clarity-content .option__icon{flex:0 0 32px;width:32px;height:24px}
+.clarity-content .option__icon svg{width:32px;height:32px}
+.clarity-content .option__body{gap:6px}
+.clarity-content .option__title{gap:10px}
+.clarity-content .option__title h3{font-size:18px;line-height:24px}
+.clarity-content .badge-soft{font-size:13px;line-height:16px;padding:4px 8px}
+.clarity-content .option__desc{font-size:16px;line-height:20px;color:#5f5f5f}
+.clarity-content .option__link{font-size:16px;line-height:20px;min-height:0;margin-top:4px}
+.clarity-btn .btn{font-size:16px;line-height:20px}
+@media(min-width:901px){.clarity-content{margin-left:12px}}
+@media(max-width:760px){.clarity-head h2{font-size:28px;line-height:34px}}
+@media(max-width:600px){.clarity-media{padding-top:20px}.clarity-media .badge-tag{width:110px;height:28px;font-size:16px}}
