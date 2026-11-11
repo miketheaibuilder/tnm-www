@@ -1,4 +1,3 @@
-/* TNM – apla zespołu: strzałki (2 kolumny na klik) i przeciąganie myszką (11.11.2026) */
 (function(){
   function init(){
     document.querySelectorAll(".carousel--apla").forEach(function(c){
@@ -22,7 +21,6 @@
       window.addEventListener("resize", upd);
       new MutationObserver(upd).observe(t, {childList: true});
 
-      /* Przeciąganie myszką */
       var down = false, moved = false, sx = 0, sl = 0;
       t.addEventListener("pointerdown", function(e){
         if(e.pointerType !== "mouse" || e.button !== 0) return;
@@ -42,7 +40,6 @@
         var w = col();
         t.scrollTo({left: Math.round(t.scrollLeft / w) * w, behavior: "smooth"});
       });
-      /* Po przeciągnięciu nie otwieraj pop-upu osoby */
       t.addEventListener("click", function(e){
         if(moved){ e.stopPropagation(); e.preventDefault(); moved = false; }
       }, true);
