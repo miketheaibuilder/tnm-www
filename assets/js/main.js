@@ -2066,7 +2066,6 @@ function openTeamPopup(t){
    
    
    
-  /* tpopup v2 (11.11.2026): cytat z podpisem, zajęcia jako lista z „|”, śródtytuły w opisie, CTA w stopce */
   const esc2=x=>String(x).replace(/&/g,"&amp;").replace(/</g,"&lt;");
   const norm=x=>String(x).replace(/[„”"“\s\-–]/g,"").toLowerCase();
   const qParts=quote?quote.split(/\n\s*\n+/).map(q=>q.trim()).filter(Boolean):[];

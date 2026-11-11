@@ -2101,7 +2101,6 @@ body>section>.container,body>section .container.subhero__inner,.subhero>.contain
 @media(max-width:899px){.knarz__grid{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.knarz__grid{grid-template-columns:1fr}.knarz .knarz__card .zk__title{font-size:20px;line-height:24px}}
 
-/* === 11.11.2026: pop-up „Poznajmy się” v2 (wariant A) === */
 .modal__box--team:has(.tpopup--v2){max-width:940px}
 .tpopup--v2{height:620px;max-height:82vh;min-height:0}
 .tpopup--v2 .tpopup__side{flex:1;min-width:0;display:flex;flex-direction:column}
@@ -2119,7 +2118,6 @@ body>section>.container,body>section .container.subhero__inner,.subhero>.contain
 .tpopup--v2 .tpopup__bio p:last-child{margin-bottom:0}
 .tpopup--v2 .tpopup__sub{font-family:inherit;font-weight:700;font-size:13px;line-height:16px;letter-spacing:.06em;text-transform:uppercase;color:#2e2e2e;margin:0 0 8px}
 .tpopup--v2 .tpopup__cta{position:static;flex:none;display:flex;justify-content:flex-end;padding:12px 40px;border-top:1px solid #dfd6c9;background:#fff;margin:0}
-/* zdjęcie: wysokość pop-upu, dosunięte do prawej (góra, dół, prawa krawędź) */
 .tpopup--v2 .tpopup__media{flex:0 0 40%;min-height:0;background-color:#fff;background-size:auto 100%;background-position:right center!important}
 @media (max-width:860px){
   .modal__box--team:has(.tpopup--v2){max-width:none}
@@ -2134,7 +2132,6 @@ body>section>.container,body>section .container.subhero__inner,.subhero>.contain
 }
 @media (max-width:600px){.tpopup--v2 .tpopup__bio{font-size:15px}}
 
-/* === 11.11.2026: „Słyszymy Was” – do lewej krawędzi siatki, strzałki jak w „Poznajmy się” === */
 .carousel--op .carousel__track{padding-inline:clamp(1rem,3.5vw,1.5rem);scroll-padding-inline:clamp(1rem,3.5vw,1.5rem)}
 @media (min-width:992px){
   .carousel--op .carousel__track{padding-inline:calc((100vw - min(1000px,100vw - 80px))/2);scroll-padding-inline:calc((100vw - min(1000px,100vw - 80px))/2)}
@@ -2145,7 +2142,6 @@ body>section>.container,body>section .container.subhero__inner,.subhero>.contain
 }
 @media (max-width:991px){.carousel--op .carousel__nav{display:none}}
 
-/* === 11.11.2026: telefon – zdjęcia zespołu bliżej wideo i tekstu === */
 @media (max-width:991px){
   .meet-row.meet-row--apla{gap:16px;margin-bottom:24px}
   .meet-row--apla .meet-video:has(>.video-facade){margin-bottom:16px}
