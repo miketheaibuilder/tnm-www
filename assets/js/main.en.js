@@ -2066,31 +2066,34 @@ function openTeamPopup(t){
    
    
    
-  openModal(`<div class="tpopup">
+  const esc2=x=>String(x).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+  const norm=x=>String(x).replace(/[„”"“\s\-–]/g,"").toLowerCase();
+  const qParts=quote?quote.split(/\n\s*\n+/).map(q=>q.trim()).filter(Boolean):[];
+  const qHtml=qParts.map(q=>{const ls=q.split("\n");let c="";
+    if(ls.length>1&&/^\s*[-–—]\s*/.test(ls[ls.length-1])) c=ls.pop().replace(/^\s*[-–—]\s*/,"");
+    return `<p class="tpopup__quote">${ls.join(" ").replace(/[„"”“]/g,"")}${c?`<cite>${c}</cite>`:""}</p>`;}).join("");
+  const qNorm=norm(quote);
+  const list=x=>String(x).split(/\s*,\s*/).filter(Boolean).map(v=>`<span>${v}</span>`).join('<i aria-hidden="true">|</i>');
+  const bioHtml=bio?bio.split(/\n\n+/).filter(p=>{const n=norm(p);return n&&!(qNorm&&qNorm.includes(n));}).map(p=>{
+    const ls=p.split("\n");let h="";
+    if(ls.length>1&&/^[A-ZĄĆĘŁŃÓŚŹŻ][A-ZĄĆĘŁŃÓŚŹŻ \-]{1,30}$/.test(ls[0].trim())) h=`<h3 class="tpopup__sub">${ls.shift().trim()}</h3>`;
+    return h+`<p>${ls.join("<br>")}</p>`;}).join(""):"";
+  openModal(`<div class="tpopup tpopup--v2">
     <div class="tpopup__bar"><span class="tpopup__barlabel">Let's meet</span><button type="button" class="tpopup__barx" aria-label="Zamknij">&times;</button></div>
-    <div class="tpopup__panel">
-      <h2 class="tpopup__name">${t.name.trim()}</h2>
-      <div class="tpopup__row">
-        ${quote?`<p class="tpopup__quote">${quote.replace(/[„"]/g,"").replace(/\n/g,"<br>")}</p>`:`<p class="tpopup__quote muted"></p>`}
-        <div class="tpopup__chars">
-          ${indyw?`<div class="tchar">${ICO_USER}<div><strong>One-to-one classes</strong><span>${indyw}</span></div></div>`:""}
-          ${grup?`<div class="tchar">${ICO_GROUP}<div><strong>Group classes</strong><span>${grup}</span></div></div>`:""}
-          ${fallbackRole?`<div class="tchar">${ICO_USER}<div><strong>Classes</strong><span>${fallbackRole}</span></div></div>`:""}
-        </div>
+    <div class="tpopup__side">
+      <div class="tpopup__panel">
+        <h2 class="tpopup__name">${t.name.trim()}</h2>
+        ${qHtml?`<div class="tpopup__quotes">${qHtml}</div>`:""}
+        ${(indyw||grup||fallbackRole)?`<dl class="tpopup__offer">
+          ${indyw?`<div><dt>One-to-one classes</dt><dd>${list(indyw)}</dd></div>`:""}
+          ${grup?`<div><dt>Group classes</dt><dd>${list(grup)}</dd></div>`:""}
+          ${fallbackRole?`<div><dt>Classes</dt><dd>${fallbackRole}</dd></div>`:""}
+        </dl>`:""}
+        ${bioHtml?`<div class="tpopup__bio">${bioHtml}</div>`:""}
       </div>
-      ${bio?`<div class="tpopup__bio">${bio.split(/\n\n+/).map(p=>`<p>${p.replace(/\n/g,"<br>")}</p>`).join("")}</div>`:""}
+      ${(indyw||grup)?`<div class="tpopup__cta"><a class="btn" href="${FORM_URL}" data-intake="zajecia-1na1" data-prowadzacy="${t.name.trim()}" data-thx-photo="${popupImg}">Sign up</a></div>`:""}
     </div>
-    <div class="tpopup__media bw" style="background-image:url('${popupImg}');background-position:${isData(t.foto_pos)?t.foto_pos:"center 30%"}"></div>
-    
-
-
-
-    
-
-
-
-
-    ${(indyw||grup)?`<div class="tpopup__cta"><a class="btn" href="${FORM_URL}" data-intake="zajecia-1na1" data-prowadzacy="${t.name.trim()}" data-thx-photo="${popupImg}">Sign up <span aria-hidden="true">&gt;</span></a></div>`:""}
+    <div class="tpopup__media bw" role="img" aria-label="${esc2(t.name.trim())}" style="background-image:url('${popupImg}')"></div>
   </div>`,"modal__box--team");
   document.querySelector(".tpopup__barx")?.addEventListener("click",closeModalBox);
 }
@@ -2198,10 +2201,18 @@ function renderKonsultacjeTiles(el, aud){
 
 function initCarousels(root=document){
   root.querySelectorAll("[data-carousel]").forEach(c=>{
+    if(c.classList.contains("carousel--apla")||c.dataset.opInit) return;
+    c.dataset.opInit="1"; c.classList.add("carousel--op");
     const track=c.querySelector(".carousel__track");
-    const step=()=>Math.max(280,track.firstElementChild?.getBoundingClientRect().width+26||300);
-    c.querySelector("[data-prev]")?.addEventListener("click",()=>track.scrollBy({left:-step(),behavior:"smooth"}));
-    c.querySelector("[data-next]")?.addEventListener("click",()=>track.scrollBy({left:step(),behavior:"smooth"}));
+    const prev=c.querySelector("[data-prev]"), next=c.querySelector("[data-next]");
+    if(prev){prev.type="button";prev.innerHTML='<svg width="24" height="12" viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" style="transform:scaleX(-1)"><path d="M0 6h22.5M17 .8 22.5 6 17 11.2"/></svg>';}
+    if(next){next.type="button";next.innerHTML='<svg width="24" height="12" viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M0 6h22.5M17 .8 22.5 6 17 11.2"/></svg>';}
+    const step=()=>Math.max(280,track.firstElementChild?.getBoundingClientRect().width+24||300);
+    const upd=()=>{ if(prev) prev.disabled=track.scrollLeft<=2; if(next) next.disabled=track.scrollLeft+track.clientWidth>=track.scrollWidth-2; };
+    prev?.addEventListener("click",()=>track.scrollBy({left:-step(),behavior:"smooth"}));
+    next?.addEventListener("click",()=>track.scrollBy({left:step(),behavior:"smooth"}));
+    track.addEventListener("scroll",upd,{passive:true}); window.addEventListener("resize",upd);
+    new MutationObserver(upd).observe(track,{childList:true}); upd();
   });
 }
 
