@@ -1,0 +1,48 @@
+/* TNM – sekcja „Poznajmy się”: apla zespołu w 2 rzędach (11.11.2026)
+   Działa tylko na elementach z klasą .meet-row--apla i .carousel--apla (strona główna PL i EN). */
+
+/* ===== Komputer (od 992 px) ===== */
+@media (min-width: 992px){
+  /* Wideo = 2 kolumny apli (2/5 szerokości), tekst = 3 kolumny */
+  .meet-row.meet-row--apla{display:grid;grid-template-columns:2fr 3fr;gap:0;align-items:center;justify-content:stretch;max-width:min(1000px,calc(100vw - 80px));margin:0 auto 64px !important}
+  .meet-row--apla .meet-video{width:100%;height:auto !important;aspect-ratio:376/668;flex:none;max-width:none}
+  .meet-row--apla .meet-text{padding:0 0 0 56px;max-width:none}
+
+  /* Apla: 2 rzędy, 5 kolumn w kolumnie strony, bez odstępów */
+  .carousel.carousel--apla{width:auto;max-width:min(1000px,calc(100vw - 80px));margin:0 auto}
+  .carousel--apla .carousel__track{display:grid;grid-template-rows:repeat(2,auto);grid-auto-flow:column;grid-auto-columns:20%;gap:0;padding:0 !important;padding-inline:0 !important;scroll-padding-inline:0 !important;scroll-snap-type:x mandatory;cursor:grab}
+  .carousel--apla .carousel__track.is-drag{cursor:grabbing;scroll-snap-type:none;scroll-behavior:auto;user-select:none;-webkit-user-select:none}
+
+  /* Strzałki: same cienkie strzałki, przy prawej krawędzi kolumny */
+  .carousel--apla .carousel__nav{justify-content:flex-end;gap:8px;margin-top:24px}
+  .carousel--apla .carousel__nav button{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;padding:0;color:var(--ink,#2e2e2e);transition:color .2s,opacity .2s}
+  .carousel--apla .carousel__nav button:hover{opacity:1;color:#e20900}
+  .carousel--apla .carousel__nav button:disabled{opacity:.3;cursor:default;color:var(--ink,#2e2e2e)}
+}
+
+/* ===== Karta osoby w apli (wszystkie szerokości) ===== */
+.carousel--apla .person-card{position:relative;display:block;gap:0;width:auto;scroll-snap-align:start;overflow:hidden}
+.carousel--apla .person-card__img{aspect-ratio:4/5;background-size:cover;background-position:center;transition:opacity .4s}
+.carousel--apla .person-card__info{position:absolute;left:0;bottom:0;max-width:100%;box-sizing:border-box;gap:0;background:rgba(22,22,22,.55);padding:8px 12px 10px;color:#fff;transition:opacity .3s}
+.carousel--apla .person-card .person-card__nr h3{font-size:14px;line-height:18px;font-weight:700;color:#fff;margin:0}
+.carousel--apla .person-card .person-card__role{font-size:11px;line-height:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.85);margin-top:2px}
+.carousel--apla .person-card__quote,.carousel--apla .person-card__more{display:none !important}
+
+/* Z myszką: same zdjęcia, imię i specjalizacja po najechaniu, reszta przygasa */
+@media (hover:hover) and (pointer:fine){
+  .carousel--apla .person-card__info{opacity:0}
+  .carousel--apla .person-card:hover .person-card__info{opacity:1}
+  .carousel--apla .carousel__track:hover .person-card__img{opacity:.6}
+  .carousel--apla .carousel__track:hover .person-card:hover .person-card__img{opacity:1}
+}
+
+/* ===== Telefon i tablet (do 991 px): 1 rząd, przesuwanie palcem, imię zawsze widoczne ===== */
+@media (max-width: 991px){
+  .carousel--apla .carousel__track{gap:0}
+  .carousel--apla .person-card{flex:0 0 min(64vw,280px)}
+  .carousel--apla .carousel__nav{display:none}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .carousel--apla .person-card__img,.carousel--apla .person-card__info{transition:none}
+}
