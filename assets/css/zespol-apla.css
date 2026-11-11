@@ -7,7 +7,7 @@
   .carousel--apla .carousel__track{display:grid;grid-template-rows:repeat(2,auto);grid-auto-flow:column;grid-auto-columns:20%;gap:0;padding:0 !important;padding-inline:0 !important;scroll-padding-inline:0 !important;scroll-snap-type:x mandatory;cursor:grab}
   .carousel--apla .carousel__track.is-drag{cursor:grabbing;scroll-snap-type:none;scroll-behavior:auto;user-select:none;-webkit-user-select:none}
 
-  .carousel--apla .carousel__nav{justify-content:flex-end;gap:8px;margin-top:24px}
+  .carousel--apla .carousel__nav{justify-content:center;gap:8px;margin-top:24px}
   .carousel--apla .carousel__nav button{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;padding:0;color:var(--ink,#2e2e2e);transition:color .2s,opacity .2s}
   .carousel--apla .carousel__nav button:hover{opacity:1;color:#e20900}
   .carousel--apla .carousel__nav button:disabled{opacity:.3;cursor:default;color:var(--ink,#2e2e2e)}
