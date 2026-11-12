@@ -2098,6 +2098,14 @@ function openTeamPopup(t){
   document.querySelector(".tpopup__barx")?.addEventListener("click",closeModalBox);
 }
 
+function opNb(t){return String(t).replace(/(^|\s)([^\s]{1,2})\s/g,"$1$2\u00a0").replace(/(^|\s)([^\s]{1,2})\s/g,"$1$2\u00a0");}
+function opAkapity(t){
+  const zd=String(t).trim().split(/(?<=[.!?…)”"])\s+(?=[A-ZĄĆĘŁŃÓŚŹŻ„"(])/);
+  const ak=[];let cur="";
+  zd.forEach(z=>{ if(cur&&(cur+" "+z).length>170){ak.push(cur);cur=z;} else cur=cur?cur+" "+z:z; });
+  if(cur) ak.push(cur);
+  return ak.map(p=>`<p>${opNb(p).replace(/\(\.\.\.\)|\(…\)/g,'<span class="op-card__cut">(…)</span>')}</p>`).join("");
+}
 function renderOpinie(data, el, key){
   let ops=((key?data[key]:data.opinie)||[]).filter(o=>isData(o.cytat));
   if(!ops.length){
@@ -2111,8 +2119,8 @@ function renderOpinie(data, el, key){
   el.innerHTML=ops.map(o=>`
     <div class="op-card">
       <div class="op-card__body">
-        <p class="op-card__quote">${o.cytat}</p>
-        <p class="op-card__author">${o.autor||""}${o.rola?`,<br>${o.rola}`:""}</p>
+        <div class="op-card__quote">${opAkapity(o.cytat)}</div>
+        <p class="op-card__author">${opNb(o.autor||"")}${o.rola?`\u00a0\u00a0|\u00a0\u00a0${opNb(o.rola)}`:""}</p>
       </div>
       <div class="op-card__logo"><img src="../assets/img/figma/logo-tnm-white.png?v=20260615" alt="The Noise Makers"></div>
       <div class="op-card__media bw" style="${o.foto_link&&isData(o.foto_link)?`background-image:url('${o.foto_link}')`:''}"></div>
@@ -2212,7 +2220,18 @@ function initCarousels(root=document){
     prev?.addEventListener("click",()=>track.scrollBy({left:-step(),behavior:"smooth"}));
     next?.addEventListener("click",()=>track.scrollBy({left:step(),behavior:"smooth"}));
     track.addEventListener("scroll",upd,{passive:true}); window.addEventListener("resize",upd);
-    new MutationObserver(upd).observe(track,{childList:true}); upd();
+    const act=()=>{ const cards=[...track.children]; if(!cards.length) return;
+      const mid=track.getBoundingClientRect().left+track.clientWidth/2; let best=cards[0],d=1e9;
+      cards.forEach(k=>{const r=k.getBoundingClientRect(),dd=Math.abs(r.left+r.width/2-mid); if(dd<d){d=dd;best=k;}});
+      cards.forEach(k=>k.classList.toggle("is-active",k===best)); };
+    let raf=0; track.addEventListener("scroll",()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(act);},{passive:true});
+    track.addEventListener("click",e=>{const k=e.target.closest(".op-card"); if(k&&!k.classList.contains("is-active")){const r=k.getBoundingClientRect(),t=track.getBoundingClientRect();track.scrollBy({left:r.left+r.width/2-(t.left+track.clientWidth/2),behavior:"smooth"});}});
+    let startDone=false,tries=0; const start=()=>requestAnimationFrame(()=>{ act(); if(startDone||track.children.length<3||!track.clientWidth) return;
+      const k=track.children[1],r=k.getBoundingClientRect(),t=track.getBoundingClientRect();
+      track.scrollTo({left:track.scrollLeft+r.left+r.width/2-(t.left+track.clientWidth/2),behavior:"instant"});
+      if(track.scrollLeft>0) startDone=true; else if((tries=(tries||0)+1)<15) setTimeout(start,300); act(); upd(); });
+    if(window.IntersectionObserver) new IntersectionObserver(es=>{ if(es.some(e=>e.isIntersecting)&&!startDone) start(); }).observe(track);
+    new MutationObserver(()=>{upd();start();}).observe(track,{childList:true}); upd(); start();
   });
 }
 
