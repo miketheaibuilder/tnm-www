@@ -2149,7 +2149,6 @@ body>section>.container,body>section .container.subhero__inner,.subhero>.contain
 }
 
 
-/* Słyszymy Was – czytana opinia na środku, reszta przygaszona, lepszy skład tekstu (11.2026) */
 .carousel--op .carousel__track{--opw:424px;scroll-snap-type:x mandatory;padding-inline:calc(50vw - var(--opw)/2);scroll-padding-inline:0}
 @media (min-width:992px){.carousel--op .carousel__track{padding-inline:calc(50vw - var(--opw)/2);scroll-padding-inline:0}}
 @media (max-width:560px){.carousel--op .carousel__track{--opw:300px}}
