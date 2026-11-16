@@ -713,7 +713,7 @@ const FOOTER = `
   <div class="footer__top">
     <div class="footer__claim">Feel the he<span class="art">art</span>.</div>
     <div class="footer__social">
-      <a href="https://www.instagram.com/thenoisemakers.pl" target="_blank" rel="noopener" aria-label="Instagram">${IG}</a>
+      <a href="https://www.instagram.com/the_noise_makers_academy/" target="_blank" rel="noopener" aria-label="Instagram">${IG}</a>
       
 
 
@@ -1297,7 +1297,7 @@ const THX={
     "Do zobaczenia.",
     'Jeśli gra w Tobie pytanie pozostawione bez odpowiedzi, Jesteśmy:<br><a class="thxcard__link" href="mailto:jestem@thenoisemakers.pl">jestem@thenoisemakers.pl</a>'
   ]},
-  partnerzy:{title:"Dziękujemy za Twoje zainteresowanie współpracą z The Noise Makers.",paras:["Przyjęliśmy Twoje zgłoszenie i już wkrótce mu się przyjrzymy.","Zapraszamy Ciebie do zapoznania się z naszą przestrzenią. Współtworzenie daje większą moc zmian i rozwoju.",'<a class="thxcard__link" href="https://www.instagram.com/thenoisemakers.pl" target="_blank" rel="noopener">Chcę o Was przeczytać</a>',"Dziękujemy."]}    
+  partnerzy:{title:"Dziękujemy za Twoje zainteresowanie współpracą z The Noise Makers.",paras:["Przyjęliśmy Twoje zgłoszenie i już wkrótce mu się przyjrzymy.","Zapraszamy Ciebie do zapoznania się z naszą przestrzenią. Współtworzenie daje większą moc zmian i rozwoju.",'<a class="thxcard__link" href="https://www.instagram.com/the_noise_makers_academy/" target="_blank" rel="noopener">Chcę o Was przeczytać</a>',"Dziękujemy."]}    
 };
 
 
@@ -1462,13 +1462,14 @@ function tnmPopupData(i,kind){
     let t=p?(()=>{const [a,b]=p.od.split(":").map(Number);return a*60+b;})():0;
     const hh=m=>Math.floor(m/60)+":"+String(m%60).padStart(2,"0");
     const segs=p?p.segs.map(s=>{const o={n:s.n,od:hh(t),do:hh(t+s.min)};t+=s.min;return o;}):[];
-    return {kind,haslo:TNM_HASLA_Z[key]||"",akapity,skladniki:"",
+    return {kind,haslo:TNM_HASLA_Z[key]||"",koniec:TNM_KONIEC[key]||"",akapity,skladniki:"",
       plan:p?{min:p.min,segs}:null,
       rows:[["KIEDY",tnmKiedyZesp(p,i)],["GDZIE",isData(i.lokalizacja)?i.lokalizacja:""],["POZIOM","od pierwszych kroków"]].filter(r=>r[1]),
       facts:dz?[["Twój kontakt"," (telefon, e-mail)"],["dane dziecka"," (imię i wiek)"]]:[["Twój kontakt"," (telefon, e-mail)"]],
       krokiLab:"CO DALEJ",kroki:["Gdy grupa się zbierze, potwierdzamy start telefonicznie lub mailem.","Potwierdzasz miejsce – dopiero wtedy płatność."],
       mies:zl(i.cena_karnet),wzor:zgodne?`4 spotkania × ${h} godz. = ${4*h} godzin w miesiącu`:"4 spotkania w miesiącu",
-      jedn:zgodne?zl(i.cena_lekcji):zl((+i.cena_lekcji||0)*(h||1)),jednTxt:zgodne?"ZA GODZINĘ":"ZA SPOTKANIE"};
+      jedn:zgodne?zl(i.cena_lekcji):zl((+i.cena_lekcji||0)*(h||1)),jednTxt:zgodne?"ZA GODZINĘ":"ZA SPOTKANIE",
+      spot:(+i.cena_lekcji>0&&h>0)?(+i.cena_lekcji)*h:0,spotSkl:(zgodne&&h>1)?`${h} godz. × ${+i.cena_lekcji} zł`:"",karnet:+i.cena_karnet||0,spotLab:"spotkanie",spotN4:"4 spotkania"};
   }
   const mg=/grup|najm/i.test(i.format||"");
   const czas=isData(i.godz)?String(i.godz).replace(/\.\s*$/,""):"45 min";
@@ -1476,7 +1477,8 @@ function tnmPopupData(i,kind){
   return {kind,haslo:TNM_HASLA[key]||"",akapity,skladniki:P.s,plan:null,rows:[],
     facts:dz?f:f.slice(1),
     krokiLab:"JAK WYGLĄDA ZAPIS",kroki:mg?["Dołączasz do listy oczekujących – bez płatności i zobowiązań.","Gdy grupa się zbierze, piszemy z dniem i godziną startu.","Potwierdzasz miejsce i przychodzicie na pierwsze zajęcia."]:["Wypełniasz krótki formularz zapisu.","Odzywamy się, dobieramy prowadzącego i ustalamy termin.",dz?"Pierwsze zajęcia – w dniu i miejscu, które Wam pasują.":"Pierwsze zajęcia – w dniu i miejscu, które Ci pasują."],
-    mies:zl(i.cena_karnet),wzor:`4 zajęcia po ${czas} w miesiącu`,jedn:zl(i.cena_lekcji),jednTxt:"ZA ZAJĘCIA"};
+    mies:zl(i.cena_karnet),wzor:`4 zajęcia po ${czas} w miesiącu`,jedn:zl(i.cena_lekcji),jednTxt:"ZA ZAJĘCIA",
+    spot:+i.cena_lekcji||0,spotSkl:czas,karnet:+i.cena_karnet||0,spotLab:"zajęcia",spotN4:"4 zajęcia"};
 }
 const TNM_ZESP_DZIEN="wybrany dzień", TNM_ZESP_START="wkrótce";
 function tnmHaslo(t){
@@ -1500,7 +1502,11 @@ function tnmPanelHTML(ctx){
   const rows=d.rows.length?`<div class="tp__rows">${d.rows.map(r=>`<div class="tp__row"><span class="tp__lab">${r[0]}</span><span>${r[1]}</span></div>`).join("")}</div>`:"";
   const facts=d.facts.map(f=>`<span><b>${f[0]}</b>${f[1]}</span>`).join(`<span class="tp__sep">|</span>`);
   const kroki=d.kroki.map((t,k)=>`<li><span class="tp__num">${k+1}</span><span>${t}</span></li>`).join("");
-  const cena=(d.mies||d.jedn)?`<div class="tp__cena">
+  const cena=d.spot?`<div class="tp__cena tp__cena--z">
+      <span class="tp__mies">${d.spot} zł <small>/ ${d.spotLab}</small></span>
+      ${d.spotSkl?`<span class="tp__wzor">${d.spotSkl}</span>`:""}
+      ${d.karnet?`<span class="tp__wzor tp__wzor3"><b class="tp__ratak">${d.karnet} zł / miesiąc</b>${d.karnet===4*d.spot?` (${d.spotN4})`:""}</span>`:""}
+    </div>`:(d.mies||d.jedn)?`<div class="tp__cena">
       <span class="tp__miesw">${d.mies?`<span class="tp__mies">${d.mies} <small>/ miesiąc</small></span><span class="tp__wzor">${d.wzor}</span>`:""}</span>
       ${d.jedn?`<span class="tp__jedn"><b>${d.jedn}</b><span>${d.jednTxt}</span></span>`:""}
     </div>`:"";
@@ -1511,6 +1517,7 @@ function tnmPanelHTML(ctx){
         ${d.akapity.length?`<div class="tp__opis">${d.akapity.map(t=>`<p>${t}</p>`).join("")}</div>`:""}
         
       </div>
+      ${d.koniec?`<div class="tp__sec"><span class="tp__lab">Z CZYM KOŃCZYMY</span><p class="tp__koniec">${d.koniec}</p></div>`:""}
       ${d.alts?`<div class="tp__sec"><span class="tp__lab">WYBIERZ FORMĘ</span><div class="tp__formy" role="radiogroup">${d.alts.map(a=>`<button type="button" role="radio" class="tp__forma" aria-checked="${a.on?"true":"false"}" data-tnm-alt="${a.j}">${a.label}</button>`).join("")}</div></div>`:""}
       ${plan}${rows}
       <div class="tp__sec"><span class="tp__lab">PODCZAS ZAPISU ZAPYTAMY O</span><p class="tp__facts">${facts}</p></div>
@@ -2325,7 +2332,7 @@ function catCard(i,idx){
       ${haslo?`<p class="zk__haslo">${tnmHaslo(haslo)}</p>`:""}
       <h3 class="zk__title">${tytul}</h3>
       <p class="zk__meta">${czas}${kiedy?"<b class=tnm-hs__sep>|</b>"+kiedy:""}</p>
-      <div class="zk__foot"><span class="zk__tags"><span class="zk__tag">${mg?"mała grupa":"1:1"}</span>${najm?`<span class="zk__tag">3–5 lat</span>`:""}</span><span class="zk__cena">${isData(i.cena)?i.cena:""}</span></div>
+      <div class="zk__foot"><span class="zk__tags"><span class="zk__tag">${mg?"mała grupa":"1:1"}</span>${najm?`<span class="zk__tag">3–5 lat</span>`:""}</span><span class="zk__cena">${isData(i.cena)?i.cena+" / zajęcia":""}</span></div>
     </div>
     <button class="zk__hit" type="button" data-popup="${idx}" aria-label="Zapisz się – ${tytul}"></button>
   </article>`;
@@ -2333,6 +2340,7 @@ function catCard(i,idx){
 
 
 
+const TNM_KONIEC={"Dziecko|Musical": "Premiera dla rodziny i przyjaciół.", "Dziecko|Chór": "Wspólny koncert dla bliskich.", "Dziecko|Orkiestra": "Koncert, w którym każdy instrument jest ważny.", "Dziecko|Rythm & Feel - Groove": "Rytmiczny pokaz pełen energii.", "Dziecko|Stwórz swoją piosenkę - Wokal + Tekst + Produkcja": "Własna piosenka, nagrana dla bliskich.", "Dziecko|Spektakl - Aktorstwo": "Spektakl dla rodziny i przyjaciół.", "Dziecko|Spektakl - Taniec / Ruch": "Taneczny pokaz dla bliskich.", "Dziecko|Yoga z relaksacją dźwiękami": "Spokój, po który dziecko sięga samo.", "Dziecko|Koncert relaksacyjny": "Chwila wyciszenia, do której chce się wracać.", "Dziecko|Medytacja": "Oddech, który pomaga w trudnej chwili.", "Dorosły|Musical": "Premiera dla przyjaciół i bliskich.", "Dorosły|Chór": "Wspólny koncert dla bliskich.", "Dorosły|Orkiestra": "Koncert, w którym brzmisz razem z innymi.", "Dorosły|Spektakl - Aktorstwo": "Spektakl przed widownią bliskich.", "Dorosły|Spektakl - Taniec / Ruch": "Pokaz opowiedziany ruchem.", "Dorosły|Yoga z relaksacją dźwiękami": "Własny rytuał wyciszenia.", "Dorosły|Koncert relaksacyjny": "Głęboki odpoczynek w środku tygodnia.", "Dorosły|Medytacja": "Codzienna chwila spokoju i obecności.", "Dorosły|TRE - praca z ciałem uwalniająca napięcia i stres": "Lżejsze ciało i mniej napięcia.", "Dorosły|Psychologia somatyczna (Dance Movement Therapy)": "Bliższy kontakt z ciałem i emocjami.", "Dorosły|Taniec intuicyjny": "Swoboda w ciele, bez oceniania.", "Dorosły|Karykatura": "Teczka karykatur i wystawa z humorem.", "Dorosły|Malarstwo": "Obrazy do domu i wspólna wystawa.", "Dorosły|Muzykoterapia": "Spokój i łatwość w wyrażaniu emocji.", "Dorosły|Stwórz swoją piosenkę - Wokal + Tekst + Produkcja": "Twoja piosenka, nagrana dla bliskich.", "Dorosły|Yoga": "Praktyka, którą zabierasz ze sobą."};
 const TNM_HASLA_Z={"Dorosły|Malarstwo":"Kolor. Warsztat. Pracownia.","Dziecko|Musical":"Scena. Głos. Ruch.","Dziecko|Chór":"Głosy. Brzmienie. Radość.","Dziecko|Rythm & Feel - Groove":"Rytm. Ciało. Groove.","Dziecko|Stwórz swoją piosenkę - Wokal + Tekst + Produkcja":"Słowo. Melodia. Tworzenie.","Dziecko|Spektakl - Aktorstwo":"Scena. Postacie. Historia.","Dziecko|Spektakl - Taniec / Ruch":"Ruch. Ciało. Energia.","Dziecko|Yoga z relaksacją dźwiękami":"Oddech. Spokój. Ciało.","Dziecko|Koncert relaksacyjny":"Dźwięk. Cisza. Obecność.","Dziecko|Ciekawe spotkania o sztuce - kierunki, artyści, twórczość":"Rozmowa. Sztuka. Odkrywanie.","Dziecko|Ciekawe spotkania o muzyce - kierunki, artyści, twórczość":"Rozmowa. Muzyka. Słuchanie.","Dorosły|Musical":"Scena. Głos. Ruch.","Dorosły|Chór":"Głosy. Brzmienie. Radość.","Dorosły|Spektakl - Aktorstwo":"Scena. Postacie. Historia.","Dorosły|Spektakl - Taniec / Ruch":"Ruch. Ciało. Energia.","Dorosły|Yoga z relaksacją dźwiękami":"Oddech. Spokój. Ciało.","Dorosły|Koncert relaksacyjny":"Dźwięk. Cisza. Obecność.","Dorosły|TRE - praca z ciałem uwalniająca napięcia i stres":"Ciało. Napięcie. Uwolnienie.","Dorosły|Psychologia somatyczna (Dance Movement Therapy)":"Ruch. Ciało. Emocje.","Dorosły|Malarstwo intuicyjne":"Kolor. Intuicja. Tworzenie.","Dorosły|Porozmawiajmy o sztuce - kierunki, artyści, twórczość":"Rozmowa. Sztuka. Odkrywanie.","Dorosły|Porozmawiajmy o muzyce - kierunki, artyści, twórczość":"Rozmowa. Muzyka. Słuchanie.","Dorosły|Taniec intuicyjny":"Ruch. Ciało. Swoboda.","Dorosły|Karykatura":"Linia. Charakter. Humor."};
 function tnmPlan(g){
   const mm=/^(?:(\d+)\s*×\s*)?(\d+)\s*min/.exec(String(g||"").trim());
@@ -2382,7 +2390,7 @@ function zespCard(i,idx){
       <h3 class="zk__title">${tytul}</h3>
       <p class="zk__meta zk__meta--z zk__kiedy">${kiedy}</p>
       ${plan}
-      ${spot&&mies?`<div class="zk__foot"><span class="zk__spot">${spot} zł / spotkanie</span><span class="zk__cena">${mies} zł / mies.</span></div>`:""}
+      ${spot?`<div class="zk__foot zk__foot--r"><span class="zk__cena">${spot} zł / spotkanie</span></div>`:""}
     </div>
     <button class="zk__hit" type="button" data-popup="${idx}" aria-label="Dowiedz się więcej – ${tytul}"></button>
   </article>`;
