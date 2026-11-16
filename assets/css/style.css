@@ -2211,3 +2211,11 @@ body>section>.container,body>section .container.subhero__inner,.subhero>.contain
 #reg-form .btn{min-height:42px;padding:0 22px}
 #reg-form .btn.is-locked{opacity:1}
 body:has(#reg-form) .subhero__sub{max-width:640px}
+
+.zk__foot--r{justify-content:flex-end}
+.tp__cena--z{flex-direction:column;align-items:stretch;gap:6px}
+.tp__cena--z .tp__wzor{font-size:16px}
+.tp__wzor3{margin-top:4px}
+.tp__ratak{font-size:20px;line-height:1.2;font-weight:700;color:var(--ink);white-space:nowrap}
+@media(max-width:560px){.tp__cena--z .tp__wzor{font-size:14px}}
+.tp__koniec{margin:0;font-size:16px;line-height:22px;font-weight:600;color:var(--ink)}
