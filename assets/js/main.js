@@ -2111,7 +2111,7 @@ function opAkapity(t){
   const ak=[];let cur="";
   zd.forEach(z=>{ if(cur&&(cur+" "+z).length>170){ak.push(cur);cur=z;} else cur=cur?cur+" "+z:z; });
   if(cur) ak.push(cur);
-  return ak.map(p=>`<p>${opNb(p).replace(/\(\.\.\.\)|\(…\)/g,'<span class="op-card__cut">(…)</span>')}</p>`).join("");
+  return ak.map(p=>`<p>${opNb(p).replace(/\(\.\.\.\)|\(…\)|\[\.\.\.\]|\[…\]/g,'<span class="op-card__cut">[…]</span>')}</p>`).join("");
 }
 function renderOpinie(data, el, key){
   let ops=((key?data[key]:data.opinie)||[]).filter(o=>isData(o.cytat));
