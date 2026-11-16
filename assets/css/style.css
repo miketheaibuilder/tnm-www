@@ -2219,3 +2219,6 @@ body:has(#reg-form) .subhero__sub{max-width:640px}
 .tp__ratak{font-size:20px;line-height:1.2;font-weight:700;color:var(--ink);white-space:nowrap}
 @media(max-width:560px){.tp__cena--z .tp__wzor{font-size:14px}}
 .tp__koniec{margin:0;font-size:16px;line-height:22px;font-weight:600;color:var(--ink)}
+section:has(#kons-values):has(+.knarz){padding-bottom:clamp(48px,7vw,96px)}
+section:has(#kons-values)+.knarz{padding-top:0}
+section:has(#kons-values)+.knarz>.container{border-top:2px solid var(--ink);padding-top:clamp(48px,7vw,96px)}
