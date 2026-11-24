@@ -1274,12 +1274,12 @@
   
 
   const SHELL = `<div class="intake" id="intake" role="dialog" aria-modal="true" aria-labelledby="intake-title" hidden>
-    <button class="intake__scrimx" type="button" data-intake-close aria-label="Zamknij okno">${ICO_X}</button>
+    <button class="intake__scrimx" type="button" data-intake-close aria-label="Close window">${ICO_X}</button>
     <div class="intake__card" role="document">
       <div class="intake__crown">
         <img class="intake__logo" src="../assets/img/figma/logo-tnm-white.png?v=20260616" alt="The Noise Makers">
         <span class="intake__title" id="intake-title">Application form</span>
-        <button class="intake__close" type="button" data-intake-close aria-label="Zamknij okno">${ICO_X}</button>
+        <button class="intake__close" type="button" data-intake-close aria-label="Close window">${ICO_X}</button>
       </div>
       <div class="intake__body">${BODY_SPLIT}</div>
       <div class="intake__foot"><span class="intake__feel">Feel the he<span class="art">art</span>.</span></div>
@@ -1708,7 +1708,7 @@
         <span class="intake-ty__logo"><img src="${THANK_LOGO}" alt="The Noise Makers"></span>
       </div>
       <div class="intake-ty__body">
-        <button type="button" class="intake-ty__x intake-done" aria-label="Zamknij okno">${ICO_X}</button>
+        <button type="button" class="intake-ty__x intake-done" aria-label="Close window">${ICO_X}</button>
         <h2 class="intake-ty__title">${esc(e.title)}</h2>
         <div class="intake-ty__text">${paras}</div>
         ${tail}
