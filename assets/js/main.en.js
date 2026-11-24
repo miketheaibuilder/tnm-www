@@ -783,7 +783,7 @@ const STICKY = `<a class="sticky-cta" href="${FORM_URL}" data-entry="pinned-peln
 
 
 
-const MODAL = `<div class="modal" id="modal"><button class="modal__close" type="button" aria-label="Zamknij okno">×</button><div class="modal__box"><div id="modal-content"></div></div></div>`;
+const MODAL = `<div class="modal" id="modal"><button class="modal__close" type="button" aria-label="Close window">×</button><div class="modal__box"><div id="modal-content"></div></div></div>`;
 
 
 
@@ -1725,7 +1725,7 @@ const BOOKING=`<div class="booking" id="booking" role="dialog" aria-modal="true"
     <div class="booking__crown">
       <img class="booking__logo" src="../assets/img/figma/logo-tnm-white.png?v=20260616" alt="The Noise Makers">
       <span class="booking__title" id="booking-title">Book a meeting</span>
-      <button class="booking__close" type="button" data-book-close aria-label="Zamknij okno">
+      <button class="booking__close" type="button" data-book-close aria-label="Close window">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
     </div>
